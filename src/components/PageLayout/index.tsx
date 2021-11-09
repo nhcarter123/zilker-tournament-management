@@ -1,6 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { Button } from 'antd';
+import { Redirect, Route } from 'react-router-dom';
+import LoginPage from 'components/pages/general/LoginPage';
+import MoreInfoPage from 'components/pages/general/MoreInfoPage';
 
 import { Pages } from 'types/pages';
 import { useStyles } from 'components/PageLayout/styles';
@@ -10,18 +11,10 @@ const PageLayout = (): JSX.Element => {
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <div className={classes.itemContainer}>Are you a...</div>
-        <div className={classes.itemContainer}>
-          <Button type="primary" className={classes.button}>
-            Returning Player
-          </Button>
-        </div>
-        <div className={classes.itemContainer}>
-          <Button type="primary" className={classes.button}>
-            New Player
-          </Button>
-        </div>
-        <Redirect from={'/'} exact to={Pages.players} />
+        <Redirect from={'/'} exact to={Pages.login} />
+        <Route path={Pages.login} component={LoginPage} />
+        <Route path={Pages.moreInfo} component={MoreInfoPage} />
+        <Route path={Pages.readyUp} component={LoginPage} />
       </div>
     </div>
   );

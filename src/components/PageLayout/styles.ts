@@ -12,7 +12,6 @@ export const useStyles = makeStyles({
   },
   itemContainer: {
     padding: '0 20px',
-    textAlign: 'center',
     margin: '16px 0'
   },
   button: {

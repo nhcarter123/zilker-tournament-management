@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Button, Modal } from 'antd';
-import AddTournamentForm from 'components/forms/AddTournamentForm';
 
 // todo move to other folder
 const useStyles = makeStyles({
@@ -28,9 +27,7 @@ const AddTournamentButton = (): JSX.Element => {
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
-      >
-        <AddTournamentForm />
-      </Modal>
+      />
     </>
   );
 };

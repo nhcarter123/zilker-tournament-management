@@ -19,10 +19,10 @@ const useStyles = makeStyles({
   }
 });
 
-type TableSearchBarProps = {
+interface TableSearchBarProps {
   setFilterTerm: Dispatch<SetStateAction<string>>;
   renderButton: () => JSX.Element;
-};
+}
 
 const TableSearchBar = (props: TableSearchBarProps): JSX.Element => {
   const classes = useStyles();

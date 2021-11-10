@@ -4,10 +4,12 @@
   "dependencies": {
     "@apollo/client": "^3.4.17",
     "@material-ui/core": "^4.12.3",
+    "@types/graphql": "^14.5.0",
     "antd": "^4.16.13",
     "cra-template-typescript": "1.1.2",
     "formik": "^2.2.9",
     "graphql": "^16.0.1",
+    "graphql.macro": "^1.4.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "nanoid": "^3.1.25",

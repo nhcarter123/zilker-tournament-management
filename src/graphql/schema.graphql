@@ -1,0 +1,23 @@
+input UpdateUserDetailsArgs {
+  firstName: String!
+  lastName: String!
+  rating: Int!
+}
+
+type User {
+  firstName: String
+  lastName: String
+  phone: String!
+  rating: Int
+  token: String
+}
+
+type Mutation {
+  updateUserDetails(args: UpdateUserDetailsArgs!): User!
+  sendVerificationCode(phone: String!): Boolean!
+  verifyCode(code: Int!): User!
+}
+
+type Query {
+  me: User
+}

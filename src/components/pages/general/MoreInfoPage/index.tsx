@@ -1,15 +1,23 @@
 import React from 'react';
-import ContentHeader from 'components/ContentHeader';
 
-import MoreInfoForm from 'components/forms/MoreInfoForm';
+import GetMoreDetailsForm from 'components/forms/GetMoreDetailsForm';
+import { Typography } from '@material-ui/core';
 
-const LoginPage = (): JSX.Element => {
+interface MoreInfoPageProps {
+  updateUserDetails: Function;
+}
+
+const MoreInfoPage = ({
+  updateUserDetails
+}: MoreInfoPageProps): JSX.Element => {
   return (
     <div>
-      <ContentHeader title={'Addition Info'} />
-      <MoreInfoForm />
+      <Typography variant={'h4'} align={'center'}>
+        Tell us more
+      </Typography>
+      <GetMoreDetailsForm updateUserDetails={updateUserDetails} />
     </div>
   );
 };
 
-export default LoginPage;
+export default MoreInfoPage;

@@ -6,7 +6,7 @@ import { SEND_VERIFICATION_CODE } from 'graphql/mutations/mutations';
 import SendCodeForm from 'components/forms/SendCodeForm';
 import CodeInput from 'components/CodeInput';
 
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 
 interface LoginPageProps {
   verifyCode: Function;

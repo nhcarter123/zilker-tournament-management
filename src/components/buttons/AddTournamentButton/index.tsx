@@ -1,34 +1,27 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core';
-import { Button, Modal } from 'antd';
-
-// todo move to other folder
-const useStyles = makeStyles({
-  root: {
-    marginRight: '8px'
-  }
-});
+import React from 'react';
+import { Button } from 'antd';
+import { useMutation } from '@apollo/client';
+import { CREATE_TOURNAMENT } from 'graphql/mutations/mutations';
+import { GET_TOURNAMENTS } from 'graphql/queries/queries';
+import { onError } from 'graphql/errorHandler';
 
 const AddTournamentButton = (): JSX.Element => {
-  const classes = useStyles();
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = (): void => setIsModalVisible(true);
-  const handleCancel = (): void => setIsModalVisible(false);
+  const [createTournament, { loading }] = useMutation(CREATE_TOURNAMENT, {
+    refetchQueries: [GET_TOURNAMENTS],
+    onError
+  });
 
   return (
-    <>
-      <Button className={classes.root} type="primary" onClick={showModal}>
-        Add Tournament
-      </Button>
-      <Modal
-        title="Add Tournament"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      />
-    </>
+    <Button
+      size={'large'}
+      type="primary"
+      onClick={(): void => {
+        createTournament({ variables: { name: 'New Tournament' } });
+      }}
+      loading={loading}
+    >
+      Create
+    </Button>
   );
 };
 

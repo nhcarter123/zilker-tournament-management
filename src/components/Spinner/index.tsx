@@ -1,15 +1,17 @@
 import React from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { useStyles } from 'components/Spinner/styles';
 
-const CodeInput = (): JSX.Element => {
+const Spinner = (): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.root}>
+    <div className={classes.root}>
+      <div />
       <CircularProgress size={120} color={'inherit'} />
-    </Box>
+      <div />
+    </div>
   );
 };
 
-export default CodeInput;
+export default Spinner;

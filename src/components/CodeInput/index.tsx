@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import ReactCodeInput from 'react-code-input';
 
 // todo move to other folder
@@ -21,9 +21,10 @@ interface CodeInputProps {
 
 const CodeInput = (props: CodeInputProps): JSX.Element => {
   const classes = useStyles();
+
   const handleChange = (value: string): void => {
     if (value.length === 6) {
-      props.verifyCode({ variables: { code: parseInt(value) } });
+      props.verifyCode({ variables: { code: value } });
     }
   };
 

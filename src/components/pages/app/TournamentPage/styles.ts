@@ -2,11 +2,11 @@ import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
   root: {
-    marginTop: '40px'
+    height: '100%'
   },
-  input: {
-    width: '100%',
-    paddingBottom: '24px'
+  header: {
+    marginTop: '50px',
+    marginBottom: '20px'
   },
   button: {
     width: '100%'

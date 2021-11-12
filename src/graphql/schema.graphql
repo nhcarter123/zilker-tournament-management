@@ -1,3 +1,5 @@
+scalar Date
+
 input UpdateUserDetailsArgs {
   firstName: String!
   lastName: String!
@@ -5,19 +7,64 @@ input UpdateUserDetailsArgs {
 }
 
 type User {
+  _id: String!
   firstName: String
   lastName: String
   phone: String!
   rating: Int
   token: String
+  role: Role!
 }
+
+enum Role {
+  admin
+  player
+}
+
+enum MatchResult {
+  whiteWon
+  blackWon
+  draw
+  didNotStart
+}
+
+enum TournamentStatus {
+  inactive
+  completed
+  registration
+}
+
+type Match {
+  white: User!
+  black: User!
+  result: MatchResult
+}
+
+type Round {
+  completed: Boolean!
+  matches: [String!]!
+}
+
+type Tournament {
+  _id: String!
+  name: String!
+  date: Date!
+  status: TournamentStatus!
+  players: [String!]!
+  rounds: [Round!]!
+}
+
 
 type Mutation {
   updateUserDetails(args: UpdateUserDetailsArgs!): User!
   sendVerificationCode(phone: String!): Boolean!
-  verifyCode(code: Int!): User!
+  verifyCode(code: String!): User!
+  createTournament(name: String!): Boolean!
+  joinTournament(tournamentId: String!, userId: String!): Boolean!
 }
 
 type Query {
   me: User
+  getActiveTournament: Tournament!
+  getTournaments: [Tournament!]!
 }

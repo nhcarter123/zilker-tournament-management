@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GetMoreDetailsForm from 'components/forms/GetMoreDetailsForm';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material/';
 
 interface MoreInfoPageProps {
   updateUserDetails: Function;

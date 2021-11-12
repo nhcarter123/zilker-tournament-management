@@ -1,11 +1,9 @@
 import React from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useHistory } from 'react-router-dom';
 import { Button } from 'antd';
-import TextField from '@material-ui/core/TextField';
+import { TextField } from '@mui/material';
 import { useStyles } from 'components/forms/GetMoreDetailsForm/styles';
-import { Pages } from 'types/pages';
 
 interface AddPlayerValues {
   firstName: string;
@@ -21,7 +19,6 @@ const GetMoreDetailsForm = ({
   updateUserDetails
 }: GetMoreDetailsFormProps): JSX.Element => {
   const classes = useStyles();
-  const history = useHistory();
 
   const initialValues: AddPlayerValues = {
     firstName: '',
@@ -61,7 +58,7 @@ const GetMoreDetailsForm = ({
             rating: values.rating
           }
         }
-      }).then(() => history.push(Pages.readyUp));
+      });
     }
   });
 

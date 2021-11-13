@@ -42,3 +42,19 @@ export const GET_TOURNAMENTS = gql`
     }
   }
 `;
+
+export const GET_TOURNAMENT = gql`
+  query GetTournament($tournamentId: String!) {
+    getTournament(tournamentId: $tournamentId) {
+      _id
+      name
+      date
+      status
+      players
+      rounds {
+        matches
+        completed
+      }
+    }
+  }
+`;

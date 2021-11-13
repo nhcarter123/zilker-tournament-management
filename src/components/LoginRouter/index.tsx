@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
 import LoginPage from 'components/pages/login/LoginPage';
@@ -15,7 +15,7 @@ import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/LoginRouter/styles';
 
-const PageLayout = (): JSX.Element => {
+const LoginRouter = (): JSX.Element => {
   const history = useHistory();
   const classes = useStyles();
 
@@ -56,19 +56,21 @@ const PageLayout = (): JSX.Element => {
     }
   );
 
-  const [updateUserDetails] = useMutation(UPDATE_USER_DETAILS, {
-    onError,
-    onCompleted: refetch
-  });
+  const [updateUserDetails, { loading: updateUserDetailsLoading }] =
+    useMutation(UPDATE_USER_DETAILS, {
+      onError,
+      onCompleted: refetch
+    });
 
   const me = data?.me;
 
   return (
     <div className={classes.root}>
-      {meLoading || verifyCodeLoading || !me ? (
+      {meLoading || verifyCodeLoading ? (
         <Spinner />
       ) : (
         <>
+          <Redirect from={'/'} exact to={Pages.login} />
           <Route
             path={Pages.login}
             render={(): JSX.Element => <LoginPage verifyCode={verifyCode} />}
@@ -76,12 +78,15 @@ const PageLayout = (): JSX.Element => {
           <Route
             path={Pages.moreInfo}
             render={(): JSX.Element => (
-              <MoreInfoPage updateUserDetails={updateUserDetails} />
+              <MoreInfoPage
+                updateUserDetails={updateUserDetails}
+                updateUserDetailsLoading={updateUserDetailsLoading}
+              />
             )}
           />
           <Route
             path={Pages.app}
-            render={(): JSX.Element => <AppPage me={me} />}
+            render={(): JSX.Element => (me ? <AppPage me={me} /> : <></>)}
           />
         </>
       )}
@@ -89,4 +94,4 @@ const PageLayout = (): JSX.Element => {
   );
 };
 
-export default PageLayout;
+export default LoginRouter;

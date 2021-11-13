@@ -19,7 +19,7 @@ const LoginPage = ({ verifyCode }: LoginPageProps): JSX.Element => {
     useMutation(SEND_VERIFICATION_CODE, { onError });
 
   return (
-    <>
+    <div>
       <Typography variant={'h4'} align={'center'}>
         Welcome
       </Typography>
@@ -32,7 +32,7 @@ const LoginPage = ({ verifyCode }: LoginPageProps): JSX.Element => {
       {hasSentCode && !verificationCodeLoading && (
         <CodeInput verifyCode={verifyCode} />
       )}
-    </>
+    </div>
   );
 };
 

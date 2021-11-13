@@ -9,6 +9,8 @@ import TableSearchBar from 'components/TableSearchBar';
 
 import { Tournament } from 'types/types';
 import { useStyles } from 'components/tables/TournamentTable/styles';
+import { useHistory } from 'react-router-dom';
+import { Pages } from 'types/pages';
 
 type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -20,6 +22,7 @@ type TournamentsTableProps = {
 const TournamentsTable = ({
   tournaments
 }: TournamentsTableProps): JSX.Element => {
+  const history = useHistory();
   const classes = useStyles();
   const [filterTerm, setFilterTerm] = useState('');
 
@@ -36,7 +39,9 @@ const TournamentsTable = ({
       render: (name: string, record: Tournament): JSX.Element => (
         <a
           onClick={(): void => {
-            console.log(record);
+            history.push(
+              Pages.editTournament.replace(':tournamentId', record._id)
+            );
           }}
         >
           {name}

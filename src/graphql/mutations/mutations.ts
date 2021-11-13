@@ -16,9 +16,7 @@ export const SEND_VERIFICATION_CODE = gql`
 
 export const UPDATE_USER_DETAILS = gql`
   mutation UpdateUserDetails($args: UpdateUserDetailsArgs!) {
-    updateUserDetails(args: $args) {
-      phone
-    }
+    updateUserDetails(args: $args)
   }
 `;
 
@@ -31,5 +29,11 @@ export const CREATE_TOURNAMENT = gql`
 export const JOIN_TOURNAMENT = gql`
   mutation JoinTournament($tournamentId: String!, $userId: String!) {
     joinTournament(tournamentId: $tournamentId, userId: $userId)
+  }
+`;
+
+export const NEXT_ROUND = gql`
+  mutation NextRound($tournamentId: String!) {
+    nextRound(tournamentId: $tournamentId)
   }
 `;

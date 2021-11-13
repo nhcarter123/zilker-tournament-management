@@ -5,5 +5,10 @@ export enum Pages {
   profile = '/app/profile',
   players = '/app/players',
   tournaments = '/app/tournaments',
-  play = '/app/play'
+  editTournament = '/app/tournament/:tournamentId',
+  play = '/app/play',
+  join = '/app/play/join',
+  tournament = '/app/play/tournament',
+  waiting = '/app/play/tournament/waiting',
+  match = '/app/play/tournament/match'
 }

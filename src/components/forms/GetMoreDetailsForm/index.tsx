@@ -13,10 +13,12 @@ interface AddPlayerValues {
 
 interface GetMoreDetailsFormProps {
   updateUserDetails: Function;
+  updateUserDetailsLoading: boolean;
 }
 
 const GetMoreDetailsForm = ({
-  updateUserDetails
+  updateUserDetails,
+  updateUserDetailsLoading
 }: GetMoreDetailsFormProps): JSX.Element => {
   const classes = useStyles();
 
@@ -55,7 +57,7 @@ const GetMoreDetailsForm = ({
           args: {
             firstName: values.firstName,
             lastName: values.lastName,
-            rating: values.rating
+            rating: parseInt(`${values.rating}`)
           }
         }
       });
@@ -70,53 +72,56 @@ const GetMoreDetailsForm = ({
       }}
     >
       <div className={classes.root}>
-        <TextField
-          className={classes.input}
-          error={!!errors.firstName && touched.firstName}
-          id="firstName"
-          label="First Name"
-          onChange={(e): void => {
-            setFieldTouched('firstName');
-            e.target.value = e.target.value.replace(/[^a-zA-Z]/, '');
-            handleChange(e);
-          }}
-          value={values.firstName}
-          variant="outlined"
-          helperText={touched.firstName ? errors.firstName : ''}
-          required
-        />
+        <div className={classes.input}>
+          <TextField
+            error={!!errors.firstName && touched.firstName}
+            id="firstName"
+            label="First Name"
+            onChange={(e): void => {
+              setFieldTouched('firstName');
+              e.target.value = e.target.value.replace(/[^a-zA-Z]/, '');
+              handleChange(e);
+            }}
+            value={values.firstName}
+            variant="outlined"
+            helperText={touched.firstName ? errors.firstName : ''}
+            required
+          />
+        </div>
 
-        <TextField
-          className={classes.input}
-          error={!!errors.lastName && touched.lastName}
-          id="lastName"
-          label="Last Name"
-          onChange={(e): void => {
-            setFieldTouched('lastName');
-            e.target.value = e.target.value.replace(/[^a-zA-Z]/, '');
-            handleChange(e);
-          }}
-          value={values.lastName}
-          variant="outlined"
-          helperText={touched.lastName ? errors.lastName : ''}
-          required
-        />
+        <div className={classes.input}>
+          <TextField
+            error={!!errors.lastName && touched.lastName}
+            id="lastName"
+            label="Last Name"
+            onChange={(e): void => {
+              setFieldTouched('lastName');
+              e.target.value = e.target.value.replace(/[^a-zA-Z]/, '');
+              handleChange(e);
+            }}
+            value={values.lastName}
+            variant="outlined"
+            helperText={touched.lastName ? errors.lastName : ''}
+            required
+          />
+        </div>
 
-        <TextField
-          className={classes.input}
-          error={!!errors.rating && touched.rating}
-          id="rating"
-          label="Rating"
-          onChange={(e): void => {
-            setFieldTouched('rating');
-            e.target.value = e.target.value.replace(/[^0-9]/, '');
-            handleChange(e);
-          }}
-          value={values.rating}
-          helperText={touched.rating ? errors.rating : ''}
-          variant="outlined"
-          required
-        />
+        <div className={classes.input}>
+          <TextField
+            error={!!errors.rating && touched.rating}
+            id="rating"
+            label="Rating"
+            onChange={(e): void => {
+              setFieldTouched('rating');
+              e.target.value = e.target.value.replace(/[^0-9]/, '');
+              handleChange(e);
+            }}
+            value={values.rating}
+            helperText={touched.rating ? errors.rating : ''}
+            variant="outlined"
+            required
+          />
+        </div>
 
         <Button
           className={classes.button}
@@ -124,6 +129,7 @@ const GetMoreDetailsForm = ({
           type="primary"
           htmlType={'submit'}
           disabled={!isValid}
+          loading={updateUserDetailsLoading}
           onSubmit={(e): Promise<void> => {
             e.preventDefault();
             return submitForm();

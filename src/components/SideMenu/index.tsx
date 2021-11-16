@@ -17,7 +17,8 @@ enum MenuItem {
   play = 'Play',
   profile = 'Profile',
   tournaments = 'Tournaments',
-  players = 'Players'
+  players = 'Players',
+  rules = 'Rules'
 }
 
 interface SideMenuProps {
@@ -34,7 +35,8 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
     MenuItem.play,
     MenuItem.profile,
     isAdmin && MenuItem.tournaments,
-    isAdmin && MenuItem.players
+    isAdmin && MenuItem.players,
+    MenuItem.rules
   ].filter((v) => v) as MenuItem[];
 
   const generateMenuList = (list: string[]): JSX.Element => {
@@ -45,6 +47,8 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
         case MenuItem.profile:
           return <InboxIcon />;
         case MenuItem.tournaments:
+          return <InboxIcon />;
+        case MenuItem.rules:
           return <InboxIcon />;
         case MenuItem.play:
         default:
@@ -60,6 +64,8 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
           return Pages.profile;
         case MenuItem.tournaments:
           return Pages.tournaments;
+        case MenuItem.rules:
+          return Pages.rules;
         case MenuItem.play:
         default:
           return Pages.play;

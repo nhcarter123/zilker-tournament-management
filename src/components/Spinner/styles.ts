@@ -1,11 +1,15 @@
 import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
-  root: {
+  spinner: {
     color: '#0f9fff',
     display: 'grid',
     gridTemplateRows: '1fr 1fr 1fr',
-    height: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    height: '100%'
+  },
+  linear: {
+    color: '#0f9fff',
+    height: '100%'
   }
 });

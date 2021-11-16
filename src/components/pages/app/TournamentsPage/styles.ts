@@ -7,8 +7,5 @@ export const useStyles = makeStyles({
   header: {
     marginTop: '50px',
     marginBottom: '20px'
-  },
-  button: {
-    width: '100%'
   }
 });

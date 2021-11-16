@@ -1,8 +1,11 @@
 scalar Date
 
-input UpdateUserDetailsArgs {
-  firstName: String!
-  lastName: String!
+input UpdateUserDetailsPayload {
+  firstName: String
+  lastName: String
+  rating: Int
+}
+input UpdateMatchPayload {
   rating: Int!
 }
 
@@ -35,12 +38,23 @@ enum TournamentStatus {
 }
 
 type Match {
-  white: User!
-  black: User!
-  result: MatchResult
+  _id: String!
+  white: String!
+  black: String!
+  whiteRating: Int!
+  blackRating: Int!
+  result: MatchResult!
+  completed: Boolean!
 }
 
 type Round {
+  _id: String!
+  completed: Boolean!
+  matches: [Match!]!
+}
+
+type RoundPreview {
+  _id: String!
   completed: Boolean!
   matches: [String!]!
 }
@@ -51,22 +65,34 @@ type Tournament {
   date: Date!
   status: TournamentStatus!
   players: [String!]!
-  rounds: [Round!]!
-}
-
-
-type Mutation {
-  updateUserDetails(args: UpdateUserDetailsArgs!): Boolean!
-  sendVerificationCode(phone: String!): Boolean!
-  verifyCode(code: String!): User!
-  createTournament(name: String!): Boolean!
-  joinTournament(tournamentId: String!, userId: String!): Boolean!
-  nextRound(tournamentId: String!): Boolean!
+  rounds: [RoundPreview!]!
+  totalRounds: Int!
 }
 
 type Query {
   me: User
+  getUser(userId: ID!): User
+
   getActiveTournament: Tournament!
   getTournaments: [Tournament!]!
-  getTournament(tournamentId: String!): Tournament!
+  getTournament(tournamentId: ID!): Tournament!
+
+  getMatch(matchId: ID!): Match
+  getMyMatch: Match
+  getRound(tournamentId: ID!, roundId: ID!): Round
+}
+
+type Mutation {
+  updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
+
+  sendVerificationCode(phone: String!): Boolean!
+  verifyCode(code: String!): User!
+
+  createTournament(name: String!): Boolean!
+  joinTournament(tournamentId: ID!, userId: ID!): Boolean!
+  nextRound(tournamentId: ID!): Boolean!
+  deleteRound(tournamentId: ID!, roundId: ID!): Boolean!
+
+  updateMatch(matchId: ID!, payload: UpdateMatchPayload!): Boolean!
+  deleteMatch(tournamentId: ID!, roundId: ID!, matchId: ID!): Boolean!
 }

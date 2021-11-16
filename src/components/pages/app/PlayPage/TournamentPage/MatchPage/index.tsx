@@ -1,49 +1,90 @@
 import React from 'react';
-import moment from 'moment';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import { GET_MY_MATCH, GET_USER } from 'graphql/queries/queries';
 
-import { Typography } from '@mui/material/';
-import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
+import Spinner from 'components/Spinner';
+import Player from 'components/Player';
+import MatchResultSelect from 'components/MachResultSelect';
 
-import { Tournament, User } from 'types/types';
+import ChessBoard from 'svg/chessBoard.svg';
+
 import { useStyles } from 'components/pages/app/PlayPage/styles';
+import { Match, User } from 'types/types';
+import { Box, Divider, Typography } from '@mui/material';
 
 interface PlayPageProps {
   me: User;
-  tournament: Tournament;
 }
 
-const MatchPage = ({ me, tournament }: PlayPageProps): JSX.Element => {
+const MatchPage = ({ me }: PlayPageProps): JSX.Element => {
   const classes = useStyles();
 
-  const isTournamentAvailable = me._id && !tournament?.players.includes(me._id);
+  const [getOpponent, { data: opponentData }] = useLazyQuery<{
+    getUser: Nullable<User>;
+  }>(GET_USER);
+
+  const { data: matchData, loading } = useQuery<{
+    getMyMatch: Nullable<Match>;
+  }>(GET_MY_MATCH, {
+    notifyOnNetworkStatusChange: true,
+    pollInterval: 4000,
+    onCompleted: (data) =>
+      data.getMyMatch?.white &&
+      data.getMyMatch?.white !== 'bye' &&
+      data.getMyMatch?.black !== 'bye' &&
+      getOpponent({
+        variables: {
+          userId:
+            me._id === data.getMyMatch.white
+              ? data.getMyMatch.black
+              : data.getMyMatch.white
+        }
+      })
+  });
+
+  const opponent = opponentData?.getUser;
+  const match = matchData?.getMyMatch;
 
   return (
     <div className={classes.root}>
-      <div>
-        {isTournamentAvailable && tournament ? (
-          <>
-            <Typography variant={'h4'} align={'center'}>
-              {tournament.name}
-            </Typography>
-            <Typography variant={'subtitle2'} align={'center'}>
-              {moment(tournament.date).format('LL')}
-            </Typography>
-            <JoinTournamentButton
-              tournamentId={tournament._id}
-              userId={me._id}
-            />
-          </>
-        ) : (
-          <>
-            <Typography variant={'h4'} align={'center'}>
-              Uh oh
-            </Typography>
-            <div>
-              It looks like there aren’t any active tournaments right now... 😢
-            </div>
-          </>
-        )}
-      </div>
+      {!match && loading ? (
+        <Spinner />
+      ) : match?.white === 'bye' || match?.black === 'bye' || !match ? (
+        <div>
+          <Typography>You don’t have an opponent for this round.</Typography>
+          <Typography>
+            You’ll have to wait until the next round... 😑
+          </Typography>
+        </div>
+      ) : (
+        opponent && (
+          <div>
+            <Player player={match.white === opponent._id ? me : opponent} />
+
+            <Box display={'flex'} justifyContent={'center'}>
+              <div
+                style={{
+                  border: '5px solid rgb(191 191 191)',
+                  borderRadius: '8px'
+                }}
+              >
+                <img
+                  src={ChessBoard}
+                  width={150}
+                  height={150}
+                  alt={'Chess board'}
+                />
+              </div>
+            </Box>
+
+            <Player player={match.white === opponent._id ? opponent : me} />
+
+            <Divider />
+
+            <MatchResultSelect match={match} />
+          </div>
+        )
+      )}
     </div>
   );
 };

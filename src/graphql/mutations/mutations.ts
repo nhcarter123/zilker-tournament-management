@@ -15,8 +15,8 @@ export const SEND_VERIFICATION_CODE = gql`
 `;
 
 export const UPDATE_USER_DETAILS = gql`
-  mutation UpdateUserDetails($args: UpdateUserDetailsArgs!) {
-    updateUserDetails(args: $args)
+  mutation UpdateUserDetails($payload: UpdateUserDetailsPayload!) {
+    updateUserDetails(payload: $payload)
   }
 `;
 
@@ -27,13 +27,25 @@ export const CREATE_TOURNAMENT = gql`
 `;
 
 export const JOIN_TOURNAMENT = gql`
-  mutation JoinTournament($tournamentId: String!, $userId: String!) {
+  mutation JoinTournament($tournamentId: ID!, $userId: ID!) {
     joinTournament(tournamentId: $tournamentId, userId: $userId)
   }
 `;
 
 export const NEXT_ROUND = gql`
-  mutation NextRound($tournamentId: String!) {
+  mutation NextRound($tournamentId: ID!) {
     nextRound(tournamentId: $tournamentId)
+  }
+`;
+
+export const DELETE_ROUND = gql`
+  mutation DeleteRound($tournamentId: ID!, $roundId: ID!) {
+    deleteRound(tournamentId: $tournamentId, roundId: $roundId)
+  }
+`;
+
+export const UPDATE_MATCH = gql`
+  mutation UpdateMatch($matchId: ID!, $payload: UpdateMatchPayload!) {
+    updateMatch(matchId: $matchId, payload: $payload)
   }
 `;

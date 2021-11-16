@@ -12,8 +12,5 @@ export const useStyles = makeStyles({
       height: '38px',
       fontSize: '20px'
     }
-  },
-  button: {
-    width: '100%'
   }
 });

@@ -68,11 +68,11 @@ const SendCodeForm = (props: SendCodeFormProps): JSX.Element => {
           type="primary"
           htmlType={'submit'}
           disabled={!isValid || props.loading}
-          className={classes.button}
           onSubmit={(e): Promise<void> => {
             e.preventDefault();
             return submitForm();
           }}
+          block
         >
           {props.hasSentCode ? 'Resend code' : 'Send me a code'}
         </Button>

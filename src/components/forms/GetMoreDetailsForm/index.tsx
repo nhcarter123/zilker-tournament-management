@@ -124,7 +124,6 @@ const GetMoreDetailsForm = ({
         </div>
 
         <Button
-          className={classes.button}
           size={'large'}
           type="primary"
           htmlType={'submit'}
@@ -134,6 +133,7 @@ const GetMoreDetailsForm = ({
             e.preventDefault();
             return submitForm();
           }}
+          block
         >
           Submit
         </Button>

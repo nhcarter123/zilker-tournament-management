@@ -1,7 +1,7 @@
 export type User = {
   _id: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   phone: string;
   rating: number;
   token: string;
@@ -27,14 +27,24 @@ export enum TournamentStatus {
 }
 
 export type Match = {
-  white: User;
-  black: User;
+  _id: string;
+  white: string;
+  black: string;
+  whiteRating: number;
+  blackRating: number;
   result: MatchResult;
+  completed: boolean;
 };
 
 export type Round = {
+  _id: string;
   completed: boolean;
   matches: string[];
+};
+
+export type RoundStatus = {
+  completeCount: number;
+  total: number;
 };
 
 export interface Tournament {
@@ -44,6 +54,7 @@ export interface Tournament {
   status: TournamentStatus;
   players: string[];
   rounds: Round[];
+  totalRounds: number;
 }
 
 // export interface TournamentWithStats extends Tournament {

@@ -1,14 +1,24 @@
 import React from 'react';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, LinearProgress, Box } from '@mui/material';
 import { useStyles } from 'components/Spinner/styles';
 
-const Spinner = (): JSX.Element => {
+interface SpinnerProps {
+  linear?: boolean;
+}
+
+const Spinner = ({ linear }: SpinnerProps): JSX.Element => {
   const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
+  return linear ? (
+    <Box sx={{ width: '100%' }} className={classes.linear}>
+      <LinearProgress color={'inherit'} />
+    </Box>
+  ) : (
+    <div className={classes.spinner}>
       <div />
-      <CircularProgress size={120} color={'inherit'} />
+      <Box display={'flex'} alignItems={'center'}>
+        <CircularProgress size={120} color={'inherit'} />
+      </Box>
       <div />
     </div>
   );

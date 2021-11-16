@@ -13,6 +13,17 @@ export const GET_ME = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query GetUser($userId: ID!) {
+    getUser(userId: $userId) {
+      _id
+      firstName
+      lastName
+      rating
+    }
+  }
+`;
+
 export const GET_ACTIVE_TOURNAMENT = gql`
   query GetActiveTournament {
     getActiveTournament {
@@ -24,6 +35,7 @@ export const GET_ACTIVE_TOURNAMENT = gql`
       rounds {
         completed
       }
+      totalRounds
     }
   }
 `;
@@ -44,7 +56,7 @@ export const GET_TOURNAMENTS = gql`
 `;
 
 export const GET_TOURNAMENT = gql`
-  query GetTournament($tournamentId: String!) {
+  query GetTournament($tournamentId: ID!) {
     getTournament(tournamentId: $tournamentId) {
       _id
       name
@@ -52,8 +64,47 @@ export const GET_TOURNAMENT = gql`
       status
       players
       rounds {
+        _id
         matches
         completed
+      }
+      totalRounds
+    }
+  }
+`;
+
+export const GET_MATCH = gql`
+  query GetMatch($matchId: ID!) {
+    getMatch(matchId: $matchId) {
+      _id
+      white
+      black
+      result
+    }
+  }
+`;
+
+export const GET_MY_MATCH = gql`
+  query GetMyMatch {
+    getMyMatch {
+      _id
+      white
+      black
+      result
+    }
+  }
+`;
+
+export const GET_ROUND = gql`
+  query GetRound($tournamentId: ID!, $roundId: ID!) {
+    getRound(tournamentId: $tournamentId, roundId: $roundId) {
+      _id
+      completed
+      matches {
+        _id
+        white
+        black
+        result
       }
     }
   }

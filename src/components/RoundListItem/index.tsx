@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
@@ -9,19 +9,29 @@ import { Button, Popconfirm } from 'antd';
 import { Box, Typography, Divider } from '@mui/material';
 import RoundStatusDetail from 'components/RoundListItem/RoundStatusDetail';
 
-import { Tournament, Round } from 'types/types';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+import { Tournament, RoundPreview, User } from 'types/types';
 import { DeleteOutlined } from '@ant-design/icons';
 
 interface RoundListItemProps {
   index: number;
+  selectedRound: Nullable<string>;
+  setSelectedRound: Dispatch<React.SetStateAction<Nullable<string>>>;
   tournament: Tournament;
-  round: Round;
+  users: User[];
+  roundPreview: RoundPreview;
+  isLastRound: boolean;
 }
 
 const RoundListItem = ({
-  round,
+  index,
+  selectedRound,
+  setSelectedRound,
+  roundPreview,
   tournament,
-  index
+  users,
+  isLastRound
 }: RoundListItemProps): JSX.Element => {
   const [deleteRound, { loading }] = useMutation(DELETE_ROUND, {
     refetchQueries: [GET_TOURNAMENT],
@@ -29,28 +39,26 @@ const RoundListItem = ({
   });
 
   return (
-    <>
+    <Box key={index} onClick={(): void => setSelectedRound(roundPreview._id)}>
       <Box
         display={'flex'}
         alignItems={'center'}
         justifyContent={'space-between'}
-        pt={1.5}
-        pb={1.5}
+        pt={1}
+        pb={1}
       >
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography variant={'h6'}>{`Round ${index + 1}`}</Typography>
-          {!round.completed && (
-            <RoundStatusDetail tournament={tournament} round={round} />
-          )}
-        </Box>
+        <Typography variant={'h6'}>{`Round ${index + 1}`}</Typography>
 
-        {!round.completed && (
+        {isLastRound ? (
           <Popconfirm
             title="Are you sure?"
             placement={'left'}
             onConfirm={(): void => {
               deleteRound({
-                variables: { tournamentId: tournament._id, roundId: round._id }
+                variables: {
+                  tournamentId: tournament._id,
+                  roundId: roundPreview._id
+                }
               });
             }}
           >
@@ -61,11 +69,23 @@ const RoundListItem = ({
               loading={loading}
             />
           </Popconfirm>
+        ) : (
+          <CheckCircleIcon color={'success'} />
+        )}
+      </Box>
+
+      <Box>
+        {(selectedRound ? selectedRound === roundPreview._id : isLastRound) && (
+          <RoundStatusDetail
+            users={users}
+            tournament={tournament}
+            roundPreview={roundPreview}
+          />
         )}
       </Box>
 
       <Divider />
-    </>
+    </Box>
   );
 };
 

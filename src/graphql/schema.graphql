@@ -32,9 +32,9 @@ enum MatchResult {
 }
 
 enum TournamentStatus {
-  inactive
+  created
+  active
   completed
-  registration
 }
 
 type Match {
@@ -72,6 +72,7 @@ type Tournament {
 type Query {
   me: User
   getUser(userId: ID!): User
+  getUsers(userIds: [ID!]!, filterTerm: String): [User!]!
 
   getActiveTournament: Tournament!
   getTournaments: [Tournament!]!
@@ -90,7 +91,8 @@ type Mutation {
 
   createTournament(name: String!): Boolean!
   joinTournament(tournamentId: ID!, userId: ID!): Boolean!
-  nextRound(tournamentId: ID!): Boolean!
+  kickPlayer(tournamentId: ID!, userId: ID!): Boolean!
+  completeRound(tournamentId: ID!, newRound: Boolean!): Boolean!
   deleteRound(tournamentId: ID!, roundId: ID!): Boolean!
 
   updateMatch(matchId: ID!, payload: UpdateMatchPayload!): Boolean!

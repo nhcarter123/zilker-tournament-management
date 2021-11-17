@@ -6,9 +6,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Divider from '@mui/material/Divider';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+
+import FaceIcon from '@mui/icons-material/Face';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import ArticleIcon from '@mui/icons-material/Article';
 
 import { Pages } from 'types/pages';
 import { useStyles } from 'components/SideMenu/styles';
@@ -17,7 +21,6 @@ enum MenuItem {
   play = 'Play',
   profile = 'Profile',
   tournaments = 'Tournaments',
-  players = 'Players',
   rules = 'Rules'
 }
 
@@ -35,31 +38,26 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
     MenuItem.play,
     MenuItem.profile,
     isAdmin && MenuItem.tournaments,
-    isAdmin && MenuItem.players,
     MenuItem.rules
   ].filter((v) => v) as MenuItem[];
 
   const generateMenuList = (list: string[]): JSX.Element => {
     const getIcon = (text: string): JSX.Element => {
       switch (text) {
-        case MenuItem.players:
-          return <InboxIcon />;
         case MenuItem.profile:
-          return <InboxIcon />;
+          return <FaceIcon />;
         case MenuItem.tournaments:
-          return <InboxIcon />;
+          return <ArticleIcon />;
         case MenuItem.rules:
-          return <InboxIcon />;
+          return <MenuBookIcon />;
         case MenuItem.play:
         default:
-          return <InboxIcon />;
+          return <SportsEsportsIcon />;
       }
     };
 
     const getDestination = (text: string): string => {
       switch (text) {
-        case MenuItem.players:
-          return Pages.players;
         case MenuItem.profile:
           return Pages.profile;
         case MenuItem.tournaments:
@@ -81,7 +79,9 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
               onClick={(): void => history.push(getDestination(text))}
             >
               <div className={classes.listItem}>
-                <ListItemIcon>{getIcon(text)}</ListItemIcon>
+                <ListItemIcon sx={{ color: '#3878ff' }}>
+                  {getIcon(text)}
+                </ListItemIcon>
                 <ListItemText primary={text} />
               </div>
             </ListItem>

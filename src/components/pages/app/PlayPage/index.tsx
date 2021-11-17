@@ -23,7 +23,7 @@ enum TournamentStage {
 
 // todo move to helper
 const getCurrentStage = (tournament: Tournament): TournamentStage => {
-  if (tournament.rounds.some((round) => !round.completed)) {
+  if (tournament.rounds.length) {
     return TournamentStage.playing;
   }
 
@@ -36,7 +36,7 @@ const PlayPage = ({ me }: PlayPageProps): JSX.Element => {
 
   const { data: tournamentData, loading } = useQuery<{
     getActiveTournament: Nullable<Tournament>;
-  }>(GET_ACTIVE_TOURNAMENT);
+  }>(GET_ACTIVE_TOURNAMENT, { pollInterval: 4000 });
 
   const tournament = tournamentData?.getActiveTournament || null;
 

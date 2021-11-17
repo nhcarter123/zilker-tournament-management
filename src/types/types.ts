@@ -21,9 +21,9 @@ export enum MatchResult {
 }
 
 export enum TournamentStatus {
-  registration = 'registration',
-  completed = 'completed',
-  inactive = 'inactive'
+  created = 'created',
+  active = 'active',
+  completed = 'completed'
 }
 
 export type Match = {
@@ -39,12 +39,13 @@ export type Match = {
 export type Round = {
   _id: string;
   completed: boolean;
-  matches: string[];
+  matches: Match[];
 };
 
-export type RoundStatus = {
-  completeCount: number;
-  total: number;
+export type RoundPreview = {
+  _id: string;
+  completed: boolean;
+  matches: string[];
 };
 
 export interface Tournament {
@@ -53,7 +54,7 @@ export interface Tournament {
   date: Date;
   status: TournamentStatus;
   players: string[];
-  rounds: Round[];
+  rounds: RoundPreview[];
   totalRounds: number;
 }
 

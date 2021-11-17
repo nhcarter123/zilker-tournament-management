@@ -32,9 +32,15 @@ export const JOIN_TOURNAMENT = gql`
   }
 `;
 
+export const KICK_PLAYER = gql`
+  mutation KickPlayer($tournamentId: ID!, $userId: ID!) {
+    kickPlayer(tournamentId: $tournamentId, userId: $userId)
+  }
+`;
+
 export const NEXT_ROUND = gql`
-  mutation NextRound($tournamentId: ID!) {
-    nextRound(tournamentId: $tournamentId)
+  mutation CompleteRound($tournamentId: ID!, $newRound: Boolean!) {
+    completeRound(tournamentId: $tournamentId, newRound: $newRound)
   }
 `;
 

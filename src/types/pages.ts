@@ -3,7 +3,6 @@ export enum Pages {
   moreInfo = '/moreInfo',
   app = '/app',
   profile = '/app/profile',
-  players = '/app/players',
   rules = '/app/rules',
   tournaments = '/app/tournaments',
   editTournament = '/app/tournament/:tournamentId',

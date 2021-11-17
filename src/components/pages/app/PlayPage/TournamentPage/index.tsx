@@ -21,10 +21,7 @@ const TournamentPage = ({ me, tournament }: PlayPageProps): JSX.Element => {
     <div className={classes.root}>
       <TournamentHeader tournament={tournament} />
 
-      <Route
-        path={Pages.waiting}
-        render={(): JSX.Element => <WaitingPage tournament={tournament} />}
-      />
+      <Route path={Pages.waiting} component={WaitingPage} />
       <Route
         path={Pages.match}
         render={(): JSX.Element => <MatchPage me={me} />}

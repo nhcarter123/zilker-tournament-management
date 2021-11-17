@@ -24,6 +24,17 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_USERS = gql`
+  query GetUsers($userIds: [ID!]!, $filterTerm: String) {
+    getUsers(userIds: $userIds, filterTerm: $filterTerm) {
+      _id
+      firstName
+      lastName
+      rating
+    }
+  }
+`;
+
 export const GET_ACTIVE_TOURNAMENT = gql`
   query GetActiveTournament {
     getActiveTournament {
@@ -33,6 +44,7 @@ export const GET_ACTIVE_TOURNAMENT = gql`
       status
       players
       rounds {
+        _id
         completed
       }
       totalRounds
@@ -49,6 +61,7 @@ export const GET_TOURNAMENTS = gql`
       status
       players
       rounds {
+        _id
         completed
       }
     }

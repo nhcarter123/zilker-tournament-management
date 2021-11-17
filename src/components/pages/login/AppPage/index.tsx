@@ -5,12 +5,13 @@ import { Redirect, Route } from 'react-router-dom';
 import { Pages } from 'types/pages';
 import { useStyles } from 'components/pages/login/AppPage/styles';
 
+import { Button } from 'antd';
 import SideMenu from 'components/SideMenu';
 import PlayPage from 'components/pages/app/PlayPage';
 import TournamentPage from 'components/pages/app/TournamentPage';
 import TournamentsPage from 'components/pages/app/TournamentsPage';
 import RulesPage from 'components/pages/app/RulesPage';
-import { Button } from 'antd';
+import ProfilePage from 'components/pages/app/ProfilePage';
 
 interface AppPageProps {
   me: User;
@@ -35,8 +36,10 @@ const AppPage = ({ me }: AppPageProps): JSX.Element => {
         path={Pages.play}
         render={(): JSX.Element => <PlayPage me={me} />}
       />
-      <Route path={Pages.profile} />
-      <Route path={Pages.players} />
+      <Route
+        path={Pages.profile}
+        render={(): JSX.Element => <ProfilePage me={me} />}
+      />
       <Route
         path={Pages.tournaments}
         render={(): JSX.Element => <TournamentsPage isAdmin={isAdmin} />}

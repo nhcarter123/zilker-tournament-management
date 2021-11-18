@@ -39,7 +39,14 @@ const RoundListItem = ({
   });
 
   return (
-    <Box key={index} onClick={(): void => setSelectedRound(roundPreview._id)}>
+    <Box
+      key={index}
+      onClick={(): void =>
+        roundPreview._id === selectedRound
+          ? setSelectedRound(null)
+          : setSelectedRound(roundPreview._id)
+      }
+    >
       <Box
         display={'flex'}
         alignItems={'center'}
@@ -53,7 +60,8 @@ const RoundListItem = ({
           <Popconfirm
             title="Are you sure?"
             placement={'left'}
-            onConfirm={(): void => {
+            onConfirm={(e): void => {
+              e?.stopPropagation();
               deleteRound({
                 variables: {
                   tournamentId: tournament._id,
@@ -67,6 +75,7 @@ const RoundListItem = ({
               shape="circle"
               icon={<DeleteOutlined />}
               loading={loading}
+              onClick={(e): void => e.stopPropagation()}
             />
           </Popconfirm>
         ) : (
@@ -75,7 +84,7 @@ const RoundListItem = ({
       </Box>
 
       <Box>
-        {(selectedRound ? selectedRound === roundPreview._id : isLastRound) && (
+        {selectedRound === roundPreview._id && (
           <RoundStatusDetail
             users={users}
             tournament={tournament}

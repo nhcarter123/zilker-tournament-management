@@ -10,10 +10,10 @@ import TableSearchBar from 'components/TableSearchBar';
 import { Tournament } from 'types/types';
 import { useStyles } from 'components/tables/TournamentTable/styles';
 import { useHistory } from 'react-router-dom';
-import { Pages } from 'types/pages';
+import { Page } from 'types/page';
 
-type EditableTableProps = Parameters<typeof Table>[0];
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
+// type EditableTableProps = Parameters<typeof Table>[0];
+// type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 type TournamentsTableProps = {
   tournaments: Tournament[];
@@ -40,7 +40,7 @@ const TournamentsTable = ({
         <a
           onClick={(): void => {
             history.push(
-              Pages.editTournament.replace(':tournamentId', record._id)
+              Page.EditTournament.replace(':tournamentId', record._id)
             );
           }}
         >
@@ -92,7 +92,7 @@ const TournamentsTable = ({
       />
       <Table
         className={classes.table}
-        columns={columns as ColumnTypes}
+        columns={columns}
         dataSource={tournaments}
         size={'small'}
         // pagination={{ pageSize: 50 }}

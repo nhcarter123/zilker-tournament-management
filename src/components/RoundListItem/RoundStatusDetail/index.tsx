@@ -21,7 +21,7 @@ interface RoundProps {
 }
 
 const isComplete = (match: Match): boolean =>
-  match.result !== MatchResult.didNotStart ||
+  match.result !== MatchResult.DidNotStart ||
   match.white === 'bye' ||
   match.black === 'bye';
 
@@ -51,7 +51,7 @@ const RoundStatusDetail = ({
 
     return (
       <Box key={index} display={'flex'} alignItems={'center'}>
-        {match.result === MatchResult.whiteWon && (
+        {match.result === MatchResult.WhiteWon && (
           <Typography ml={1} mr={1} variant={'subtitle1'}>
             👑
           </Typography>
@@ -63,7 +63,7 @@ const RoundStatusDetail = ({
             : `${white?.firstName} ${white?.lastName}`}
         </Typography>
 
-        {match.result === MatchResult.draw ? (
+        {match.result === MatchResult.Draw ? (
           <Typography ml={1} mr={1} variant={'subtitle1'}>
             🤝
           </Typography>
@@ -78,7 +78,7 @@ const RoundStatusDetail = ({
           </Typography>
         )}
 
-        {match.result === MatchResult.blackWon && (
+        {match.result === MatchResult.BlackWon && (
           <Typography ml={1} mr={1} variant={'subtitle1'}>
             👑
           </Typography>

@@ -13,13 +13,13 @@ import { useStyles } from 'components/MachResultSelect/styles';
 import { Match, MatchResult } from 'types/types';
 
 const winLossOptions = [
-  { label: 'White won', value: MatchResult.whiteWon },
-  { label: 'Black won', value: MatchResult.blackWon }
+  { label: 'White won', value: MatchResult.WhiteWon },
+  { label: 'Black won', value: MatchResult.BlackWon }
 ];
 
 const drawDnsOptions = [
-  { label: 'Draw', value: MatchResult.draw },
-  { label: 'Did not start', value: MatchResult.didNotStart }
+  { label: 'Draw', value: MatchResult.Draw },
+  { label: 'Did not start', value: MatchResult.DidNotStart }
 ];
 
 interface MatchResultSelectProps {

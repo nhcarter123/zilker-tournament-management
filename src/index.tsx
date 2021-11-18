@@ -12,13 +12,10 @@ import { setContext } from '@apollo/client/link/context';
 
 import 'index.css';
 
-// todo move this
-const serverUrl = 'http://localhost:4000/graphql';
-
 const typeDefs = loader('./graphql/schema.graphql');
 
 const httpLink = createHttpLink({
-  uri: serverUrl
+  uri: process.env.REACT_APP_SERVER_URL
 });
 
 const authLink = setContext((_, { headers }) => {

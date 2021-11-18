@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_MY_MATCH, GET_USER } from 'graphql/queries/queries';
 
@@ -17,6 +17,7 @@ interface PlayPageProps {
 }
 
 const MatchPage = ({ me }: PlayPageProps): JSX.Element => {
+  const [loaded, setLoaded] = useState(false);
   const classes = useStyles();
 
   const [getOpponent, { data: opponentData }] = useLazyQuery<{
@@ -26,20 +27,24 @@ const MatchPage = ({ me }: PlayPageProps): JSX.Element => {
   const { data: matchData, loading } = useQuery<{
     getMyMatch: Nullable<Match>;
   }>(GET_MY_MATCH, {
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    pollInterval: 4000,
-    onCompleted: (data) =>
+    // pollInterval: 4000, // todo rewrite using subscriptions (who knew that was a thing??)
+    onCompleted: (data) => {
+      setLoaded(true);
+
       data.getMyMatch?.white &&
-      data.getMyMatch?.white !== 'bye' &&
-      data.getMyMatch?.black !== 'bye' &&
-      getOpponent({
-        variables: {
-          userId:
-            me._id === data.getMyMatch.white
-              ? data.getMyMatch.black
-              : data.getMyMatch.white
-        }
-      })
+        data.getMyMatch?.white !== 'bye' &&
+        data.getMyMatch?.black !== 'bye' &&
+        getOpponent({
+          variables: {
+            userId:
+              me._id === data.getMyMatch.white
+                ? data.getMyMatch.black
+                : data.getMyMatch.white
+          }
+        });
+    }
   });
 
   const opponent = opponentData?.getUser;
@@ -47,7 +52,7 @@ const MatchPage = ({ me }: PlayPageProps): JSX.Element => {
 
   return (
     <div className={classes.root}>
-      {!match && loading ? (
+      {!loaded && loading ? (
         <Spinner />
       ) : match?.white === 'bye' || match?.black === 'bye' || !match ? (
         <div>

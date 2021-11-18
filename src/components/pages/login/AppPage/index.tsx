@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Role, User } from 'types/types';
-import { Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import { Pages } from 'types/pages';
+import { Page } from 'types/page';
 import { useStyles } from 'components/pages/login/AppPage/styles';
 
 import { Button } from 'antd';
@@ -21,7 +21,7 @@ const AppPage = ({ me }: AppPageProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
-  const isAdmin = me.role === Role.admin;
+  const isAdmin = me.role === Role.Admin;
 
   return (
     <div className={classes.root}>
@@ -31,24 +31,23 @@ const AppPage = ({ me }: AppPageProps): JSX.Element => {
         </Button>
       </div>
       <SideMenu open={open} setOpen={setOpen} isAdmin={isAdmin} />
-      <Redirect from={Pages.app} exact to={Pages.play} />
       <Route
-        path={Pages.play}
+        path={Page.Play}
         render={(): JSX.Element => <PlayPage me={me} />}
       />
       <Route
-        path={Pages.profile}
+        path={Page.Profile}
         render={(): JSX.Element => <ProfilePage me={me} />}
       />
       <Route
-        path={Pages.tournaments}
+        path={Page.Tournaments}
         render={(): JSX.Element => <TournamentsPage isAdmin={isAdmin} />}
       />
       <Route
-        path={Pages.editTournament}
+        path={Page.EditTournament}
         render={(): JSX.Element => <TournamentPage isAdmin={isAdmin} />}
       />
-      <Route path={Pages.rules} component={RulesPage} />
+      <Route path={Page.Rules} component={RulesPage} />
     </div>
   );
 };

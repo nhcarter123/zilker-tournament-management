@@ -10,24 +10,24 @@ import { useStyles } from 'components/pages/app/PlayPage/styles';
 import JoinPage from 'components/pages/app/PlayPage/JoinPage';
 import TournamentPage from 'components/pages/app/PlayPage/TournamentPage';
 
-import { Pages } from 'types/pages';
+import { Page } from 'types/page';
 
 interface PlayPageProps {
   me: User;
 }
 
 enum TournamentStage {
-  waiting = 'waiting',
-  playing = 'playing'
+  Waiting = 'waiting',
+  Playing = 'playing'
 }
 
 // todo move to helper
 const getCurrentStage = (tournament: Tournament): TournamentStage => {
   if (tournament.rounds.length) {
-    return TournamentStage.playing;
+    return TournamentStage.Playing;
   }
 
-  return TournamentStage.waiting;
+  return TournamentStage.Waiting;
 };
 
 const PlayPage = ({ me }: PlayPageProps): JSX.Element => {
@@ -36,28 +36,30 @@ const PlayPage = ({ me }: PlayPageProps): JSX.Element => {
 
   const { data: tournamentData, loading } = useQuery<{
     getActiveTournament: Nullable<Tournament>;
-  }>(GET_ACTIVE_TOURNAMENT, { pollInterval: 4000 });
+  }>(GET_ACTIVE_TOURNAMENT, {
+    // pollInterval: 4000
+  });
 
   const tournament = tournamentData?.getActiveTournament || null;
 
   const inTournament = tournament?.players.includes(me._id);
 
-  if (!inTournament && page !== Pages.join) {
-    return <Redirect to={Pages.join} />;
+  if (!inTournament && page !== Page.Join) {
+    return <Redirect to={Page.Join} />;
   }
 
   if (tournament && inTournament) {
     // todo rename Pages to Page
     const stage = getCurrentStage(tournament);
-    let target: Pages;
+    let target: Page;
 
     switch (stage) {
-      case TournamentStage.playing:
-        target = Pages.match;
+      case TournamentStage.Playing:
+        target = Page.Match;
         break;
-      case TournamentStage.waiting:
+      case TournamentStage.Waiting:
       default:
-        target = Pages.waiting;
+        target = Page.Waiting;
         break;
     }
 
@@ -73,13 +75,13 @@ const PlayPage = ({ me }: PlayPageProps): JSX.Element => {
       ) : (
         <>
           <Route
-            path={Pages.join}
+            path={Page.Join}
             render={(): JSX.Element => (
               <JoinPage me={me} tournament={tournament} />
             )}
           />
           <Route
-            path={Pages.tournament}
+            path={Page.Tournament}
             render={(): JSX.Element =>
               tournament ? (
                 <TournamentPage me={me} tournament={tournament} />

@@ -14,14 +14,14 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ArticleIcon from '@mui/icons-material/Article';
 
-import { Pages } from 'types/pages';
+import { Page } from 'types/page';
 import { useStyles } from 'components/SideMenu/styles';
 
 enum MenuItem {
-  play = 'Play',
-  profile = 'Profile',
-  tournaments = 'Tournaments',
-  rules = 'Rules'
+  Play = 'Play',
+  Profile = 'Profile',
+  Tournaments = 'Tournaments',
+  Rules = 'Rules'
 }
 
 interface SideMenuProps {
@@ -35,22 +35,22 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
   const history = useHistory();
 
   const menuItems = [
-    MenuItem.play,
-    MenuItem.profile,
-    isAdmin && MenuItem.tournaments,
-    MenuItem.rules
-  ].filter((v) => v) as MenuItem[];
+    MenuItem.Play,
+    MenuItem.Profile,
+    isAdmin && MenuItem.Tournaments,
+    MenuItem.Rules
+  ].flatMap((f) => (!!f ? [f] : []));
 
   const generateMenuList = (list: string[]): JSX.Element => {
     const getIcon = (text: string): JSX.Element => {
       switch (text) {
-        case MenuItem.profile:
+        case MenuItem.Profile:
           return <FaceIcon />;
-        case MenuItem.tournaments:
+        case MenuItem.Tournaments:
           return <ArticleIcon />;
-        case MenuItem.rules:
+        case MenuItem.Rules:
           return <MenuBookIcon />;
-        case MenuItem.play:
+        case MenuItem.Play:
         default:
           return <SportsEsportsIcon />;
       }
@@ -58,15 +58,15 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
 
     const getDestination = (text: string): string => {
       switch (text) {
-        case MenuItem.profile:
-          return Pages.profile;
-        case MenuItem.tournaments:
-          return Pages.tournaments;
-        case MenuItem.rules:
-          return Pages.rules;
-        case MenuItem.play:
+        case MenuItem.Profile:
+          return Page.Profile;
+        case MenuItem.Tournaments:
+          return Page.Tournaments;
+        case MenuItem.Rules:
+          return Page.Rules;
+        case MenuItem.Play:
         default:
-          return Pages.play;
+          return Page.Play;
       }
     };
 

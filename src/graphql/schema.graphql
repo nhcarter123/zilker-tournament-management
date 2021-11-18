@@ -74,9 +74,9 @@ type Query {
   getUser(userId: ID!): User
   getUsers(userIds: [ID!]!, filterTerm: String): [User!]!
 
-  getActiveTournament: Tournament!
+  getActiveTournament: Tournament
   getTournaments: [Tournament!]!
-  getTournament(tournamentId: ID!): Tournament!
+  getTournament(tournamentId: ID!): Tournament
 
   getMatch(matchId: ID!): Match
   getMyMatch: Match

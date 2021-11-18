@@ -6,7 +6,7 @@ import MatchPage from 'components/pages/app/PlayPage/TournamentPage/MatchPage';
 import WaitingPage from 'components/pages/app/PlayPage/TournamentPage/WaitingPage';
 
 import { Tournament, User } from 'types/types';
-import { Pages } from 'types/pages';
+import { Page } from 'types/page';
 import { useStyles } from 'components/pages/app/PlayPage/TournamentPage/styles';
 
 interface PlayPageProps {
@@ -21,9 +21,9 @@ const TournamentPage = ({ me, tournament }: PlayPageProps): JSX.Element => {
     <div className={classes.root}>
       <TournamentHeader tournament={tournament} />
 
-      <Route path={Pages.waiting} component={WaitingPage} />
+      <Route path={Page.Waiting} component={WaitingPage} />
       <Route
-        path={Pages.match}
+        path={Page.Match}
         render={(): JSX.Element => <MatchPage me={me} />}
       />
     </div>

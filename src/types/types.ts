@@ -9,21 +9,21 @@ export type User = {
 };
 
 export enum Role {
-  admin = 'admin',
-  player = 'player'
+  Admin = 'admin',
+  Player = 'player'
 }
 
 export enum MatchResult {
-  whiteWon = 'whiteWon',
-  blackWon = 'blackWon',
-  draw = 'draw',
-  didNotStart = 'didNotStart'
+  WhiteWon = 'whiteWon',
+  BlackWon = 'blackWon',
+  Draw = 'draw',
+  DidNotStart = 'didNotStart'
 }
 
 export enum TournamentStatus {
-  created = 'created',
-  active = 'active',
-  completed = 'completed'
+  Created = 'created',
+  Active = 'active',
+  Completed = 'completed'
 }
 
 export type Match = {

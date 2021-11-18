@@ -87,7 +87,7 @@ const TournamentRounds = ({
           <Button
             size={'large'}
             type="primary"
-            loading={isMutationNewRound && nextRoundLoading}
+            loading={!isMutationNewRound && nextRoundLoading}
             block
           >
             Complete tournament

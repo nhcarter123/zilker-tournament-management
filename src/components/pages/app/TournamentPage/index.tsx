@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useLazyQuery, useQuery } from '@apollo/client';
 
-import { Box, Typography, Divider } from '@mui/material/';
+import { Typography, Divider } from '@mui/material/';
 import Spinner from 'components/Spinner';
 import TournamentHeader from 'components/TournamentHeader';
 import TournamentRounds from 'components/pages/app/TournamentPage/TournamentRounds';
@@ -67,10 +67,6 @@ const TournamentPage = ({ isAdmin }: PlayPageProps): JSX.Element => {
                 tournamentId={tournamentId}
               />
             ))}
-
-            <Box mt={8}>
-              <Divider />
-            </Box>
           </>
         )
       )}

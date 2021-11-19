@@ -54,7 +54,7 @@ const GetMoreDetailsForm = ({
     onSubmit: (values) => {
       updateUserDetails({
         variables: {
-          args: {
+          payload: {
             firstName: values.firstName,
             lastName: values.lastName,
             rating: parseInt(`${values.rating}`)

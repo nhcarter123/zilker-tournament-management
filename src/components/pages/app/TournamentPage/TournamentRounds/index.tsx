@@ -73,7 +73,7 @@ const TournamentRounds = ({
         </Popconfirm>
       </Box>
 
-      <Box mt={3} mb={3}>
+      <Box mt={2} mb={3}>
         <Popconfirm
           title="Are you sure?"
           placement={'top'}

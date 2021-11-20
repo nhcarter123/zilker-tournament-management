@@ -16,10 +16,12 @@ import { Page } from 'types/page';
 // type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 type TournamentsTableProps = {
+  isAdmin: boolean;
   tournaments: Tournament[];
 };
 
 const TournamentsTable = ({
+  isAdmin,
   tournaments
 }: TournamentsTableProps): JSX.Element => {
   const history = useHistory();
@@ -78,16 +80,17 @@ const TournamentsTable = ({
     {
       dataIndex: 'delete',
       width: '50px',
-      render: (_: any, record: Tournament): JSX.Element => (
-        <DeleteTournamentButton _id={record._id} />
-      )
+      render: (_: any, record: Tournament): JSX.Element =>
+        isAdmin ? <DeleteTournamentButton _id={record._id} /> : <></>
     }
   ];
 
   return (
     <div className={classes.root}>
       <TableSearchBar
-        renderButton={(): JSX.Element => <AddTournamentButton />}
+        renderButton={(): JSX.Element =>
+          isAdmin ? <AddTournamentButton /> : <></>
+        }
         setFilterTerm={setFilterTerm}
       />
       <Table

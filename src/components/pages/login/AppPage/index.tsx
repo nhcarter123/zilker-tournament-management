@@ -12,6 +12,7 @@ import TournamentPage from 'components/pages/app/TournamentPage';
 import TournamentsPage from 'components/pages/app/TournamentsPage';
 import RulesPage from 'components/pages/app/RulesPage';
 import ProfilePage from 'components/pages/app/ProfilePage';
+import SocialPage from 'components/pages/app/SocialPage';
 
 interface AppPageProps {
   me: User;
@@ -30,14 +31,10 @@ const AppPage = ({ me }: AppPageProps): JSX.Element => {
           Menu
         </Button>
       </div>
-      <SideMenu open={open} setOpen={setOpen} isAdmin={isAdmin} />
+      <SideMenu open={open} setOpen={setOpen} />
       <Route
         path={Page.Play}
         render={(): JSX.Element => <PlayPage me={me} />}
-      />
-      <Route
-        path={Page.Profile}
-        render={(): JSX.Element => <ProfilePage me={me} />}
       />
       <Route
         path={Page.Tournaments}
@@ -47,6 +44,11 @@ const AppPage = ({ me }: AppPageProps): JSX.Element => {
         path={Page.EditTournament}
         render={(): JSX.Element => <TournamentPage isAdmin={isAdmin} />}
       />
+      <Route
+        path={Page.Profile}
+        render={(): JSX.Element => <ProfilePage me={me} />}
+      />
+      <Route path={Page.Social} component={SocialPage} />
       <Route path={Page.Rules} component={RulesPage} />
     </div>
   );

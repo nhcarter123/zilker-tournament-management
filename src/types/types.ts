@@ -32,8 +32,20 @@ export type Match = {
   black: string;
   whiteRating: number;
   blackRating: number;
+  boardNumber: number;
   result: MatchResult;
   completed: boolean;
+};
+
+export type Standing = {
+  _id: string;
+  userId: string;
+  position: number;
+  score: number;
+  win: number;
+  loss: number;
+  draw: number;
+  bye: number;
 };
 
 export type Round = {
@@ -48,15 +60,16 @@ export type RoundPreview = {
   matches: string[];
 };
 
-export interface Tournament {
+export type Tournament = {
   _id: string;
   name: string;
   date: Date;
   status: TournamentStatus;
   players: string[];
   rounds: RoundPreview[];
+  standings: Standing[];
   totalRounds: number;
-}
+};
 
 // export interface TournamentWithStats extends Tournament {
 //   medianRating: number;

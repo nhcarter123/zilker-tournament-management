@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { Button, Popconfirm } from 'antd';
@@ -11,15 +11,20 @@ import { Tournament, User } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 
 interface TournamentRoundsProps {
+  isAdmin: boolean;
   users: User[];
   tournament: Tournament;
+  selectedRound: Nullable<string>;
+  setSelectedRound: Dispatch<SetStateAction<Nullable<string>>>;
 }
 
 const TournamentRounds = ({
+  isAdmin,
   tournament,
-  users
+  users,
+  selectedRound,
+  setSelectedRound
 }: TournamentRoundsProps): JSX.Element => {
-  const [selectedRound, setSelectedRound] = useState<Nullable<string>>(null);
   const [isMutationNewRound, setIsMutationNewRound] = useState<boolean>(true);
 
   const [completeRound, { loading: nextRoundLoading }] = useMutation(
@@ -41,6 +46,7 @@ const TournamentRounds = ({
       {tournament.rounds.map((roundPreview, index) => (
         <RoundListItem
           key={index}
+          isAdmin={isAdmin}
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
           index={index}
@@ -51,49 +57,55 @@ const TournamentRounds = ({
         />
       ))}
 
-      <Box mt={3}>
-        <Popconfirm
-          title="Are you sure?"
-          placement={'top'}
-          onConfirm={(): void => {
-            setIsMutationNewRound(true);
-            completeRound({
-              variables: { tournamentId: tournament._id, newRound: true }
-            });
-          }}
-        >
-          <Button
-            size={'large'}
-            type="primary"
-            loading={isMutationNewRound && nextRoundLoading}
-            block
-          >
-            New round
-          </Button>
-        </Popconfirm>
-      </Box>
+      {isAdmin && (
+        <>
+          <Box mt={3}>
+            <Popconfirm
+              title="Are you sure?"
+              placement={'top'}
+              onConfirm={(): void => {
+                setIsMutationNewRound(true);
+                completeRound({
+                  variables: { tournamentId: tournament._id, newRound: true }
+                });
+              }}
+            >
+              <Button
+                size={'large'}
+                type="primary"
+                loading={isMutationNewRound && nextRoundLoading}
+                block
+              >
+                New round
+              </Button>
+            </Popconfirm>
+          </Box>
 
-      <Box mt={2} mb={3}>
-        <Popconfirm
-          title="Are you sure?"
-          placement={'top'}
-          onConfirm={(): void => {
-            setIsMutationNewRound(true);
-            completeRound({
-              variables: { tournamentId: tournament._id, newRound: false }
-            });
-          }}
-        >
-          <Button
-            size={'large'}
-            type="primary"
-            loading={!isMutationNewRound && nextRoundLoading}
-            block
-          >
-            Complete tournament
-          </Button>
-        </Popconfirm>
-      </Box>
+          <Box mt={2} mb={3}>
+            <Popconfirm
+              title="Are you sure?"
+              placement={'top'}
+              onConfirm={(): void => {
+                setIsMutationNewRound(true);
+                completeRound({
+                  variables: { tournamentId: tournament._id, newRound: false }
+                });
+              }}
+            >
+              <Button
+                size={'large'}
+                type="primary"
+                loading={!isMutationNewRound && nextRoundLoading}
+                block
+              >
+                Complete tournament
+              </Button>
+            </Popconfirm>
+          </Box>
+
+          <Divider />
+        </>
+      )}
     </>
   );
 };

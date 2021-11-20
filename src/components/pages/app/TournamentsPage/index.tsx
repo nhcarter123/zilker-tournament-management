@@ -16,14 +16,13 @@ interface PlayPageProps {
 const TournamentsPage = ({ isAdmin }: PlayPageProps): JSX.Element => {
   const classes = useStyles();
 
+  // todo replace is admin propagation with more hooks instead
+
   const { data: tournamentData, loading } = useQuery<{
     getTournaments: Tournament[];
   }>(GET_TOURNAMENTS);
 
   const tournaments = tournamentData?.getTournaments;
-
-  // todo implement this for all users with isAdmin
-  console.log(isAdmin);
 
   return (
     <div className={classes.root}>
@@ -36,7 +35,9 @@ const TournamentsPage = ({ isAdmin }: PlayPageProps): JSX.Element => {
       {loading ? (
         <Spinner />
       ) : (
-        tournaments && <TournamentsTable tournaments={tournaments} />
+        tournaments && (
+          <TournamentsTable tournaments={tournaments} isAdmin={isAdmin} />
+        )
       )}
     </div>
   );

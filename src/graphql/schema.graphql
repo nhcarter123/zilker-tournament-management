@@ -43,8 +43,20 @@ type Match {
   black: String!
   whiteRating: Int!
   blackRating: Int!
+  boardNumber: Int!
   result: MatchResult!
   completed: Boolean!
+}
+
+type Standing {
+  _id: ID!
+  userId: String!
+  position: Int!
+  score: Float!
+  win: Int!
+  loss: Int!
+  draw: Int!
+  bye: Int!
 }
 
 type Round {
@@ -66,6 +78,7 @@ type Tournament {
   status: TournamentStatus!
   players: [String!]!
   rounds: [RoundPreview!]!
+  standings: [Standing!]!
   totalRounds: Int!
 }
 

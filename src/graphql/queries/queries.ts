@@ -81,6 +81,16 @@ export const GET_TOURNAMENT = gql`
         matches
         completed
       }
+      standings {
+        _id
+        userId
+        position
+        score
+        win
+        loss
+        draw
+        bye
+      }
       totalRounds
     }
   }
@@ -103,6 +113,7 @@ export const GET_MY_MATCH = gql`
       _id
       white
       black
+      boardNumber
       result
     }
   }
@@ -117,6 +128,7 @@ export const GET_ROUND = gql`
         _id
         white
         black
+        boardNumber
         result
       }
     }

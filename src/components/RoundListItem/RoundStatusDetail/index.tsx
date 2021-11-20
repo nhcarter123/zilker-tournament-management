@@ -39,10 +39,6 @@ const RoundStatusDetail = ({
     }
   });
 
-  if (!data?.getRound) {
-    return <></>;
-  }
-
   const renderMatches = (match: Match, index: number): JSX.Element => {
     const white = find(users, (user) => user._id === match.white);
     const black = find(users, (user) => user._id === match.black);
@@ -93,6 +89,10 @@ const RoundStatusDetail = ({
     );
   };
 
+  const sortedMatches = [...(data?.getRound?.matches || [])].sort(
+    (a, b) => a.boardNumber - b.boardNumber
+  );
+
   return loading ? (
     <Box sx={{ width: '200px' }} mb={3}>
       <Spinner linear />
@@ -100,10 +100,10 @@ const RoundStatusDetail = ({
   ) : (
     <Box mb={2}>
       <Typography variant={'h6'}>{`${
-        data.getRound.matches.filter(isComplete).length
-      }/${data.getRound.matches.length} completed`}</Typography>
+        data?.getRound?.matches.filter(isComplete).length
+      }/${data?.getRound?.matches.length} completed`}</Typography>
 
-      {data.getRound.matches.map((match, index) => renderMatches(match, index))}
+      {sortedMatches.map((match, index) => renderMatches(match, index))}
     </Box>
   );
 };

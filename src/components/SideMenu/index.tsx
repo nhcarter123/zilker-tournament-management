@@ -13,6 +13,7 @@ import FaceIcon from '@mui/icons-material/Face';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ArticleIcon from '@mui/icons-material/Article';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 import { Page } from 'types/page';
 import { useStyles } from 'components/SideMenu/styles';
@@ -21,25 +22,26 @@ enum MenuItem {
   Play = 'Play',
   Profile = 'Profile',
   Tournaments = 'Tournaments',
-  Rules = 'Rules'
+  Rules = 'Rules',
+  Social = 'Social'
 }
 
 interface SideMenuProps {
-  isAdmin: boolean;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
+const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
 
   const menuItems = [
     MenuItem.Play,
     MenuItem.Profile,
-    isAdmin && MenuItem.Tournaments,
+    MenuItem.Social,
+    MenuItem.Tournaments,
     MenuItem.Rules
-  ].flatMap((f) => (!!f ? [f] : []));
+  ];
 
   const generateMenuList = (list: string[]): JSX.Element => {
     const getIcon = (text: string): JSX.Element => {
@@ -50,6 +52,8 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
           return <ArticleIcon />;
         case MenuItem.Rules:
           return <MenuBookIcon />;
+        case MenuItem.Social:
+          return <GroupsIcon />;
         case MenuItem.Play:
         default:
           return <SportsEsportsIcon />;
@@ -64,6 +68,8 @@ const SideMenu = ({ open, setOpen, isAdmin }: SideMenuProps): JSX.Element => {
           return Page.Tournaments;
         case MenuItem.Rules:
           return Page.Rules;
+        case MenuItem.Social:
+          return Page.Social;
         case MenuItem.Play:
         default:
           return Page.Play;

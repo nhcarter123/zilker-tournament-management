@@ -8,7 +8,7 @@ import MatchResultSelect from 'components/MachResultSelect';
 
 import ChessBoard from 'svg/chessBoard.svg';
 
-import { useStyles } from 'components/pages/app/PlayPage/styles';
+import { useStyles } from 'components/pages/app/PlayPage/TournamentPage/MatchPage/styles';
 import { Match, User } from 'types/types';
 import { Box, Divider, Typography } from '@mui/material';
 
@@ -23,6 +23,8 @@ const MatchPage = ({ me }: PlayPageProps): JSX.Element => {
   const [getOpponent, { data: opponentData }] = useLazyQuery<{
     getUser: Nullable<User>;
   }>(GET_USER);
+
+  // todo this !== 'bye' shit has to get abstracted to somewhere
 
   const { data: matchData, loading } = useQuery<{
     getMyMatch: Nullable<Match>;
@@ -66,7 +68,12 @@ const MatchPage = ({ me }: PlayPageProps): JSX.Element => {
           <div>
             <Player player={match.white === opponent._id ? me : opponent} />
 
-            <Box display={'flex'} justifyContent={'center'}>
+            <Box className={classes.boardContainer}>
+              <div className={classes.boardNumber}>
+                <Typography
+                  variant={'h6'}
+                >{`#${match.boardNumber}`}</Typography>
+              </div>
               <div
                 style={{
                   border: '5px solid rgb(191 191 191)',

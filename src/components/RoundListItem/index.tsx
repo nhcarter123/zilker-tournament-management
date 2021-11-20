@@ -16,6 +16,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 
 interface RoundListItemProps {
   index: number;
+  isAdmin: boolean;
   selectedRound: Nullable<string>;
   setSelectedRound: Dispatch<React.SetStateAction<Nullable<string>>>;
   tournament: Tournament;
@@ -26,6 +27,7 @@ interface RoundListItemProps {
 
 const RoundListItem = ({
   index,
+  isAdmin,
   selectedRound,
   setSelectedRound,
   roundPreview,
@@ -57,27 +59,29 @@ const RoundListItem = ({
         <Typography variant={'h6'}>{`Round ${index + 1}`}</Typography>
 
         {isLastRound ? (
-          <Popconfirm
-            title="Are you sure?"
-            placement={'left'}
-            onConfirm={(e): void => {
-              e?.stopPropagation();
-              deleteRound({
-                variables: {
-                  tournamentId: tournament._id,
-                  roundId: roundPreview._id
-                }
-              });
-            }}
-          >
-            <Button
-              type={'primary'}
-              shape="circle"
-              icon={<DeleteOutlined />}
-              loading={loading}
-              onClick={(e): void => e.stopPropagation()}
-            />
-          </Popconfirm>
+          isAdmin && (
+            <Popconfirm
+              title="Are you sure?"
+              placement={'left'}
+              onConfirm={(e): void => {
+                e?.stopPropagation();
+                deleteRound({
+                  variables: {
+                    tournamentId: tournament._id,
+                    roundId: roundPreview._id
+                  }
+                });
+              }}
+            >
+              <Button
+                type={'primary'}
+                shape="circle"
+                icon={<DeleteOutlined />}
+                loading={loading}
+                onClick={(e): void => e.stopPropagation()}
+              />
+            </Popconfirm>
+          )
         ) : (
           <CheckCircleIcon color={'success'} />
         )}

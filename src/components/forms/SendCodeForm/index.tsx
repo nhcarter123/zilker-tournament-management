@@ -6,6 +6,7 @@ import { Button } from 'antd';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { useStyles } from 'components/forms/SendCodeForm/styles';
+import { Box } from '@mui/material/';
 
 interface SignupValues {
   phoneNumber: string;
@@ -47,12 +48,12 @@ const SendCodeForm = (props: SendCodeFormProps): JSX.Element => {
         return submitForm();
       }}
     >
-      <div className={classes.root}>
+      <Box mt={4}>
         <div className={classes.row}>
           <PhoneInput
             className={classes.phoneInput}
             defaultCountry="US"
-            placeholder="Enter your phone number"
+            placeholder="Phone number"
             name="phoneNumber"
             value={values.phoneNumber}
             onChange={(e): void => {
@@ -76,7 +77,7 @@ const SendCodeForm = (props: SendCodeFormProps): JSX.Element => {
         >
           {props.hasSentCode ? 'Resend code' : 'Send me a code'}
         </Button>
-      </div>
+      </Box>
     </form>
   );
 };

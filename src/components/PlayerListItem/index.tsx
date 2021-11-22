@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
@@ -6,12 +6,12 @@ import { GET_TOURNAMENT } from 'graphql/queries/queries';
 
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography, Divider } from '@mui/material';
-import { Standing, User } from 'types/types';
+import { Role, Standing, User } from 'types/types';
 import { KICK_PLAYER } from 'graphql/mutations/mutations';
+import { UserContext } from '../../context/userContext';
 
 interface PlayerListItemProps {
   user: User;
-  isAdmin: boolean;
   isInTournament: boolean;
   standing?: Standing;
   tournamentId: string;
@@ -19,11 +19,11 @@ interface PlayerListItemProps {
 
 const PlayerListItem = ({
   user,
-  isAdmin,
   standing,
   tournamentId,
   isInTournament
 }: PlayerListItemProps): JSX.Element => {
+  const me = useContext(UserContext);
   const [kickUser, { loading }] = useMutation(KICK_PLAYER, {
     refetchQueries: [GET_TOURNAMENT],
     onError
@@ -82,7 +82,7 @@ const PlayerListItem = ({
           )}
         </Box>
 
-        {isAdmin && isInTournament && (
+        {me?.role === Role.Admin && isInTournament && (
           <Popconfirm
             title="Are you sure?"
             placement={'left'}

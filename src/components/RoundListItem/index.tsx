@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React, { Dispatch, useContext } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
@@ -11,12 +11,12 @@ import RoundStatusDetail from 'components/RoundListItem/RoundStatusDetail';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import { Tournament, RoundPreview, User } from 'types/types';
+import { Tournament, RoundPreview, User, Role } from 'types/types';
 import { DeleteOutlined } from '@ant-design/icons';
+import { UserContext } from '../../context/userContext';
 
 interface RoundListItemProps {
   index: number;
-  isAdmin: boolean;
   selectedRound: Nullable<string>;
   setSelectedRound: Dispatch<React.SetStateAction<Nullable<string>>>;
   tournament: Tournament;
@@ -27,7 +27,6 @@ interface RoundListItemProps {
 
 const RoundListItem = ({
   index,
-  isAdmin,
   selectedRound,
   setSelectedRound,
   roundPreview,
@@ -35,6 +34,7 @@ const RoundListItem = ({
   users,
   isLastRound
 }: RoundListItemProps): JSX.Element => {
+  const me = useContext(UserContext);
   const [deleteRound, { loading }] = useMutation(DELETE_ROUND, {
     refetchQueries: [GET_TOURNAMENT],
     onError
@@ -59,7 +59,7 @@ const RoundListItem = ({
         <Typography variant={'h6'}>{`Round ${index + 1}`}</Typography>
 
         {isLastRound ? (
-          isAdmin && (
+          me?.role === Role.Admin && (
             <Popconfirm
               title="Are you sure?"
               placement={'left'}

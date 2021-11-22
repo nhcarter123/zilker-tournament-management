@@ -16,14 +16,13 @@ import { Page } from 'types/page';
 // type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 type TournamentsTableProps = {
-  isAdmin: boolean;
   tournaments: Tournament[];
 };
 
 const TournamentsTable = ({
-  isAdmin,
   tournaments
 }: TournamentsTableProps): JSX.Element => {
+  const isAdmin = true;
   const history = useHistory();
   const classes = useStyles();
   const [filterTerm, setFilterTerm] = useState('');

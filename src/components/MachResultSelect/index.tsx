@@ -41,14 +41,14 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
   };
 
   return (
-    <Box mt={3}>
+    <Box mt={2}>
       <Box mb={1}>
         <Typography variant={'h5'} align={'center'}>
           Match result
         </Typography>
       </Box>
 
-      <div className={classes.container}>
+      <div>
         {loading ? (
           <Box mt={1}>
             <Spinner linear />

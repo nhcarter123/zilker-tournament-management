@@ -3,14 +3,15 @@ import { User } from 'types/types';
 import { Box, Typography } from '@mui/material/';
 import PlayerAvatar from 'components/PlayerAvatar';
 
-interface PlayPageProps {
+interface PlayerProps {
   player: User;
+  hideAvatar?: boolean;
 }
 
-const MatchPage = ({ player }: PlayPageProps): JSX.Element => {
+const Player = ({ player, hideAvatar }: PlayerProps): JSX.Element => {
   return (
     <Box mt={2} mb={1}>
-      <PlayerAvatar player={player} />
+      {!hideAvatar && <PlayerAvatar player={player} />}
 
       <Typography
         align={'center'}
@@ -24,4 +25,4 @@ const MatchPage = ({ player }: PlayPageProps): JSX.Element => {
   );
 };
 
-export default MatchPage;
+export default Player;

@@ -8,7 +8,7 @@ interface PlayPageProps {
 
 // todo as helper
 const getFirstLetter = (name: string): string =>
-  name.substr(0, 1).toUpperCase();
+  name.substring(0, 1).toUpperCase();
 
 // todo as helper
 const getColorFromName = (name: string): string => {

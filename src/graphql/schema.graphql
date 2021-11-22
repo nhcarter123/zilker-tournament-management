@@ -5,6 +5,12 @@ input UpdateUserDetailsPayload {
   lastName: String
   rating: Int
 }
+
+input UpdateTournamentPayload {
+  name: String
+  isDeleted: Boolean
+}
+
 input UpdateMatchPayload {
   rating: Int!
 }
@@ -97,17 +103,20 @@ type Query {
 }
 
 type Mutation {
-  updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
-
-  sendVerificationCode(phone: String!): Boolean!
-  verifyCode(code: String!): User!
-
-  createTournament(name: String!): Boolean!
-  joinTournament(tournamentId: ID!, userId: ID!): Boolean!
-  kickPlayer(tournamentId: ID!, userId: ID!): Boolean!
+  #   Tournament
   completeRound(tournamentId: ID!, newRound: Boolean!): Boolean!
   deleteRound(tournamentId: ID!, roundId: ID!): Boolean!
+  joinTournament(tournamentId: ID!, userId: ID!): Boolean!
+  kickPlayer(tournamentId: ID!, userId: ID!): Boolean!
+  createTournament(name: String!): Boolean!
+  updateTournament(tournamentId: ID!, payload: UpdateTournamentPayload!): Boolean!
 
+  #   User
+  verifyCode(code: String!): User
+  sendVerificationCode(phone: String!): Boolean
+  updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
+
+  #   Matches
   updateMatch(matchId: ID!, payload: UpdateMatchPayload!): Boolean!
   deleteMatch(tournamentId: ID!, roundId: ID!, matchId: ID!): Boolean!
 }

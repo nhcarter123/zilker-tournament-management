@@ -10,8 +10,6 @@ import {
 import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
 
-import 'index.css';
-
 const typeDefs = loader('./graphql/schema.graphql');
 
 const httpLink = createHttpLink({

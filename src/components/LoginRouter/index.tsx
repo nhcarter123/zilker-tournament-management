@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 
-import LoginPage from 'components/pages/login/LoginPage';
-import MoreInfoPage from 'components/pages/login/MoreInfoPage';
-import AppPage from 'components/pages/login/AppPage';
+import LoginPage from 'components/pages/LoginPage';
+import MoreInfoPage from 'components/pages/MoreInfoPage';
+import AppPage from 'components/pages/AppPage';
 import Spinner from 'components/Spinner';
 
 import { GET_ME } from 'graphql/queries/queries';
@@ -14,6 +14,7 @@ import { UPDATE_USER_DETAILS, VERIFY_CODE } from 'graphql/mutations/mutations';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/LoginRouter/styles';
+import { UserContext } from 'context/userContext';
 
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
@@ -64,14 +65,14 @@ const LoginRouter = (): JSX.Element => {
       onCompleted: refetch
     });
 
-  const me = data?.me;
+  const me = data?.me || null;
 
   return (
     <div className={classes.root}>
       {meLoading || verifyCodeLoading ? (
         <Spinner />
       ) : (
-        <>
+        <UserContext.Provider value={me}>
           <Route
             path={Page.Login}
             render={(): JSX.Element => <LoginPage verifyCode={verifyCode} />}
@@ -85,11 +86,8 @@ const LoginRouter = (): JSX.Element => {
               />
             )}
           />
-          <Route
-            path={Page.App}
-            render={(): JSX.Element => (me ? <AppPage me={me} /> : <></>)}
-          />
-        </>
+          <Route path={Page.App} component={AppPage} />
+        </UserContext.Provider>
       )}
     </div>
   );

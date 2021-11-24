@@ -6,7 +6,7 @@ import Spinner from 'components/Spinner';
 
 import { useMutation } from '@apollo/client';
 import { UPDATE_MATCH } from 'graphql/mutations/mutations';
-import { GET_MY_MATCH } from 'graphql/queries/queries';
+import { GET_MATCH } from 'graphql/queries/queries';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MachResultSelect/styles';
@@ -24,13 +24,17 @@ const drawDnsOptions = [
 
 interface MatchResultSelectProps {
   match: Match;
+  matchLoading: boolean;
 }
 
-const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
+const MatchResultSelect = ({
+  match,
+  matchLoading
+}: MatchResultSelectProps): JSX.Element => {
   const classes = useStyles();
 
   const [updateMatch, { loading }] = useMutation(UPDATE_MATCH, {
-    refetchQueries: [GET_MY_MATCH],
+    refetchQueries: [GET_MATCH],
     onError
   });
 
@@ -49,7 +53,7 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
       </Box>
 
       <div>
-        {loading ? (
+        {matchLoading || loading ? (
           <Box mt={1}>
             <Spinner linear />
           </Box>

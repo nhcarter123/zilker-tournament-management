@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useLazyQuery, useQuery } from '@apollo/client';
-import { GET_MY_MATCH, GET_USER } from 'graphql/queries/queries';
+import { GET_MATCH, GET_USER } from 'graphql/queries/queries';
 import { useMediaQuery } from 'react-responsive';
 
 import Spinner from 'components/Spinner';
@@ -12,48 +12,58 @@ import ChessBoard from 'svg/chessBoard.svg';
 import { useStyles } from 'components/pages/AppPage/PlayPage/TournamentPage/MatchPage/styles';
 import { Match, User } from 'types/types';
 import { Box, Divider, Typography } from '@mui/material';
-import { UserContext } from 'context/userContext';
+import { useParams } from 'react-router-dom';
 
 const MatchPage = (): JSX.Element => {
   const [loaded, setLoaded] = useState(false);
-  const me = useContext(UserContext);
+  const { matchId } = useParams<{ matchId: string }>();
   const shortWindow = useMediaQuery({ query: `(max-height: 660px)` });
   const classes = useStyles();
 
-  const [getOpponent, { data: opponentData }] = useLazyQuery<{
+  const [getWhitePlayer, { data: whitePlayerData }] = useLazyQuery<{
+    getUser: Nullable<User>;
+  }>(GET_USER);
+
+  const [getBlackPlayer, { data: blackPlayerData }] = useLazyQuery<{
     getUser: Nullable<User>;
   }>(GET_USER);
 
   // todo this !== 'bye' shit has to get abstracted to somewhere
 
   const { data: matchData, loading } = useQuery<{
-    getMyMatch: Nullable<Match>;
-  }>(GET_MY_MATCH, {
-    fetchPolicy: 'network-only',
+    getMatch: Nullable<Match>;
+  }>(GET_MATCH, {
+    variables: { matchId },
+    // fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     // pollInterval: 4000, // todo rewrite using subscriptions (who knew that was a thing??)
     onCompleted: (data) => {
       setLoaded(true);
 
-      data.getMyMatch?.white &&
-        data.getMyMatch?.white !== 'bye' &&
-        data.getMyMatch?.black !== 'bye' &&
-        getOpponent({
-          variables: {
-            userId:
-              me?._id === data.getMyMatch.white
-                ? data.getMyMatch.black
-                : data.getMyMatch.white
-          }
-        });
+      if (data.getMatch?.white !== 'bye' && data.getMatch?.black !== 'bye') {
+        if (data.getMatch) {
+          getWhitePlayer({
+            variables: {
+              userId: data.getMatch.white
+            }
+          });
+
+          getBlackPlayer({
+            variables: {
+              userId: data.getMatch.black
+            }
+          });
+        }
+      }
     }
   });
 
-  const opponent = opponentData?.getUser;
-  const match = matchData?.getMyMatch;
+  const whitePlayer = whitePlayerData?.getUser;
+  const blackPlayer = blackPlayerData?.getUser;
+  const match = matchData?.getMatch;
 
   return (
-    <>
+    <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
       {!loaded && loading ? (
         <Spinner />
       ) : match?.white === 'bye' || match?.black === 'bye' || !match ? (
@@ -64,11 +74,13 @@ const MatchPage = (): JSX.Element => {
           </Typography>
         </div>
       ) : (
-        me &&
-        opponent && (
-          <div>
+        whitePlayer &&
+        blackPlayer && (
+          <Box sx={{ width: '210px' }}>
             <Player
-              player={match.white === opponent._id ? me : opponent}
+              player={blackPlayer}
+              ratingBefore={match.blackRating}
+              ratingAfter={match.newBlackRating}
               hideAvatar={shortWindow}
             />
 
@@ -94,17 +106,19 @@ const MatchPage = (): JSX.Element => {
             </Box>
 
             <Player
-              player={match.white === opponent._id ? opponent : me}
+              player={whitePlayer}
+              ratingBefore={match.whiteRating}
+              ratingAfter={match.newWhiteRating}
               hideAvatar={shortWindow}
             />
 
             <Divider />
 
-            <MatchResultSelect match={match} />
-          </div>
+            <MatchResultSelect match={match} matchLoading={loading} />
+          </Box>
         )
       )}
-    </>
+    </Box>
   );
 };
 

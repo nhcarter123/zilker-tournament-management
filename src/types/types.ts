@@ -28,10 +28,15 @@ export enum TournamentStatus {
 
 export type Match = {
   _id: string;
+  tournamentId: string;
   white: string;
   black: string;
   whiteRating: number;
   blackRating: number;
+  newWhiteRating?: number;
+  newBlackRating?: number;
+  whiteMatchesPlayed: number;
+  blackMatchesPlayed: number;
   boardNumber: number;
   result: MatchResult;
   completed: boolean;

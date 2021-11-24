@@ -102,6 +102,11 @@ export const GET_MATCH = gql`
       _id
       white
       black
+      whiteRating
+      blackRating
+      newWhiteRating
+      newBlackRating
+      boardNumber
       result
     }
   }
@@ -111,10 +116,6 @@ export const GET_MY_MATCH = gql`
   query GetMyMatch {
     getMyMatch {
       _id
-      white
-      black
-      boardNumber
-      result
     }
   }
 `;

@@ -3,7 +3,7 @@ import React from 'react';
 import { find } from 'lodash';
 import { useQuery } from '@apollo/client';
 import { GET_ROUND } from 'graphql/queries/queries';
-import { Box, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
 import {
   Match,
@@ -13,6 +13,10 @@ import {
   Tournament,
   User
 } from 'types/types';
+
+import LaunchIcon from '@mui/icons-material/Launch';
+import { useHistory } from 'react-router-dom';
+import { Page } from '../../../types/page';
 
 interface RoundProps {
   tournament: Tournament;
@@ -30,6 +34,7 @@ const RoundStatusDetail = ({
   roundPreview,
   users
 }: RoundProps): JSX.Element => {
+  const history = useHistory();
   const { data, loading } = useQuery<{
     getRound: Nullable<Round>;
   }>(GET_ROUND, {
@@ -46,45 +51,57 @@ const RoundStatusDetail = ({
     // todo add enum for bye
 
     return (
-      <Box key={index} display={'flex'} alignItems={'center'}>
-        {match.result === MatchResult.WhiteWon && (
-          <Typography ml={1} mr={1} variant={'subtitle1'}>
-            👑
-          </Typography>
-        )}
+      <Box key={index} display={'flex'} justifyContent={'space-between'}>
+        <Box display={'flex'} alignItems={'center'}>
+          {match.result === MatchResult.WhiteWon && (
+            <Typography ml={1} mr={1} variant={'subtitle1'}>
+              👑
+            </Typography>
+          )}
 
-        <Typography ml={0.5}>
-          {match.white === 'bye'
-            ? 'Bye'
-            : `${white?.firstName} ${white?.lastName}`}
-        </Typography>
-
-        {match.result === MatchResult.Draw ? (
-          <Typography ml={1} mr={1} variant={'subtitle1'}>
-            🤝
+          <Typography ml={0.5}>
+            {match.white === 'bye'
+              ? 'Bye'
+              : `${white?.firstName} ${white?.lastName}`}
           </Typography>
-        ) : (
-          <Typography
-            ml={1}
-            mr={1}
-            sx={{ fontWeight: '600' }}
-            variant={'subtitle1'}
-          >
-            VS
-          </Typography>
-        )}
 
-        {match.result === MatchResult.BlackWon && (
-          <Typography ml={1} mr={1} variant={'subtitle1'}>
-            👑
-          </Typography>
-        )}
+          {match.result === MatchResult.Draw ? (
+            <Typography ml={1} mr={1} variant={'subtitle1'}>
+              🤝
+            </Typography>
+          ) : (
+            <Typography
+              ml={1}
+              mr={1}
+              sx={{ fontWeight: '600' }}
+              variant={'subtitle1'}
+            >
+              VS
+            </Typography>
+          )}
 
-        <Typography>
-          {match.black === 'bye'
-            ? 'Bye'
-            : `${black?.firstName} ${black?.lastName}`}
-        </Typography>
+          {match.result === MatchResult.BlackWon && (
+            <Typography ml={1} mr={1} variant={'subtitle1'}>
+              👑
+            </Typography>
+          )}
+
+          <Typography>
+            {match.black === 'bye'
+              ? 'Bye'
+              : `${black?.firstName} ${black?.lastName}`}
+          </Typography>
+        </Box>
+
+        <IconButton
+          aria-label="view"
+          color={'info'}
+          onClick={() =>
+            history.push(Page.EditMatch.replace(':matchId', match._id))
+          }
+        >
+          <LaunchIcon />
+        </IconButton>
       </Box>
     );
   };

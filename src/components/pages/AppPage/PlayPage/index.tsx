@@ -50,7 +50,7 @@ const PlayPage = (): JSX.Element => {
 
     switch (stage) {
       case TournamentStage.Playing:
-        target = Page.Match;
+        target = Page.Tournament;
         break;
       case TournamentStage.Waiting:
       default:
@@ -58,7 +58,7 @@ const PlayPage = (): JSX.Element => {
         break;
     }
 
-    if (target && page !== target) {
+    if (target && page !== target && !page.includes(target)) {
       return <Redirect to={target} />;
     }
   }
@@ -68,7 +68,12 @@ const PlayPage = (): JSX.Element => {
       {loading ? (
         <Spinner />
       ) : (
-        <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
+        <Box
+          sx={{ height: '100%' }}
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'center'}
+        >
           <Route
             path={Page.Join}
             render={(): JSX.Element => <JoinPage tournament={tournament} />}

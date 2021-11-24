@@ -9,6 +9,7 @@ import TournamentsPage from 'components/pages/AppPage/TournamentsPage';
 import RulesPage from 'components/pages/AppPage/RulesPage';
 import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import SocialPage from 'components/pages/AppPage/SocialPage';
+import MatchPage from 'components/pages/AppPage/PlayPage/TournamentPage/MatchPage';
 
 const MainContent = (): JSX.Element => {
   return (
@@ -16,6 +17,7 @@ const MainContent = (): JSX.Element => {
       <Route path={Page.Play} component={PlayPage} />
       <Route path={Page.Tournaments} component={TournamentsPage} />
       <Route path={Page.EditTournament} component={TournamentPage} />
+      <Route path={Page.EditMatch} component={MatchPage} />
       <Route path={Page.Profile} component={ProfilePage} />
       <Route path={Page.Social} component={SocialPage} />
       <Route path={Page.Rules} component={RulesPage} />

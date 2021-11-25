@@ -2,6 +2,7 @@ import React from 'react';
 import { User } from 'types/types';
 import { Box, Typography } from '@mui/material/';
 import PlayerAvatar from 'components/PlayerAvatar';
+import Bold from '../Bold';
 
 interface PlayerProps {
   player: User;
@@ -21,9 +22,9 @@ const Player = ({
     <Box mt={2} mb={1}>
       {!hideAvatar && <PlayerAvatar player={player} />}
 
-      <Typography
-        align={'center'}
-      >{`${player.firstName} ${player.lastName}`}</Typography>
+      <Typography align={'center'}>
+        <Bold>{`${player.firstName} ${player.lastName}`}</Bold>
+      </Typography>
       <Box mt={-0.5}>
         <Box display={'flex'} justifyContent={'center'}>
           <Typography variant={'subtitle2'}>

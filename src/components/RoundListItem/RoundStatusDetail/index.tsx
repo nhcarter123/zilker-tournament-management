@@ -17,6 +17,7 @@ import {
 import LaunchIcon from '@mui/icons-material/Launch';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../../types/page';
+import WinnerText from '../../WinnerText';
 
 interface RoundProps {
   tournament: Tournament;
@@ -38,6 +39,7 @@ const RoundStatusDetail = ({
   const { data, loading } = useQuery<{
     getRound: Nullable<Round>;
   }>(GET_ROUND, {
+    fetchPolicy: 'network-only',
     variables: {
       tournamentId: tournament._id,
       roundId: roundPreview._id
@@ -53,17 +55,10 @@ const RoundStatusDetail = ({
     return (
       <Box key={index} display={'flex'} justifyContent={'space-between'}>
         <Box display={'flex'} alignItems={'center'}>
-          {match.result === MatchResult.WhiteWon && (
-            <Typography ml={1} mr={1} variant={'subtitle1'}>
-              👑
-            </Typography>
-          )}
-
-          <Typography ml={0.5}>
-            {match.white === 'bye'
-              ? 'Bye'
-              : `${white?.firstName} ${white?.lastName}`}
-          </Typography>
+          <WinnerText
+            won={match.result === MatchResult.WhiteWon}
+            name={`${white?.firstName} ${white?.lastName}`}
+          />
 
           {match.result === MatchResult.Draw ? (
             <Typography ml={1} mr={1} variant={'subtitle1'}>
@@ -80,17 +75,20 @@ const RoundStatusDetail = ({
             </Typography>
           )}
 
-          {match.result === MatchResult.BlackWon && (
-            <Typography ml={1} mr={1} variant={'subtitle1'}>
-              👑
-            </Typography>
-          )}
+          {/*{match.result === MatchResult.BlackWon && (*/}
+          {/*  <Typography ml={1} mr={1} variant={'subtitle1'}>*/}
+          {/*    👑*/}
+          {/*  </Typography>*/}
+          {/*)}*/}
 
-          <Typography>
-            {match.black === 'bye'
-              ? 'Bye'
-              : `${black?.firstName} ${black?.lastName}`}
-          </Typography>
+          <WinnerText
+            won={match.result === MatchResult.BlackWon}
+            name={
+              match.black === 'bye'
+                ? 'Bye'
+                : `${black?.firstName} ${black?.lastName}`
+            }
+          />
         </Box>
 
         <IconButton

@@ -59,6 +59,22 @@ type Match {
   completed: Boolean!
 }
 
+type MatchWithUserInfo {
+  _id: String!
+  tournamentId: String!
+  white: User
+  black: User
+  whiteRating: Int!
+  blackRating: Int!
+  newWhiteRating: Int
+  newBlackRating: Int
+  whiteMatchesPlayed: Int!
+  blackMatchesPlayed: Int!
+  boardNumber: Int!
+  result: MatchResult!
+  completed: Boolean!
+}
+
 type Standing {
   _id: ID!
   userId: String!
@@ -102,7 +118,7 @@ type Query {
   getTournaments: [Tournament!]!
   getTournament(tournamentId: ID!): Tournament
 
-  getMatch(matchId: ID!): Match
+  getMatch(matchId: ID!): MatchWithUserInfo
   getMyMatch: Match
   getRound(tournamentId: ID!, roundId: ID!): Round
 }

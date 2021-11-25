@@ -19,7 +19,6 @@ export const GET_USER = gql`
       _id
       firstName
       lastName
-      rating
     }
   }
 `;
@@ -100,8 +99,16 @@ export const GET_MATCH = gql`
   query GetMatch($matchId: ID!) {
     getMatch(matchId: $matchId) {
       _id
-      white
-      black
+      white {
+        _id
+        firstName
+        lastName
+      }
+      black {
+        _id
+        firstName
+        lastName
+      }
       whiteRating
       blackRating
       newWhiteRating

@@ -38,6 +38,7 @@ const TournamentPlayers = ({
       {sortedUsers.map((user, index) => (
         <PlayerListItem
           key={index}
+          index={index}
           standing={find(
             tournament.standings,
             (standing) => standing.userId === user._id

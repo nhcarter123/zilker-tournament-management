@@ -9,8 +9,8 @@ import { UPDATE_MATCH } from 'graphql/mutations/mutations';
 import { GET_MATCH } from 'graphql/queries/queries';
 import { onError } from 'graphql/errorHandler';
 
-import { useStyles } from 'components/MachResultSelect/styles';
-import { Match, MatchResult } from 'types/types';
+import { useStyles } from 'components/MatchResultSelect/styles';
+import { MatchResult, MatchWithUserInfo } from 'types/types';
 
 const winLossOptions = [
   { label: 'White won', value: MatchResult.WhiteWon },
@@ -23,7 +23,7 @@ const drawDnsOptions = [
 ];
 
 interface MatchResultSelectProps {
-  match: Match;
+  match: MatchWithUserInfo;
   matchLoading: boolean;
 }
 

@@ -85,7 +85,7 @@ const TournamentRounds = ({
               title="Are you sure?"
               placement={'top'}
               onConfirm={(): void => {
-                setIsMutationNewRound(true);
+                setIsMutationNewRound(false);
                 completeRound({
                   variables: { tournamentId: tournament._id, newRound: false }
                 });

@@ -42,6 +42,11 @@ export type Match = {
   completed: boolean;
 };
 
+export interface MatchWithUserInfo extends Omit<Match, 'white' | 'black'> {
+  white: User | null;
+  black: User | null;
+}
+
 export type Standing = {
   _id: string;
   userId: string;

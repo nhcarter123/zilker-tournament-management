@@ -17,7 +17,7 @@ const TournamentPage = (): JSX.Element => {
   }>(GET_MY_MATCH, {
     onCompleted: (data) => {
       if (data?.getMyMatch) {
-        history.push(Page.Match.replace(':matchId', data.getMyMatch._id + 1));
+        history.push(Page.Match.replace(':matchId', data.getMyMatch._id));
       }
     }
   });

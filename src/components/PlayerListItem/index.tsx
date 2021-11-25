@@ -9,9 +9,11 @@ import { Box, Typography, Divider } from '@mui/material';
 import { Role, Standing, User } from 'types/types';
 import { KICK_PLAYER } from 'graphql/mutations/mutations';
 import { UserContext } from '../../context/userContext';
+import Bold from '../Bold';
 
 interface PlayerListItemProps {
   user: User;
+  index: number;
   isInTournament: boolean;
   standing?: Standing;
   tournamentId: string;
@@ -19,6 +21,7 @@ interface PlayerListItemProps {
 
 const PlayerListItem = ({
   user,
+  index,
   standing,
   tournamentId,
   isInTournament
@@ -38,7 +41,10 @@ const PlayerListItem = ({
         pt={1}
         pb={1}
       >
-        <Box>
+        <Typography sx={{ width: '36px' }}>
+          <Bold>{index + 1} </Bold>
+        </Typography>
+        <Box sx={{ width: '100%' }}>
           <Box display={'flex'} alignItems={'center'}>
             <Typography
               variant={'h6'}
@@ -51,33 +57,12 @@ const PlayerListItem = ({
 
           {standing && (
             <Box display={'flex'} alignItems={'center'}>
-              <Typography
-                variant={'subtitle1'}
-              >{`Score: ${standing.score}`}</Typography>
-
-              <Typography
-                ml={2}
-                variant={'subtitle2'}
-              >{`${standing.win}x👑`}</Typography>
-
-              <Typography
-                ml={1.5}
-                variant={'subtitle2'}
-              >{`${standing.loss}x😞`}</Typography>
-
-              {standing.draw ? (
-                <Typography
-                  ml={1.5}
-                  variant={'subtitle2'}
-                >{`${standing.draw}x🤝`}</Typography>
-              ) : null}
-
-              {standing.bye ? (
-                <Typography
-                  ml={1.5}
-                  variant={'subtitle2'}
-                >{`${standing.bye}x👋`}</Typography>
-              ) : null}
+              <Typography variant={'subtitle1'}>
+                {`${standing.win} - ${standing.draw} - ${standing.loss} - ${standing.bye}`}
+              </Typography>
+              <Typography ml={1} variant={'subtitle2'}>
+                <Box sx={{ fontSize: '12px', color: '#b7b7b7' }}>(W-D-L-B)</Box>
+              </Typography>
             </Box>
           )}
         </Box>

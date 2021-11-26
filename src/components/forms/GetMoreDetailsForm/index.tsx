@@ -110,7 +110,7 @@ const GetMoreDetailsForm = ({
           <TextField
             error={!!errors.rating && touched.rating}
             id="rating"
-            label="Rating"
+            label="Online rating"
             onChange={(e): void => {
               setFieldTouched('rating');
               e.target.value = e.target.value.replace(/[^0-9]/, '');

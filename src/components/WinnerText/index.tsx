@@ -16,7 +16,7 @@ const WinnerText = ({ won, name }: MatchResultSelectProps): JSX.Element => {
     <Box className={won ? classes.root : ''}>
       <div className={classes.crownContainer}>
         <CrownIcon className={won ? classes.crown : classes.crownHidden} />
-        <Typography>{name}</Typography>
+        <Typography variant={'body2'}>{name}</Typography>
       </div>
     </Box>
   );

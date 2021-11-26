@@ -35,12 +35,13 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
 
   return (
     <Box display={'flex'}>
-      <Box pr={1} display={'flex'}>
+      <Box mr={1} display={'flex'}>
         <IconButton
           className={classes.icon}
           aria-label={'menu'}
           size={'large'}
           onClick={() => (isBack ? history.goBack() : setOpen(true))}
+          disableRipple
         >
           {isBack ? <ArrowBackIcon /> : <MenuIcon />}
         </IconButton>

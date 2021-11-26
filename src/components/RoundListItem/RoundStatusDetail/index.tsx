@@ -54,16 +54,14 @@ const RoundStatusDetail = ({
     const isByeRound = match.black === 'bye' || match.white === 'bye';
 
     return (
-      <Box
-        key={index}
-        display={'flex'}
-        justifyContent={'space-between'}
-        sx={{ height: '48px' }}
-      >
+      <Box key={index} display={'flex'} justifyContent={'space-between'} pt={1}>
         <Box display={'flex'} alignItems={'center'}>
           <WinnerText
             won={match.result === MatchResult.WhiteWon}
-            name={`${white?.firstName} ${white?.lastName}`}
+            name={`${white?.firstName} ${(white?.lastName || '').substring(
+              0,
+              1
+            )}`}
           />
 
           {match.result === MatchResult.Draw ? (
@@ -92,7 +90,10 @@ const RoundStatusDetail = ({
             name={
               match.black === 'bye'
                 ? 'Bye'
-                : `${black?.firstName} ${black?.lastName}`
+                : `${black?.firstName} ${(black?.lastName || '').substring(
+                    0,
+                    1
+                  )}`
             }
           />
         </Box>

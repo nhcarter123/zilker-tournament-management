@@ -41,7 +41,7 @@ const PlayerListItem = ({
         pt={1}
         pb={1}
       >
-        <Typography sx={{ width: '36px' }} component={'span'}>
+        <Typography sx={{ width: '40px' }} component={'span'}>
           <Bold>{index + 1} </Bold>
         </Typography>
         <Box sx={{ width: '100%' }}>
@@ -51,6 +51,7 @@ const PlayerListItem = ({
             >{`${user.firstName} ${user.lastName}`}</Typography>
             <Typography
               ml={1}
+              mr={0.5}
               variant={'body2'}
             >{`(${user.rating})`}</Typography>
           </Box>

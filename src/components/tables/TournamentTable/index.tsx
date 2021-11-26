@@ -11,6 +11,7 @@ import { Tournament } from 'types/types';
 import { useStyles } from 'components/tables/TournamentTable/styles';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
+import { SortOrder } from 'antd/es/table/interface';
 
 // type EditableTableProps = Parameters<typeof Table>[0];
 // type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -28,6 +29,7 @@ const TournamentsTable = ({
   const [filterTerm, setFilterTerm] = useState('');
 
   console.log(filterTerm);
+  const order: SortOrder = 'descend';
 
   const columns = [
     {
@@ -56,7 +58,8 @@ const TournamentsTable = ({
       sorter: {
         compare: (a: Tournament, b: Tournament): number =>
           moment(a.date).unix() - moment(b.date).unix()
-      }
+      },
+      defaultSortOrder: order
     },
     // {
     //   title: 'Average Rating',
@@ -100,7 +103,6 @@ const TournamentsTable = ({
         // pagination={{ pageSize: 50 }}
         pagination={false}
         rowKey={'_id'}
-        sticky
       />
     </div>
   );

@@ -4,6 +4,7 @@ import { Avatar, Box, Typography } from '@mui/material/';
 
 interface PlayPageProps {
   player: User;
+  large?: boolean;
 }
 
 // todo as helper
@@ -38,17 +39,17 @@ const getColorFromName = (name: string): string => {
   return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
 };
 
-const PlayerAvatar = ({ player }: PlayPageProps): JSX.Element => {
+const PlayerAvatar = ({ player, large }: PlayPageProps): JSX.Element => {
   return (
     <Box display={'flex'} justifyContent={'center'} mb={1}>
       <Avatar
         sx={{
           bgcolor: getColorFromName(`${player.firstName}${player.lastName}`),
-          width: '60px',
-          height: '60px'
+          width: large ? '120px' : '60px',
+          height: large ? '120px' : '60px'
         }}
       >
-        <Typography color={'inherit'} variant={'h6'}>
+        <Typography color={'inherit'} variant={large ? 'h3' : 'h6'}>
           {`${getFirstLetter(player.firstName || '')}${getFirstLetter(
             player.lastName || ''
           )}`}

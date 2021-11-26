@@ -16,7 +16,7 @@ const TournamentHeader = (): JSX.Element => {
   const tournament = data?.getActiveTournament;
 
   if (!tournament) {
-    return <></>;
+    return <Box sx={{ height: '64px' }} />;
   }
 
   const currentRound = tournament.rounds.length;

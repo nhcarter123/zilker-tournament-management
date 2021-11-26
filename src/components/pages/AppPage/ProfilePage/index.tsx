@@ -2,25 +2,24 @@ import React, { useContext } from 'react';
 import { Box, Typography } from '@mui/material/';
 import PlayerAvatar from 'components/PlayerAvatar';
 import { UserContext } from '../../../../context/userContext';
+import Bold from '../../../Bold';
 
 const ProfilePage = (): JSX.Element => {
   const me = useContext(UserContext);
 
   return me ? (
-    <Box mt={5.5}>
-      <Typography variant={'h5'} align={'center'} mb={2}>
-        Profile
-      </Typography>
-
-      <PlayerAvatar player={me} />
+    <Box mt={3}>
+      <PlayerAvatar player={me} large />
 
       <Box mt={2} mb={1}>
-        <Typography
-          align={'center'}
-          variant={'body1'}
-        >{`${me.firstName} ${me.lastName}`}</Typography>
+        <Typography align={'center'} variant={'body1'} component={'span'}>
+          <Bold>{`${me.firstName} ${me.lastName}`}</Bold>
+        </Typography>
         <Typography align={'center'} variant={'body1'}>
           {`Rating: ${me.rating}`}
+        </Typography>{' '}
+        <Typography align={'center'} variant={'body1'}>
+          {`Matches played: ${me.matchesPlayed}`}
         </Typography>
       </Box>
 

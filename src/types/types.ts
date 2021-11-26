@@ -4,6 +4,7 @@ export type User = {
   lastName?: string;
   phone: string;
   rating: number;
+  matchesPlayed: number;
   token: string;
   role: Role;
 };

@@ -55,7 +55,6 @@ const TournamentPage = (): JSX.Element => {
   const users = usersData?.getUsers;
 
   // todo
-  // add bold
   // active tournament toggle
   // footer?
   // leave tournament button

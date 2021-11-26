@@ -12,7 +12,7 @@ export const useStyles = makeStyles({
     justifyContent: 'center',
     position: 'absolute',
     top: '61px',
-    left: '180px',
+    left: '181px',
     background: 'white',
     padding: '0 8px',
     border: '4px solid #bfbfbf',

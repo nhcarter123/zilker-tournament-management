@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { uniq } from 'lodash';
 import { useLazyQuery, useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material/';
@@ -33,9 +34,10 @@ const TournamentPage = (): JSX.Element => {
 
         getUsers({
           variables: {
-            userIds: standings.length
-              ? standings.map((standing) => standing.userId)
-              : data.getTournament?.players
+            userIds: uniq([
+              ...standings.map((standing) => standing.userId),
+              ...data.getTournament?.players
+            ])
           }
         });
       }

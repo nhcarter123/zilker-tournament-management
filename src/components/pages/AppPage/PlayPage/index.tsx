@@ -58,7 +58,7 @@ const PlayPage = (): JSX.Element => {
         break;
     }
 
-    if (target && page !== target && !page.includes(target)) {
+    if (target && page !== target) {
       return <Redirect to={target} />;
     }
   }
@@ -77,8 +77,9 @@ const PlayPage = (): JSX.Element => {
           <Route
             path={Page.Join}
             render={(): JSX.Element => <JoinPage tournament={tournament} />}
+            exact
           />
-          <Route path={Page.Tournament} component={TournamentPage} />
+          <Route path={Page.Tournament} component={TournamentPage} exact />
         </Box>
       )}
     </>

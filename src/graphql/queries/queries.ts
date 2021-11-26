@@ -35,6 +35,16 @@ export const GET_USERS = gql`
   }
 `;
 
+export const GET_UPCOMING_TOURNAMENTS = gql`
+  query GetActiveTournament {
+    getUpcomingTournaments {
+      _id
+      name
+      date
+    }
+  }
+`;
+
 export const GET_ACTIVE_TOURNAMENT = gql`
   query GetActiveTournament {
     getActiveTournament {

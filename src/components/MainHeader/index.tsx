@@ -6,6 +6,7 @@ import TournamentHeader from 'components/MainHeader/TournamentHeader';
 import SocialHeader from './SocialHeader';
 import RulesHeader from './RulesHeader';
 import ProfileHeader from './ProfileHeader';
+import JoinHeader from './JoinHeader';
 
 import { Page } from 'types/page';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -32,10 +33,6 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
 
   const isBack = isPageEqual(page, [Page.EditMatch, Page.EditTournament]);
 
-  console.log(isBack);
-  console.log(page);
-  console.log(Page.EditTournament);
-
   return (
     <Box display={'flex'}>
       <Box pr={1} display={'flex'}>
@@ -49,7 +46,8 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
         </IconButton>
       </Box>
 
-      <Route path={Page.Play} component={TournamentHeader} />
+      <Route path={Page.Join} component={JoinHeader} />
+      <Route path={Page.Play} exact component={TournamentHeader} />
       <Route path={Page.Tournaments} component={TournamentsHeader} />
       <Route path={Page.EditTournament} component={TournamentHeader} />
       <Route path={Page.EditMatch} component={TournamentHeader} />

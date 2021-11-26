@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 const MatchPage = (): JSX.Element => {
   const [loaded, setLoaded] = useState(false);
   const { matchId } = useParams<{ matchId: string }>();
-  const shortWindow = useMediaQuery({ query: `(max-height: 660px)` });
+  const shortWindow = useMediaQuery({ query: `(max-height: 670px)` });
   const classes = useStyles();
 
   // todo this !== 'bye' shit has to get abstracted to somewhere

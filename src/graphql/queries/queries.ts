@@ -36,7 +36,7 @@ export const GET_USERS = gql`
 `;
 
 export const GET_UPCOMING_TOURNAMENTS = gql`
-  query GetActiveTournament {
+  query GetUpcomingTournaments {
     getUpcomingTournaments {
       _id
       name

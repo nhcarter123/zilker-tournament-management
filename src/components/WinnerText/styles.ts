@@ -12,7 +12,7 @@ export const useStyles = makeStyles({
   crown: {
     position: 'absolute',
     left: '-12px',
-    transform: 'rotate(-20deg)',
+    transform: 'rotate(-22deg)',
     top: '-15px',
     color: 'gold',
     height: '20px',

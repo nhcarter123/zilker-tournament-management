@@ -27,7 +27,7 @@ const TournamentPlayers = ({
       (standing) => standing.userId === b._id
     ) || { position: Infinity };
 
-    return standingA.position - standingB.position;
+    return standingA.position - standingB.position || b.rating - a.rating;
   });
 
   return (

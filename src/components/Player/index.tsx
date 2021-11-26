@@ -22,7 +22,7 @@ const Player = ({
     <Box mt={2} mb={1}>
       {!hideAvatar && <PlayerAvatar player={player} />}
 
-      <Typography align={'center'}>
+      <Typography align={'center'} component={'span'}>
         <Bold>{`${player.firstName} ${player.lastName}`}</Bold>
       </Typography>
       <Box mt={-0.5}>

@@ -51,9 +51,15 @@ const RoundStatusDetail = ({
     const black = find(users, (user) => user._id === match.black);
 
     // todo add enum for bye
+    const isByeRound = match.black === 'bye' || match.white === 'bye';
 
     return (
-      <Box key={index} display={'flex'} justifyContent={'space-between'}>
+      <Box
+        key={index}
+        display={'flex'}
+        justifyContent={'space-between'}
+        sx={{ height: '48px' }}
+      >
         <Box display={'flex'} alignItems={'center'}>
           <WinnerText
             won={match.result === MatchResult.WhiteWon}
@@ -91,15 +97,19 @@ const RoundStatusDetail = ({
           />
         </Box>
 
-        <IconButton
-          aria-label="view"
-          color={'info'}
-          onClick={() =>
-            history.push(Page.EditMatch.replace(':matchId', match._id))
-          }
-        >
-          <LaunchIcon />
-        </IconButton>
+        {!isByeRound ? (
+          <IconButton
+            aria-label="view"
+            color={'info'}
+            onClick={() =>
+              history.push(Page.EditMatch.replace(':matchId', match._id))
+            }
+          >
+            <LaunchIcon />
+          </IconButton>
+        ) : (
+          <div />
+        )}
       </Box>
     );
   };

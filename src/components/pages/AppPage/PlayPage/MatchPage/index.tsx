@@ -9,7 +9,7 @@ import MatchResultSelect from 'components/MatchResultSelect';
 
 import ChessBoard from 'svg/chessBoard.svg';
 
-import { useStyles } from 'components/pages/AppPage/PlayPage/TournamentPage/MatchPage/styles';
+import { useStyles } from 'components/pages/AppPage/PlayPage/MatchPage/styles';
 import { MatchWithUserInfo } from 'types/types';
 import { Box, Divider, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';

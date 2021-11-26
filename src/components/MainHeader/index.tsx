@@ -3,16 +3,17 @@ import { Route, useHistory, useLocation } from 'react-router-dom';
 
 import { IconButton, Box } from '@mui/material';
 import TournamentHeader from 'components/MainHeader/TournamentHeader';
-import SocialHeader from './SocialHeader';
-import RulesHeader from './RulesHeader';
-import ProfileHeader from './ProfileHeader';
-import JoinHeader from './JoinHeader';
+import TournamentsHeader from 'components/MainHeader/TournamentsHeader';
+import SocialHeader from 'components/MainHeader//SocialHeader';
+import RulesHeader from 'components/MainHeader//RulesHeader';
+import ProfileHeader from 'components/MainHeader//ProfileHeader';
+import JoinHeader from 'components/MainHeader//JoinHeader';
+import PlayHeader from 'components/MainHeader//PlayHeader';
 
 import { Page } from 'types/page';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useStyles } from 'components/MainHeader/styles';
-import TournamentsHeader from './TournamentsHeader';
 
 interface MainHeaderProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -41,17 +42,20 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
           aria-label={'menu'}
           size={'large'}
           onClick={() => (isBack ? history.goBack() : setOpen(true))}
+          sx={{ backgroundColor: 'transparent' }}
           disableRipple
         >
           {isBack ? <ArrowBackIcon /> : <MenuIcon />}
         </IconButton>
       </Box>
 
-      <Route path={Page.Join} component={JoinHeader} />
-      <Route path={Page.Play} exact component={TournamentHeader} />
+      <Route path={Page.Join} component={JoinHeader} exact />
+      <Route path={Page.Waiting} component={TournamentHeader} exact />
+      <Route path={Page.Play} component={PlayHeader} exact />
       <Route path={Page.Tournaments} component={TournamentsHeader} />
       <Route path={Page.EditTournament} component={TournamentHeader} />
       <Route path={Page.EditMatch} component={TournamentHeader} />
+      <Route path={Page.Match} component={TournamentHeader} />
       <Route path={Page.Profile} component={ProfileHeader} />
       <Route path={Page.Social} component={SocialHeader} />
       <Route path={Page.Rules} component={RulesHeader} />

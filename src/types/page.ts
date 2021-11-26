@@ -10,7 +10,6 @@ export enum Page {
   EditMatch = '/app/match/:matchId',
   Play = '/app/play',
   Join = '/app/play/join',
-  Tournament = '/app/play/tournament',
-  Waiting = '/app/play/tournament/waiting',
-  Match = '/app/play/tournament/match/:matchId'
+  Waiting = '/app/play/waiting',
+  Match = '/app/play/match/:matchId'
 }

@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -33,6 +33,7 @@ interface SideMenuProps {
 
 const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
   const classes = useStyles();
+  const path = useLocation().pathname;
   const history = useHistory();
 
   const menuItems = [
@@ -82,7 +83,12 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           <div key={text}>
             <ListItem
               button
-              onClick={(): void => history.push(getDestination(text))}
+              onClick={(): void => {
+                const destination = getDestination(text);
+                if (!path.includes(destination)) {
+                  history.push(destination);
+                }
+              }}
             >
               <div className={classes.listItem}>
                 <ListItemIcon sx={{ color: '#3878ff' }}>

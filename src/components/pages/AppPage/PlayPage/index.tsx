@@ -1,71 +1,58 @@
 import React, { useContext } from 'react';
-import { Route, useLocation, Redirect } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { Route, useHistory } from 'react-router-dom';
+import { useLazyQuery, useQuery } from '@apollo/client';
 
 import Spinner from 'components/Spinner';
 import JoinPage from 'components/pages/AppPage/PlayPage/JoinPage';
-import TournamentPage from 'components/pages/AppPage/PlayPage/TournamentPage';
+import WaitingPage from 'components/pages/AppPage/PlayPage/WaitingPage';
+import MatchPage from 'components/pages/AppPage/PlayPage/MatchPage';
 
-import { GET_ACTIVE_TOURNAMENT } from 'graphql/queries/queries';
-import { Tournament } from 'types/types';
+import { GET_ACTIVE_TOURNAMENT, GET_MY_MATCH } from 'graphql/queries/queries';
+import { Match, Tournament } from 'types/types';
 import { Page } from 'types/page';
 import { UserContext } from 'context/userContext';
 import { Box } from '@mui/material/';
 
-enum TournamentStage {
-  Waiting = 'waiting',
-  Playing = 'playing'
-}
-
-// todo move to helper
-const getCurrentStage = (tournament: Tournament): TournamentStage => {
-  if (tournament.rounds.length) {
-    return TournamentStage.Playing;
-  }
-
-  return TournamentStage.Waiting;
-};
-
 const PlayPage = (): JSX.Element => {
-  const page = useLocation().pathname;
+  const history = useHistory();
   const me = useContext(UserContext);
+
+  const [getMyMatch, { loading: matchLoading }] = useLazyQuery<{
+    getMyMatch: Nullable<Match>;
+  }>(GET_MY_MATCH, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      if (data?.getMyMatch) {
+        history.push(Page.Match.replace(':matchId', data.getMyMatch._id));
+      } else {
+        history.push(Page.Waiting);
+      }
+    }
+  });
 
   const { data: tournamentData, loading } = useQuery<{
     getActiveTournament: Nullable<Tournament>;
   }>(GET_ACTIVE_TOURNAMENT, {
-    // pollInterval: 4000
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data) => {
+      const inTournament = data?.getActiveTournament?.players.includes(
+        me?._id || ''
+      );
+
+      if (inTournament) {
+        getMyMatch();
+      } else {
+        history.push(Page.Join);
+      }
+    }
   });
 
   const tournament = tournamentData?.getActiveTournament || null;
 
-  const inTournament = tournament?.players.includes(me?._id || '');
-
-  if (!inTournament && page !== Page.Join) {
-    return <Redirect to={Page.Join} />;
-  }
-
-  if (tournament && inTournament) {
-    const stage = getCurrentStage(tournament);
-    let target: Page;
-
-    switch (stage) {
-      case TournamentStage.Playing:
-        target = Page.Tournament;
-        break;
-      case TournamentStage.Waiting:
-      default:
-        target = Page.Waiting;
-        break;
-    }
-
-    if (target && page !== target) {
-      return <Redirect to={target} />;
-    }
-  }
-
   return (
     <>
-      {loading ? (
+      {loading || matchLoading ? (
         <Spinner />
       ) : (
         <Box
@@ -77,9 +64,9 @@ const PlayPage = (): JSX.Element => {
           <Route
             path={Page.Join}
             render={(): JSX.Element => <JoinPage tournament={tournament} />}
-            exact
           />
-          <Route path={Page.Tournament} component={TournamentPage} exact />
+          <Route path={Page.Waiting} component={WaitingPage} />
+          <Route path={Page.Match} component={MatchPage} />
         </Box>
       )}
     </>

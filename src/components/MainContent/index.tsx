@@ -9,7 +9,7 @@ import TournamentsPage from 'components/pages/AppPage/TournamentsPage';
 import RulesPage from 'components/pages/AppPage/RulesPage';
 import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import SocialPage from 'components/pages/AppPage/SocialPage';
-import MatchPage from 'components/pages/AppPage/PlayPage/TournamentPage/MatchPage';
+import MatchPage from 'components/pages/AppPage/PlayPage/MatchPage';
 
 const MainContent = (): JSX.Element => {
   return (

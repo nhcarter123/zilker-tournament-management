@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@mui/material/';
-import { useStyles } from 'components/pages/AppPage/PlayPage/TournamentPage/WaitingPage/styles';
+import { useStyles } from 'components/pages/AppPage/PlayPage/WaitingPage/styles';
 
 const WaitingPage = (): JSX.Element => {
   const classes = useStyles();

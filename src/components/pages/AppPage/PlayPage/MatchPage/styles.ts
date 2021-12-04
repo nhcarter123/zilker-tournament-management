@@ -3,8 +3,7 @@ import { makeStyles } from '@mui/styles';
 export const useStyles = makeStyles({
   boardContainer: {
     display: 'flex',
-    justifyContent: 'center',
-    position: 'relative'
+    justifyContent: 'center'
   },
   boardNumber: {
     display: 'flex',
@@ -12,7 +11,7 @@ export const useStyles = makeStyles({
     justifyContent: 'center',
     position: 'absolute',
     top: '61px',
-    left: '193px',
+    left: '151px',
     background: 'white',
     padding: '0 8px',
     border: '4px solid #bfbfbf',

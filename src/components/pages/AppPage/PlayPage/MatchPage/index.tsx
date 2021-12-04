@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 const MatchPage = (): JSX.Element => {
   const [loaded, setLoaded] = useState(false);
   const { matchId } = useParams<{ matchId: string }>();
-  const shortWindow = useMediaQuery({ query: `(max-height: 670px)` });
+  const shortWindow = useMediaQuery({ query: `(max-height: 590px)` });
   const classes = useStyles();
 
   // todo this !== 'bye' shit has to get abstracted to somewhere
@@ -62,6 +62,7 @@ const MatchPage = (): JSX.Element => {
             </div>
             <div
               style={{
+                position: 'relative',
                 border: '5px solid rgb(191 191 191)',
                 borderRadius: '8px'
               }}

@@ -57,9 +57,6 @@ const MatchPage = (): JSX.Element => {
           />
 
           <Box className={classes.boardContainer}>
-            <div className={classes.boardNumber}>
-              <Typography variant={'h6'}>{`#${match.boardNumber}`}</Typography>
-            </div>
             <div
               style={{
                 position: 'relative',
@@ -67,6 +64,11 @@ const MatchPage = (): JSX.Element => {
                 borderRadius: '8px'
               }}
             >
+              <div className={classes.boardNumber}>
+                <Typography
+                  variant={'h6'}
+                >{`#${match.boardNumber}`}</Typography>
+              </div>
               <img
                 src={ChessBoard}
                 width={150}

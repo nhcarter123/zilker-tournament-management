@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 
 const ProfileHeader = (): JSX.Element => {
   return (
-    <Typography variant={'h4'} align={'center'}>
+    <Typography variant={'h4'} sx={{ lineHeight: 1.5 }}>
       Profile
     </Typography>
   );

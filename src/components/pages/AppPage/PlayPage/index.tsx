@@ -22,8 +22,10 @@ const PlayPage = (): JSX.Element => {
   }>(GET_MY_MATCH, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      if (data?.getMyMatch) {
-        history.push(Page.Match.replace(':matchId', data.getMyMatch._id));
+      if (tournament?.rounds.length) {
+        history.push(
+          Page.Match.replace(':matchId', data?.getMyMatch?._id || 'none')
+        );
       } else {
         history.push(Page.Waiting);
       }

@@ -17,7 +17,7 @@ const Player = ({
   ratingBefore,
   ratingAfter
 }: PlayerProps): JSX.Element => {
-  const isPositive = Math.sign((ratingAfter || 0) - ratingBefore) > 0;
+  const isPositive = Math.sign((ratingAfter || 0) - ratingBefore) >= 0;
   return (
     <Box mt={2} mb={1}>
       {!hideAvatar && <PlayerAvatar player={player} />}

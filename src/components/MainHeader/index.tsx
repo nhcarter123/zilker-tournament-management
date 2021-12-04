@@ -13,7 +13,6 @@ import PlayHeader from 'components/MainHeader//PlayHeader';
 import { Page } from 'types/page';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useStyles } from 'components/MainHeader/styles';
 
 interface MainHeaderProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -30,20 +29,16 @@ const isPageEqual = (page: string, targets: string[]) => {
 const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
   const history = useHistory();
   const page = useLocation().pathname;
-  const classes = useStyles();
 
   const isBack = isPageEqual(page, [Page.EditMatch, Page.EditTournament]);
 
   return (
     <Box display={'flex'}>
-      <Box mr={1} display={'flex'}>
+      <Box display={'flex'}>
         <IconButton
-          className={classes.icon}
           aria-label={'menu'}
           size={'large'}
           onClick={() => (isBack ? history.goBack() : setOpen(true))}
-          sx={{ backgroundColor: 'transparent' }}
-          disableRipple
         >
           {isBack ? <ArrowBackIcon /> : <MenuIcon />}
         </IconButton>

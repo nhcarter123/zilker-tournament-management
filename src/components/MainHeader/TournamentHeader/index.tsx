@@ -13,6 +13,8 @@ const TournamentHeader = (): JSX.Element => {
     // pollInterval: 4000
   });
 
+  // todo make this use the routes tournament not just the active one
+
   const tournament = data?.getActiveTournament;
 
   if (!tournament) {

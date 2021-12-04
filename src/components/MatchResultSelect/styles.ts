@@ -1,10 +1,14 @@
 import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
-  wideDraw: {
-    '& .ant-radio-button-wrapper:first-child': {
-      width: '90px',
-      textAlign: 'center'
-    }
+  container: {
+    position: 'relative'
+  },
+  matchColor: {
+    fontSize: '10px',
+    color: 'gray',
+    position: 'absolute',
+    left: '31px',
+    top: '28px'
   }
 });

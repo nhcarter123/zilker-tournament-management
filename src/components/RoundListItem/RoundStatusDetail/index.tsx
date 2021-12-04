@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { find } from 'lodash';
 import { useQuery } from '@apollo/client';
@@ -8,6 +8,7 @@ import Spinner from 'components/Spinner';
 import {
   Match,
   MatchResult,
+  Role,
   Round,
   RoundPreview,
   Tournament,
@@ -18,6 +19,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../../types/page';
 import WinnerText from '../../WinnerText';
+import { UserContext } from '../../../context/userContext';
 
 interface RoundProps {
   tournament: Tournament;
@@ -35,6 +37,7 @@ const RoundStatusDetail = ({
   roundPreview,
   users
 }: RoundProps): JSX.Element => {
+  const me = useContext(UserContext);
   const history = useHistory();
   const { data, loading } = useQuery<{
     getRound: Nullable<Round>;
@@ -98,7 +101,7 @@ const RoundStatusDetail = ({
           />
         </Box>
 
-        {!isByeRound ? (
+        {!isByeRound && me?.role === Role.Admin ? (
           <IconButton
             aria-label="view"
             color={'info'}

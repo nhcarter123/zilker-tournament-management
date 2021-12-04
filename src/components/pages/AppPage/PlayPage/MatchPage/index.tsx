@@ -48,7 +48,7 @@ const MatchPage = (): JSX.Element => {
           </Typography>
         </div>
       ) : (
-        <Box sx={{ width: '210px' }}>
+        <Box>
           <Player
             player={blackPlayer}
             ratingBefore={match.blackRating}

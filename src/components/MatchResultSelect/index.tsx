@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
-import { Box, Typography } from '@mui/material';
-import { Radio, RadioChangeEvent } from 'antd';
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography
+} from '@mui/material';
 import Spinner from 'components/Spinner';
 
 import { useMutation } from '@apollo/client';
@@ -11,16 +17,6 @@ import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MatchResultSelect/styles';
 import { MatchResult, MatchWithUserInfo } from 'types/types';
-
-const winLossOptions = [
-  { label: 'White won', value: MatchResult.WhiteWon },
-  { label: 'Black won', value: MatchResult.BlackWon }
-];
-
-const drawDnsOptions = [
-  { label: 'Draw', value: MatchResult.Draw },
-  { label: 'Did not start', value: MatchResult.DidNotStart }
-];
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
@@ -38,7 +34,7 @@ const MatchResultSelect = ({
     onError
   });
 
-  const onChange = (e: RadioChangeEvent): void => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     updateMatch({
       variables: { matchId: match._id, payload: { result: e.target.value } }
     });
@@ -59,25 +55,48 @@ const MatchResultSelect = ({
           </Box>
         ) : (
           <>
-            <Radio.Group
-              options={winLossOptions}
-              onChange={onChange}
-              value={match.result}
-              optionType={'button'}
-              buttonStyle={'solid'}
-              size={'large'}
-            />
-            <Box>
-              <Radio.Group
-                className={classes.wideDraw}
-                options={drawDnsOptions}
+            <FormControl component="fieldset">
+              <RadioGroup
+                name="controlled-radio-buttons-group"
                 onChange={onChange}
                 value={match.result}
-                optionType={'button'}
-                buttonStyle={'solid'}
-                size={'large'}
-              />
-            </Box>
+                row
+              >
+                <Box className={classes.container}>
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={`${match.white?.firstName} won`}
+                    value={MatchResult.WhiteWon}
+                  />
+                  <div className={classes.matchColor}>white</div>
+                </Box>
+                <Box className={classes.container}>
+                  <FormControlLabel
+                    control={<Radio />}
+                    label={`${match.black?.firstName} won`}
+                    value={MatchResult.BlackWon}
+                  />
+                  <div className={classes.matchColor}>black</div>
+                </Box>
+              </RadioGroup>
+              <RadioGroup
+                name="controlled-radio-buttons-group"
+                onChange={onChange}
+                value={match.result}
+                row
+              >
+                <FormControlLabel
+                  control={<Radio />}
+                  label="Draw"
+                  value={MatchResult.Draw}
+                />
+                <FormControlLabel
+                  control={<Radio />}
+                  label="Did not start"
+                  value={MatchResult.DidNotStart}
+                />
+              </RadioGroup>
+            </FormControl>
           </>
         )}
       </div>

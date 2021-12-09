@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import moment from 'moment';
 import naturalCompare from 'string-natural-compare';
 
@@ -7,11 +7,12 @@ import DeleteTournamentButton from 'components/buttons/DeleteTournamentButton';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import TableSearchBar from 'components/TableSearchBar';
 
-import { Tournament } from 'types/types';
+import { Role, Tournament } from 'types/types';
 import { useStyles } from 'components/tables/TournamentTable/styles';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
 import { SortOrder } from 'antd/es/table/interface';
+import { UserContext } from '../../../context/userContext';
 
 // type EditableTableProps = Parameters<typeof Table>[0];
 // type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -23,7 +24,8 @@ type TournamentsTableProps = {
 const TournamentsTable = ({
   tournaments
 }: TournamentsTableProps): JSX.Element => {
-  const isAdmin = true;
+  const me = useContext(UserContext);
+  const isAdmin = me?.role === Role.Admin;
   const history = useHistory();
   const classes = useStyles();
   const [filterTerm, setFilterTerm] = useState('');
@@ -42,9 +44,7 @@ const TournamentsTable = ({
       render: (name: string, record: Tournament): JSX.Element => (
         <a
           onClick={(): void => {
-            history.push(
-              Page.EditTournament.replace(':tournamentId', record._id)
-            );
+            history.push(Page.Details.replace(':tournamentId', record._id));
           }}
         >
           {name}

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_MATCH } from 'graphql/queries/queries';
+import { GET_MATCH, GET_MY_MATCH } from 'graphql/queries/queries';
 import { useMediaQuery } from 'react-responsive';
 
 import Spinner from 'components/Spinner';
@@ -9,27 +9,49 @@ import MatchResultSelect from 'components/MatchResultSelect';
 
 import ChessBoard from 'svg/chessBoard.svg';
 
-import { useStyles } from 'components/pages/AppPage/PlayPage/MatchPage/styles';
-import { MatchWithUserInfo } from 'types/types';
+import { useStyles } from 'components/pages/AppPage/TournamentPage/MatchPage/styles';
 import { Box, Divider, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { Match, MatchWithUserInfo, Tournament } from 'types/types';
+import { Page } from 'types/page';
 
-const MatchPage = (): JSX.Element => {
-  const [loaded, setLoaded] = useState(false);
+interface MatchPageProps {
+  tournament: Nullable<Tournament>;
+}
+
+const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
+  const history = useHistory();
   const { matchId } = useParams<{ matchId: string }>();
   const shortWindow = useMediaQuery({ query: `(max-height: 590px)` });
   const classes = useStyles();
 
   // todo this !== 'bye' shit has to get abstracted to somewhere
 
+  const { loading: loadingGetMyMatch } = useQuery<{
+    getMyMatch: Nullable<Match>;
+  }>(GET_MY_MATCH, {
+    fetchPolicy: 'network-only',
+    skip: matchId !== 'find',
+    onCompleted: (data) => {
+      if (tournament) {
+        history.push(
+          Page.Match.replace(':tournamentId', tournament._id).replace(
+            ':matchId',
+            data?.getMyMatch?._id || 'none'
+          )
+        );
+      }
+    }
+  });
+
   const { data: matchData, loading } = useQuery<{
     getMatch: Nullable<MatchWithUserInfo>;
   }>(GET_MATCH, {
+    skip: matchId === 'find',
     variables: { matchId },
     // fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
+    notifyOnNetworkStatusChange: true
     // pollInterval: 4000, // todo rewrite using subscriptions (who knew that was a thing??)
-    onCompleted: () => setLoaded(true)
   });
 
   const whitePlayer = matchData?.getMatch?.white;
@@ -38,7 +60,7 @@ const MatchPage = (): JSX.Element => {
 
   return (
     <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
-      {!loaded && loading ? (
+      {loadingGetMyMatch || loading ? (
         <Spinner />
       ) : !whitePlayer || !blackPlayer || !match ? (
         <div>

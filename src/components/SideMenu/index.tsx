@@ -73,7 +73,7 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return Page.Social;
         case MenuItem.Play:
         default:
-          return Page.Play;
+          return Page.Tournament.replace(':tournamentId', 'find');
       }
     };
 

@@ -49,15 +49,6 @@ export const GET_ACTIVE_TOURNAMENT = gql`
   query GetActiveTournament {
     getActiveTournament {
       _id
-      name
-      date
-      status
-      players
-      rounds {
-        _id
-        completed
-      }
-      totalRounds
     }
   }
 `;

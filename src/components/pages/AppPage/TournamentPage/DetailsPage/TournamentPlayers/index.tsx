@@ -3,7 +3,7 @@ import React from 'react';
 import { Typography } from '@mui/material/';
 
 import { Tournament, User } from 'types/types';
-import PlayerListItem from '../../../../PlayerListItem';
+import PlayerListItem from 'components/PlayerListItem';
 import { find } from 'lodash';
 
 interface TournamentRoundsProps {

@@ -38,8 +38,7 @@ const PlayerListItem = ({
         display={'flex'}
         alignItems={'center'}
         justifyContent={'space-between'}
-        pt={1}
-        pb={1}
+        py={1}
       >
         <Typography sx={{ width: '40px' }} component={'span'}>
           <Bold>{index + 1} </Bold>

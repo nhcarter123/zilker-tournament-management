@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button } from 'antd';
 import { useMutation } from '@apollo/client';
 import { JOIN_TOURNAMENT } from 'graphql/mutations/mutations';
-import { GET_ACTIVE_TOURNAMENT } from 'graphql/queries/queries';
+import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { onError } from 'graphql/errorHandler';
 import { useStyles } from 'components/buttons/JoinTournamentButton/styles';
 import { UserContext } from '../../../context/userContext';
@@ -18,7 +18,7 @@ const AddTournamentButton = ({
   const classes = useStyles();
 
   const [joinTournament, { loading }] = useMutation(JOIN_TOURNAMENT, {
-    refetchQueries: [GET_ACTIVE_TOURNAMENT],
+    refetchQueries: [GET_TOURNAMENT],
     onError
   });
 

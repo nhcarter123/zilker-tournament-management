@@ -17,9 +17,10 @@ import {
 
 import LaunchIcon from '@mui/icons-material/Launch';
 import { useHistory } from 'react-router-dom';
-import { Page } from '../../../types/page';
-import WinnerText from '../../WinnerText';
-import { UserContext } from '../../../context/userContext';
+import { Page } from 'types/page';
+import WinnerText from 'components/WinnerText';
+import { UserContext } from 'context/userContext';
+import Bold from '../../Bold';
 
 interface RoundProps {
   tournament: Tournament;
@@ -42,7 +43,6 @@ const RoundStatusDetail = ({
   const { data, loading } = useQuery<{
     getRound: Nullable<Round>;
   }>(GET_ROUND, {
-    fetchPolicy: 'network-only',
     variables: {
       tournamentId: tournament._id,
       roundId: roundPreview._id
@@ -72,21 +72,10 @@ const RoundStatusDetail = ({
               🤝
             </Typography>
           ) : (
-            <Typography
-              ml={1}
-              mr={1}
-              sx={{ fontWeight: '600' }}
-              variant={'subtitle1'}
-            >
-              VS
+            <Typography ml={1} mr={1} variant={'subtitle1'} component={'span'}>
+              <Bold>VS</Bold>
             </Typography>
           )}
-
-          {/*{match.result === MatchResult.BlackWon && (*/}
-          {/*  <Typography ml={1} mr={1} variant={'subtitle1'}>*/}
-          {/*    👑*/}
-          {/*  </Typography>*/}
-          {/*)}*/}
 
           <WinnerText
             won={match.result === MatchResult.BlackWon}
@@ -106,7 +95,12 @@ const RoundStatusDetail = ({
             aria-label="view"
             color={'info'}
             onClick={() =>
-              history.push(Page.EditMatch.replace(':matchId', match._id))
+              history.push(
+                Page.EditMatch.replace(':tournamentId', tournament._id).replace(
+                  ':matchId',
+                  match._id
+                )
+              )
             }
           >
             <LaunchIcon />
@@ -128,9 +122,11 @@ const RoundStatusDetail = ({
     </Box>
   ) : (
     <Box mb={2}>
-      <Typography variant={'h6'}>{`${
-        data?.getRound?.matches.filter(isComplete).length
-      }/${data?.getRound?.matches.length} completed`}</Typography>
+      <Typography variant={'body1'} component={'span'} color={'gray'}>
+        <Bold>{`${data?.getRound?.matches.filter(isComplete).length}/${
+          data?.getRound?.matches.length
+        } completed`}</Bold>
+      </Typography>
 
       {sortedMatches.map((match, index) => renderMatches(match, index))}
     </Box>

@@ -53,38 +53,42 @@ const RoundListItem = ({
         display={'flex'}
         alignItems={'center'}
         justifyContent={'space-between'}
-        pt={1}
-        pb={1}
+        py={1}
       >
         <Typography variant={'h6'}>{`Round ${index + 1}`}</Typography>
 
-        {isLastRound ? (
-          me?.role === Role.Admin && (
-            <Popconfirm
-              title="Are you sure?"
-              placement={'left'}
-              onConfirm={(e): void => {
-                e?.stopPropagation();
-                deleteRound({
-                  variables: {
-                    tournamentId: tournament._id,
-                    roundId: roundPreview._id
-                  }
-                });
-              }}
-            >
-              <Button
-                type={'primary'}
-                shape="circle"
-                icon={<DeleteOutlined />}
-                loading={loading}
-                onClick={(e): void => e.stopPropagation()}
-              />
-            </Popconfirm>
-          )
-        ) : (
-          <CheckCircleIcon color={'success'} />
-        )}
+        <Box height={'32px'} display={'flex'} alignItems={'center'}>
+          {isLastRound ? (
+            me?.role === Role.Admin && (
+              <Popconfirm
+                title="Are you sure?"
+                placement={'left'}
+                onConfirm={(e): void => {
+                  e?.stopPropagation();
+                  deleteRound({
+                    variables: {
+                      tournamentId: tournament._id,
+                      roundId: roundPreview._id
+                    }
+                  });
+                }}
+              >
+                <Button
+                  type={'primary'}
+                  shape="circle"
+                  icon={<DeleteOutlined />}
+                  loading={loading}
+                  onClick={(e): void => e.stopPropagation()}
+                />
+              </Popconfirm>
+            )
+          ) : (
+            <CheckCircleIcon
+              color={'success'}
+              sx={{ width: 38.5, height: 38.5, marginRight: '-4px' }}
+            />
+          )}
+        </Box>
       </Box>
 
       <Box>

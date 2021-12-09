@@ -39,6 +39,7 @@ const getColorFromName = (name: string): string => {
   return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
 };
 
+// todo replace large with size
 const PlayerAvatar = ({ player, large }: PlayPageProps): JSX.Element => {
   return (
     <Box display={'flex'} justifyContent={'center'} mb={1}>

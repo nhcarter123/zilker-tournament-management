@@ -1,84 +1,111 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { uniq } from 'lodash';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import React, { useContext } from 'react';
+import { Route, useHistory, useLocation, useParams } from 'react-router-dom';
+import { NetworkStatus, useQuery } from '@apollo/client';
 
-import { Box } from '@mui/material/';
 import Spinner from 'components/Spinner';
-import TournamentRounds from 'components/pages/AppPage/TournamentPage/TournamentRounds';
-import TournamentPlayers from './TournamentPlayers';
+import JoinPage from 'components/pages/AppPage/TournamentPage/JoinPage';
+import WaitingPage from 'components/pages/AppPage/TournamentPage/WaitingPage';
+import MatchPage from 'components/pages/AppPage/TournamentPage/MatchPage';
+import DetailsPage from 'components/pages/AppPage/TournamentPage/DetailsPage';
 
-import { GET_TOURNAMENT, GET_USERS } from 'graphql/queries/queries';
-import { Tournament, User } from 'types/types';
+import { GET_ACTIVE_TOURNAMENT, GET_TOURNAMENT } from 'graphql/queries/queries';
+import { Tournament } from 'types/types';
+import { Page } from 'types/page';
+import { UserContext } from 'context/userContext';
+import { Box } from '@mui/material';
 
 const TournamentPage = (): JSX.Element => {
-  const [tournamentLoaded, setTournamentLoaded] = useState<boolean>(false);
-  const [selectedRound, setSelectedRound] = useState<Nullable<string>>(null);
+  const me = useContext(UserContext);
+  const history = useHistory();
+  const page = useLocation().pathname;
   const { tournamentId } = useParams<{ tournamentId: string }>();
 
-  const [getUsers, { data: usersData, loading: userDataLoading }] =
-    useLazyQuery<{
-      getUsers: Nullable<User[]>;
-    }>(GET_USERS);
+  const isDetailsPage = page.includes('/details');
 
-  const { data: tournamentData, loading } = useQuery<{
+  const { loading: loadingGetActiveTournament } = useQuery<{
+    getActiveTournament: Nullable<Partial<Tournament>>;
+  }>(GET_ACTIVE_TOURNAMENT, {
+    skip: tournamentId !== 'find',
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data) => {
+      const tournamentId = data?.getActiveTournament?._id;
+      if (tournamentId) {
+        history.push(
+          `${Page.Tournament.replace(':tournamentId', tournamentId)}`
+        );
+      } else {
+        history.push(Page.Join);
+      }
+    }
+  });
+
+  const {
+    data: tournamentData,
+    loading: loadingTournament,
+    networkStatus
+  } = useQuery<{
     getTournament: Nullable<Tournament>;
   }>(GET_TOURNAMENT, {
+    skip: tournamentId === 'find',
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: {
       tournamentId
     },
     onCompleted: (data) => {
-      if (data.getTournament?.players) {
-        const standings = data.getTournament?.standings;
+      const tournament = data?.getTournament || null;
 
-        getUsers({
-          variables: {
-            userIds: uniq([
-              ...standings.map((standing) => standing.userId),
-              ...data.getTournament?.players
-            ])
-          }
-        });
+      if (tournament && !isDetailsPage) {
+        const inTournament = tournament?.players.includes(me?._id || '');
+
+        if (!tournament.rounds.length) {
+          history.push(Page.Waiting.replace(':tournamentId', tournament._id));
+        } else if (inTournament) {
+          history.push(
+            Page.Match.replace(':tournamentId', tournament._id).replace(
+              ':matchId',
+              'find'
+            )
+          );
+        } else {
+          history.push(Page.Join.replace(':tournamentId', tournament._id));
+        }
       }
-
-      if (data.getTournament?.rounds.length) {
-        setSelectedRound(
-          data.getTournament.rounds[data.getTournament.rounds.length - 1]._id
-        );
-      }
-
-      // todo: bug: this can prevent loading in a rare case that we want it
-      setTournamentLoaded(true);
     }
   });
 
-  const tournament = tournamentData?.getTournament;
-  const users = usersData?.getUsers;
-
-  // todo
-  // active tournament toggle
-  // footer?
-  // leave tournament button
+  const tournament = tournamentData?.getTournament || null;
 
   return (
     <>
-      {(loading || userDataLoading) && !tournamentLoaded ? (
+      {loadingGetActiveTournament ||
+      (loadingTournament && networkStatus !== NetworkStatus.refetch) ? (
         <Spinner />
       ) : (
-        tournament &&
-        users && (
-          <>
-            <TournamentRounds
-              users={users}
-              tournament={tournament}
-              selectedRound={selectedRound}
-              setSelectedRound={setSelectedRound}
-            />
-            <TournamentPlayers users={users} tournament={tournament} />
-            <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
-          </>
-        )
+        <Box
+          sx={{ height: '100%' }}
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'center'}
+        >
+          <Route
+            path={Page.Join}
+            render={(): JSX.Element => <JoinPage tournament={tournament} />}
+          />
+          <Route
+            path={Page.Waiting}
+            render={(): JSX.Element => <WaitingPage />}
+          />
+          <Route
+            path={Page.Match}
+            render={(): JSX.Element => <MatchPage tournament={tournament} />}
+          />
+          <Route
+            path={Page.Details}
+            render={(): JSX.Element => <DetailsPage tournament={tournament} />}
+          />
+        </Box>
       )}
     </>
   );

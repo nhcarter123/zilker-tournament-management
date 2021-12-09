@@ -39,7 +39,7 @@ const LoginRouter = (): JSX.Element => {
           history.location.pathname === Page.MoreInfo) &&
         data?.me?.firstName
       ) {
-        return history.push(Page.Play);
+        return history.push(Page.Tournament.replace(':tournamentId', 'find'));
       }
 
       if (data?.me && !data?.me.firstName) {

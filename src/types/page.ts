@@ -6,10 +6,10 @@ export enum Page {
   Social = '/app/social',
   Rules = '/app/rules',
   Tournaments = '/app/tournaments',
-  EditTournament = '/app/tournament/:tournamentId',
-  EditMatch = '/app/match/:matchId',
-  Play = '/app/play',
-  Join = '/app/play/join',
-  Waiting = '/app/play/waiting',
-  Match = '/app/play/match/:matchId'
+  Tournament = '/app/tournament/:tournamentId',
+  Details = '/app/tournament/:tournamentId/details',
+  Join = '/app/tournament/:tournamentId/join',
+  Waiting = '/app/tournament/:tournamentId/waiting',
+  Match = '/app/tournament/:tournamentId/match/:matchId',
+  EditMatch = '/app/tournament/:tournamentId/match/:matchId/edit'
 }

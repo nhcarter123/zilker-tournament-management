@@ -2,20 +2,24 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { Tournament } from 'types/types';
-import { GET_ACTIVE_TOURNAMENT } from 'graphql/queries/queries';
+import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
+import { useParams } from 'react-router-dom';
 
 const TournamentHeader = (): JSX.Element => {
   const classes = useStyles();
+  const { tournamentId } = useParams<{ tournamentId: string }>();
+
   const { data } = useQuery<{
-    getActiveTournament: Nullable<Tournament>;
-  }>(GET_ACTIVE_TOURNAMENT, {
-    // pollInterval: 4000
+    getTournament: Nullable<Tournament>;
+  }>(GET_TOURNAMENT, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      tournamentId
+    }
   });
 
-  // todo make this use the routes tournament not just the active one
-
-  const tournament = data?.getActiveTournament;
+  const tournament = data?.getTournament;
 
   if (!tournament) {
     return <Box sx={{ height: '64px' }} />;
@@ -32,16 +36,16 @@ const TournamentHeader = (): JSX.Element => {
 
       <Box display={'flex'} alignItems={'center'} className={classes.noWrap}>
         {currentRound > 0 && (
-          <Box mr={0.5}>
+          <Box mr={1}>
             <Typography variant={'h6'}>{`Round ${currentRound}`}</Typography>
           </Box>
         )}
 
-        <Box className={classes.noWrap} ml={0.5}>
-          <Typography className={classes.noWrap} variant={'subtitle2'}>
-            {`(${tournament.players.length} player${
+        <Box display={'flex'} className={classes.noWrap}>
+          <Typography variant={'subtitle2'}>
+            {`${tournament.players.length} player${
               tournament.players.length !== 1 ? 's' : ''
-            } ${totalRounds} rounds)`}
+            } ${totalRounds} rounds`}
           </Typography>
         </Box>
       </Box>

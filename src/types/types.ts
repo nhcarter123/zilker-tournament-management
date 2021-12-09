@@ -3,6 +3,7 @@ export type User = {
   firstName?: string;
   lastName?: string;
   phone: string;
+  photo: string;
   rating: number;
   matchesPlayed: number;
   token: string;

@@ -85,14 +85,18 @@ const PictureEditor = (): JSX.Element => {
                 size={'middle'}
                 type="primary"
                 onClick={(): void => {
-                  editor.current?.getImage().toBlob((blob) => {
-                    void uploadPhoto({
-                      variables: {
-                        photo: blob
-                      }
-                    });
-                    setLocalFile(null);
-                  });
+                  editor.current?.getImageScaledToCanvas().toBlob(
+                    (blob) => {
+                      void uploadPhoto({
+                        variables: {
+                          photo: blob
+                        }
+                      });
+                      setLocalFile(null);
+                    },
+                    'image/jpeg',
+                    0.7
+                  );
                 }}
               >
                 Save

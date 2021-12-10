@@ -57,8 +57,16 @@ export const KICK_PLAYER = gql`
 `;
 
 export const NEXT_ROUND = gql`
-  mutation CompleteRound($tournamentId: ID!, $newRound: Boolean!) {
-    completeRound(tournamentId: $tournamentId, newRound: $newRound)
+  mutation CompleteRound(
+    $tournamentId: ID!
+    $newRound: Boolean!
+    $textAlert: Boolean!
+  ) {
+    completeRound(
+      tournamentId: $tournamentId
+      newRound: $newRound
+      textAlert: $textAlert
+    )
   }
 `;
 

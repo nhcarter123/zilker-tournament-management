@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Typography, Divider } from '@mui/material/';
+import { Box, Typography, Divider, Checkbox } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
 import { GET_TOURNAMENT } from 'graphql/queries/queries';
@@ -24,6 +24,7 @@ const TournamentRounds = ({
   selectedRound,
   setSelectedRound
 }: TournamentRoundsProps): JSX.Element => {
+  const [sendAlert, setSendAlert] = useState(false);
   const me = useContext(UserContext);
   const [isMutationNewRound, setIsMutationNewRound] = useState<boolean>(true);
 
@@ -58,14 +59,31 @@ const TournamentRounds = ({
 
       {me?.role === Role.Admin && (
         <>
-          <Box mt={3}>
+          <Box
+            mt={1}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+          >
+            <Checkbox
+              onChange={(e) => setSendAlert(e.target.checked)}
+              value={sendAlert}
+            />
+            <Typography>Send text alert</Typography>
+          </Box>
+
+          <Box mt={1}>
             <Popconfirm
               title="Are you sure?"
               placement={'top'}
               onConfirm={(): void => {
                 setIsMutationNewRound(true);
                 completeRound({
-                  variables: { tournamentId: tournament._id, newRound: true }
+                  variables: {
+                    tournamentId: tournament._id,
+                    newRound: true,
+                    textAlert: sendAlert
+                  }
                 });
               }}
             >
@@ -87,7 +105,11 @@ const TournamentRounds = ({
               onConfirm={(): void => {
                 setIsMutationNewRound(false);
                 completeRound({
-                  variables: { tournamentId: tournament._id, newRound: false }
+                  variables: {
+                    tournamentId: tournament._id,
+                    newRound: false,
+                    textAlert: false
+                  }
                 });
               }}
             >

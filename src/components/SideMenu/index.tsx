@@ -14,6 +14,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ArticleIcon from '@mui/icons-material/Article';
 import GroupsIcon from '@mui/icons-material/Groups';
+import PaidIcon from '@mui/icons-material/Paid';
 
 import { Page } from 'types/page';
 import { useStyles } from 'components/SideMenu/styles';
@@ -23,7 +24,8 @@ enum MenuItem {
   Profile = 'Profile',
   Tournaments = 'Tournaments',
   Rules = 'Rules',
-  Social = 'Social'
+  Social = 'Social',
+  Donate = 'Donate'
 }
 
 interface SideMenuProps {
@@ -41,7 +43,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
     MenuItem.Profile,
     MenuItem.Social,
     MenuItem.Tournaments,
-    MenuItem.Rules
+    MenuItem.Rules,
+    MenuItem.Donate
   ];
 
   const generateMenuList = (list: string[]): JSX.Element => {
@@ -55,6 +58,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return <MenuBookIcon />;
         case MenuItem.Social:
           return <GroupsIcon />;
+        case MenuItem.Donate:
+          return <PaidIcon />;
         case MenuItem.Play:
         default:
           return <SportsEsportsIcon />;
@@ -71,6 +76,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return Page.Rules;
         case MenuItem.Social:
           return Page.Social;
+        case MenuItem.Donate:
+          return Page.Donate;
         case MenuItem.Play:
         default:
           return Page.Tournament.replace(':tournamentId', 'find');

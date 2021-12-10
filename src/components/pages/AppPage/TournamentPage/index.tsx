@@ -35,7 +35,8 @@ const TournamentPage = (): JSX.Element => {
           `${Page.Tournament.replace(':tournamentId', tournamentId)}`
         );
       } else {
-        history.push(Page.Join);
+        // todo
+        history.push(Page.Upcoming);
       }
     }
   });

@@ -30,7 +30,6 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
           {isBack ? <ArrowBackIcon /> : <MenuIcon />}
         </IconButton>
       </Box>
-
       <Route path={Page.Waiting} component={TournamentHeader} exact />
       <Route path={Page.Details} component={TournamentHeader} exact />
       <Route path={Page.Match} component={TournamentHeader} />
@@ -54,6 +53,10 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
       <Route
         path={Page.Rules}
         render={() => <SimpleHeader title={'Rules'} />}
+      />
+      <Route
+        path={Page.Donate}
+        render={() => <SimpleHeader title={'Donate'} />}
       />
     </Box>
   );

@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from 'App';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
 
 const typeDefs = loader('./graphql/schema.graphql');
 
-const httpLink = createHttpLink({
+const uploadLink: any = createUploadLink({
   uri: process.env.REACT_APP_SERVER_URL
-});
+}); // forced to type as any until @types/apollo-upload-client is updated
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
@@ -28,7 +24,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(uploadLink),
   cache: new InMemoryCache(),
   typeDefs
 });

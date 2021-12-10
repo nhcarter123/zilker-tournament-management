@@ -2,8 +2,8 @@ export type User = {
   _id: string;
   firstName?: string;
   lastName?: string;
+  photo?: string;
   phone: string;
-  photo: string;
   rating: number;
   matchesPlayed: number;
   token: string;

@@ -20,7 +20,7 @@ const Player = ({
   const isPositive = Math.sign((ratingAfter || 0) - ratingBefore) >= 0;
   return (
     <Box mt={2} mb={1}>
-      {!hideAvatar && <PlayerAvatar player={player} />}
+      {!hideAvatar && <PlayerAvatar player={player} size={60} />}
 
       <Typography align={'center'} component={'span'}>
         <Bold>{`${player.firstName} ${player.lastName}`}</Bold>

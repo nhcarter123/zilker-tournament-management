@@ -8,6 +8,18 @@ export const VERIFY_CODE = gql`
   }
 `;
 
+export const UPLOAD_PHOTO = gql`
+  mutation UploadPhoto($photo: Upload!) {
+    uploadPhoto(photo: $photo)
+  }
+`;
+
+export const DELETE_PHOTO = gql`
+  mutation DeletePhoto {
+    deletePhoto
+  }
+`;
+
 export const SEND_VERIFICATION_CODE = gql`
   mutation SendVerificationCode($phone: String!) {
     sendVerificationCode(phone: $phone)

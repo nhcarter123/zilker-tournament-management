@@ -5,21 +5,12 @@ export const GET_ME = gql`
     me {
       _id
       phone
+      photo
       firstName
       lastName
       rating
       matchesPlayed
       role
-    }
-  }
-`;
-
-export const GET_USER = gql`
-  query GetUser($userId: ID!) {
-    getUser(userId: $userId) {
-      _id
-      firstName
-      lastName
     }
   }
 `;
@@ -105,11 +96,13 @@ export const GET_MATCH = gql`
         _id
         firstName
         lastName
+        photo
       }
       black {
         _id
         firstName
         lastName
+        photo
       }
       whiteRating
       blackRating

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 
 import LoginPage from 'components/pages/LoginPage';
 import MoreInfoPage from 'components/pages/MoreInfoPage';
@@ -23,6 +23,7 @@ const LoginRouter = (): JSX.Element => {
   const {
     data,
     loading: meLoading,
+    networkStatus,
     refetch
   } = useQuery<{ me: Nullable<User> }>(GET_ME, {
     // fetchPolicy: 'network-only',
@@ -69,7 +70,8 @@ const LoginRouter = (): JSX.Element => {
 
   return (
     <div className={classes.root}>
-      {meLoading || verifyCodeLoading ? (
+      {(meLoading && networkStatus !== NetworkStatus.refetch) ||
+      verifyCodeLoading ? (
         <Spinner />
       ) : (
         <UserContext.Provider value={me}>

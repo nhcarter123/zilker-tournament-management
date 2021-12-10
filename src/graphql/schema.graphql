@@ -1,4 +1,11 @@
 scalar Date
+scalar Upload
+
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
 
 input UpdateUserDetailsPayload {
   firstName: String
@@ -20,6 +27,7 @@ type User {
   firstName: String
   lastName: String
   phone: String!
+  photo: String
   rating: Int
   matchesPlayed: Int
   token: String
@@ -136,7 +144,9 @@ type Mutation {
 
   #   User
   verifyCode(code: String!): User
-  sendVerificationCode(phone: String!): Boolean
+  uploadPhoto(photo: Upload!): Boolean!
+  deletePhoto: Boolean!
+  sendVerificationCode(phone: String!): Boolean!
   updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
 
   #   Matches

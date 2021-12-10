@@ -1,56 +1,25 @@
 import React from 'react';
 import { User } from 'types/types';
 import { Avatar, Box, Typography } from '@mui/material/';
+import { getColorFromName, getFirstLetter } from '../../helpers/helpers';
 
 interface PlayPageProps {
   player: User;
-  large?: boolean;
+  size: number;
 }
 
-// todo as helper
-const getFirstLetter = (name: string): string =>
-  name.substring(0, 1).toUpperCase();
-
-// todo as helper
-const getColorFromName = (name: string): string => {
-  let hash = 0;
-  let i;
-
-  for (i = 0; i < name.length; i += 1) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const rgb = [];
-
-  for (i = 0; i < 3; i += 1) {
-    let value = ((hash >> (i * 16)) & 0xff) - 50;
-
-    if (value > 220) {
-      value -= 30;
-    }
-
-    if (value < 30) {
-      value += 30;
-    }
-
-    rgb.push(value);
-  }
-
-  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
-};
-
-// todo replace large with size
-const PlayerAvatar = ({ player, large }: PlayPageProps): JSX.Element => {
+const PlayerAvatar = ({ player, size }: PlayPageProps): JSX.Element => {
   return (
     <Box display={'flex'} justifyContent={'center'} mb={1}>
       <Avatar
+        src={player.photo}
         sx={{
           bgcolor: getColorFromName(`${player.firstName}${player.lastName}`),
-          width: large ? '120px' : '60px',
-          height: large ? '120px' : '60px'
+          width: size,
+          height: size
         }}
       >
-        <Typography color={'inherit'} variant={large ? 'h3' : 'h6'}>
+        <Typography color={'inherit'} fontSize={size / 3}>
           {`${getFirstLetter(player.firstName || '')}${getFirstLetter(
             player.lastName || ''
           )}`}

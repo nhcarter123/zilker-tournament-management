@@ -18,15 +18,15 @@ import { Box } from '@mui/material';
 const getNavigationTarget = (tournament: Tournament, me: Nullable<User>) => {
   const inTournament = tournament.players.includes(me?._id || '');
 
-  if (!tournament.rounds.length) {
+  if (!inTournament) {
+    return Page.Join.replace(':tournamentId', tournament._id);
+  } else if (!tournament.rounds.length) {
     return Page.Waiting.replace(':tournamentId', tournament._id);
-  } else if (inTournament) {
+  } else {
     return Page.Match.replace(':tournamentId', tournament._id).replace(
       ':matchId',
       'find'
     );
-  } else {
-    return Page.Join.replace(':tournamentId', tournament._id);
   }
 };
 

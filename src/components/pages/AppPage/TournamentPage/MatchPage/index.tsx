@@ -31,7 +31,7 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
     getMyMatch: Nullable<Match>;
   }>(GET_MY_MATCH, {
     fetchPolicy: 'network-only',
-    skip: matchId !== 'find',
+    skip: matchId === 'none' || matchId !== 'find',
     onCompleted: (data) => {
       if (tournament) {
         history.push(
@@ -47,7 +47,7 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
   const { data: matchData, loading } = useQuery<{
     getMatch: Nullable<MatchWithUserInfo>;
   }>(GET_MATCH, {
-    skip: matchId === 'find',
+    skip: matchId === 'find' || matchId === 'none',
     variables: { matchId },
     // fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true

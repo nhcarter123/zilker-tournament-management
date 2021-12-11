@@ -7,9 +7,10 @@ import JoinPage from 'components/pages/AppPage/TournamentPage/JoinPage';
 import WaitingPage from 'components/pages/AppPage/TournamentPage/WaitingPage';
 import MatchPage from 'components/pages/AppPage/TournamentPage/MatchPage';
 import DetailsPage from 'components/pages/AppPage/TournamentPage/DetailsPage';
+import UpcomingPage from 'components/pages/AppPage/TournamentPage/UpcomingPage';
 
 import { GET_ACTIVE_TOURNAMENT, GET_TOURNAMENT } from 'graphql/queries/queries';
-import { Tournament } from 'types/types';
+import { Tournament, TournamentStatus } from 'types/types';
 import { Page } from 'types/page';
 import { UserContext } from 'context/userContext';
 import { Box } from '@mui/material';
@@ -22,10 +23,13 @@ const TournamentPage = (): JSX.Element => {
 
   const isDetailsPage = page.includes('/details');
 
+  const skipGetActiveTournament =
+    tournamentId !== 'find' && tournamentId !== 'upcoming';
+
   const { loading: loadingGetActiveTournament } = useQuery<{
     getActiveTournament: Nullable<Partial<Tournament>>;
   }>(GET_ACTIVE_TOURNAMENT, {
-    skip: tournamentId !== 'find',
+    skip: skipGetActiveTournament,
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
@@ -35,7 +39,6 @@ const TournamentPage = (): JSX.Element => {
           `${Page.Tournament.replace(':tournamentId', tournamentId)}`
         );
       } else {
-        // todo
         history.push(Page.Upcoming);
       }
     }
@@ -48,7 +51,7 @@ const TournamentPage = (): JSX.Element => {
   } = useQuery<{
     getTournament: Nullable<Tournament>;
   }>(GET_TOURNAMENT, {
-    skip: tournamentId === 'find',
+    skip: !skipGetActiveTournament, // these queries should be opposites and never run together
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -58,6 +61,10 @@ const TournamentPage = (): JSX.Element => {
       const tournament = data?.getTournament || null;
 
       if (tournament && !isDetailsPage) {
+        if (tournament.status !== TournamentStatus.Active) {
+          return history.push(Page.Upcoming);
+        }
+
         const inTournament = tournament?.players.includes(me?._id || '');
 
         if (!tournament.rounds.length) {
@@ -106,6 +113,7 @@ const TournamentPage = (): JSX.Element => {
             path={Page.Details}
             render={(): JSX.Element => <DetailsPage tournament={tournament} />}
           />
+          <Route path={Page.Upcoming} component={UpcomingPage} />
         </Box>
       )}
     </>

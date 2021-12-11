@@ -34,6 +34,11 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
       <Route path={Page.Details} component={TournamentHeader} exact />
       <Route path={Page.Match} component={TournamentHeader} />
       <Route
+        path={Page.Upcoming}
+        render={() => <SimpleHeader title={'Upcoming'} />}
+        exact
+      />
+      <Route
         path={Page.Join}
         render={() => <SimpleHeader title={'Join'} />}
         exact

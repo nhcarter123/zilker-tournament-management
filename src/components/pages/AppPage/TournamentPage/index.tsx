@@ -10,10 +10,25 @@ import DetailsPage from 'components/pages/AppPage/TournamentPage/DetailsPage';
 import UpcomingPage from 'components/pages/AppPage/TournamentPage/UpcomingPage';
 
 import { GET_ACTIVE_TOURNAMENT, GET_TOURNAMENT } from 'graphql/queries/queries';
-import { Tournament, TournamentStatus } from 'types/types';
+import { Tournament, TournamentStatus, User } from 'types/types';
 import { Page } from 'types/page';
 import { UserContext } from 'context/userContext';
 import { Box } from '@mui/material';
+
+const getNavigationTarget = (tournament: Tournament, me: Nullable<User>) => {
+  const inTournament = tournament.players.includes(me?._id || '');
+
+  if (!tournament.rounds.length) {
+    return Page.Waiting.replace(':tournamentId', tournament._id);
+  } else if (inTournament) {
+    return Page.Match.replace(':tournamentId', tournament._id).replace(
+      ':matchId',
+      'find'
+    );
+  } else {
+    return Page.Join.replace(':tournamentId', tournament._id);
+  }
+};
 
 const TournamentPage = (): JSX.Element => {
   const me = useContext(UserContext);
@@ -27,17 +42,15 @@ const TournamentPage = (): JSX.Element => {
     tournamentId !== 'find' && tournamentId !== 'upcoming';
 
   const { loading: loadingGetActiveTournament } = useQuery<{
-    getActiveTournament: Nullable<Partial<Tournament>>;
+    getActiveTournament: Nullable<Tournament>;
   }>(GET_ACTIVE_TOURNAMENT, {
     skip: skipGetActiveTournament,
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
-      const tournamentId = data?.getActiveTournament?._id;
-      if (tournamentId) {
-        history.push(
-          `${Page.Tournament.replace(':tournamentId', tournamentId)}`
-        );
+      const tournament = data?.getActiveTournament;
+      if (tournament) {
+        history.push(getNavigationTarget(tournament, me));
       } else {
         history.push(Page.Upcoming);
       }
@@ -65,20 +78,7 @@ const TournamentPage = (): JSX.Element => {
           return history.push(Page.Upcoming);
         }
 
-        const inTournament = tournament?.players.includes(me?._id || '');
-
-        if (!tournament.rounds.length) {
-          history.push(Page.Waiting.replace(':tournamentId', tournament._id));
-        } else if (inTournament) {
-          history.push(
-            Page.Match.replace(':tournamentId', tournament._id).replace(
-              ':matchId',
-              'find'
-            )
-          );
-        } else {
-          history.push(Page.Join.replace(':tournamentId', tournament._id));
-        }
+        history.push(getNavigationTarget(tournament, me));
       }
     }
   });

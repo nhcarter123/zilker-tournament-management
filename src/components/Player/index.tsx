@@ -19,7 +19,7 @@ const Player = ({
 }: PlayerProps): JSX.Element => {
   const isPositive = Math.sign((ratingAfter || 0) - ratingBefore) >= 0;
   return (
-    <Box mt={2} mb={1}>
+    <Box mb={1}>
       {!hideAvatar && <PlayerAvatar player={player} size={60} />}
 
       <Typography align={'center'} component={'span'}>

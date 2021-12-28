@@ -1,5 +1,5 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { useQuery, useSubscription } from '@apollo/client';
 import { GET_MATCH, GET_MY_MATCH } from 'graphql/queries/queries';
 import { useMediaQuery } from 'react-responsive';
 
@@ -14,6 +14,10 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useHistory, useParams } from 'react-router-dom';
 import { Match, MatchWithUserInfo, Tournament } from 'types/types';
 import { Page } from 'types/page';
+import {
+  MATCH_UPDATED,
+  NEW_ROUND_STARTED
+} from '../../../../../graphql/subscriptions/subscriptions';
 
 interface MatchPageProps {
   tournament: Nullable<Tournament>;
@@ -22,10 +26,27 @@ interface MatchPageProps {
 const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
   const history = useHistory();
   const { matchId } = useParams<{ matchId: string }>();
-  const shortWindow = useMediaQuery({ query: `(max-height: 590px)` });
+  const shortWindow = useMediaQuery({ query: '(max-height: 590px)' });
   const classes = useStyles();
 
   // todo this !== 'bye' shit has to get abstracted to somewhere
+
+  const { data: newRoundData } = useSubscription<{
+    newRoundStarted: boolean;
+  }>(NEW_ROUND_STARTED);
+
+  useEffect(() => {
+    if (newRoundData?.newRoundStarted && tournament) {
+      console.log(newRoundData?.newRoundStarted);
+
+      history.push(
+        Page.Match.replace(':tournamentId', tournament._id).replace(
+          ':matchId',
+          'find'
+        )
+      );
+    }
+  }, [newRoundData, history, tournament]);
 
   const { loading: loadingGetMyMatch } = useQuery<{
     getMyMatch: Nullable<Match>;
@@ -48,18 +69,66 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
     getMatch: Nullable<MatchWithUserInfo>;
   }>(GET_MATCH, {
     skip: matchId === 'find' || matchId === 'none',
-    variables: { matchId },
-    // fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true
-    // pollInterval: 4000, // todo rewrite using subscriptions (who knew that was a thing??)
+    variables: { matchId }
+    // onCompleted: () =>
+    //   subscribeToMore({
+    //     document: MATCH_UPDATED,
+    //     variables: { matchIds: [matchId] },
+    //     updateQuery: (prev, { subscriptionData }: MatchUpdateSubscription) => {
+    //       if (!subscriptionData.data) {
+    //         return prev;
+    //       }
+    //
+    //       return {
+    //         ...prev,
+    //         getMatch: {
+    //           ...prev.getMatch,
+    //           ...subscriptionData.data.matchUpdated
+    //         } as MatchWithUserInfo
+    //       };
+    //     }
+    //   })
   });
+
+  const { data: updatedMatchData } = useSubscription<{
+    matchUpdated: Nullable<Partial<MatchWithUserInfo>>;
+  }>(MATCH_UPDATED, {
+    variables: { matchIds: [matchId] },
+    skip: matchId === 'find' || matchId === 'none'
+  });
+
+  // const { data } = useSubscription(MATCH_UPDATED, {
+  //   variables: { matchIds: [matchId] },
+  //   skip: matchId === 'find' || matchId === 'none'
+  // });
+  // console.log(data);
+
+  // useEffect(() => {
+  //   if (matchId !== 'find' && matchId !== 'none' && !subscribed) {
+  //     console.log(matchId);
+  //     setSubscribed(true);
+  //
+  //     subscribeToMore({
+  //       document: MATCH_UPDATED,
+  //       variables: { matchIds: [matchId] }
+  //     });
+  //   }
+  // }, [subscribeToMore, matchId, subscribed]);
 
   const whitePlayer = matchData?.getMatch?.white;
   const blackPlayer = matchData?.getMatch?.black;
-  const match = matchData?.getMatch;
+  const match = matchData?.getMatch && {
+    ...matchData.getMatch,
+    ...(updatedMatchData?.matchUpdated || {})
+  };
 
   return (
-    <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
+    <Box
+      display={'flex'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      width={'100%'}
+    >
       {loadingGetMyMatch || loading ? (
         <Spinner />
       ) : !whitePlayer || !blackPlayer || !match ? (
@@ -70,7 +139,7 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
           </Typography>
         </div>
       ) : (
-        <Box>
+        <Box sx={{ width: '100%' }} pt={2}>
           <Player
             player={blackPlayer}
             ratingBefore={match.blackRating}
@@ -78,7 +147,7 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
             hideAvatar={shortWindow}
           />
 
-          <Box className={classes.boardContainer}>
+          <Box display={'flex'} justifyContent={'center'} mb={2}>
             <div
               style={{
                 position: 'relative',
@@ -87,9 +156,7 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
               }}
             >
               <div className={classes.boardNumber}>
-                <Typography
-                  variant={'h6'}
-                >{`#${match.boardNumber}`}</Typography>
+                <Typography variant="h6">{`#${match.boardNumber}`}</Typography>
               </div>
               <img
                 src={ChessBoard}

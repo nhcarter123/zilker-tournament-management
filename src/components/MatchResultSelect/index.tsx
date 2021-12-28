@@ -12,7 +12,6 @@ import Spinner from 'components/Spinner';
 
 import { useMutation } from '@apollo/client';
 import { UPDATE_MATCH } from 'graphql/mutations/mutations';
-import { GET_MATCH } from 'graphql/queries/queries';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MatchResultSelect/styles';
@@ -30,7 +29,6 @@ const MatchResultSelect = ({
   const classes = useStyles();
 
   const [updateMatch, { loading }] = useMutation(UPDATE_MATCH, {
-    refetchQueries: [GET_MATCH],
     onError
   });
 
@@ -48,9 +46,13 @@ const MatchResultSelect = ({
         </Typography>
       </Box>
 
-      <div>
+      <Box
+        display={'flex'}
+        justifyContent={'center'}
+        sx={{ height: '84px', width: '100%' }}
+      >
         {matchLoading || loading ? (
-          <Box mt={1}>
+          <Box mt={5} width={'220px'}>
             <Spinner linear />
           </Box>
         ) : (
@@ -99,7 +101,7 @@ const MatchResultSelect = ({
             </FormControl>
           </>
         )}
-      </div>
+      </Box>
     </Box>
   );
 };

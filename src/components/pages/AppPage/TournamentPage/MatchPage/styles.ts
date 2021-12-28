@@ -1,10 +1,6 @@
 import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
-  boardContainer: {
-    display: 'flex',
-    justifyContent: 'center'
-  },
   boardNumber: {
     display: 'flex',
     alignItems: 'center',

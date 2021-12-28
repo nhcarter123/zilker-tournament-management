@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { find } from 'lodash';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { GET_ROUND } from 'graphql/queries/queries';
 import { Box, IconButton, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
@@ -21,6 +21,7 @@ import { Page } from 'types/page';
 import WinnerText from 'components/WinnerText';
 import { UserContext } from 'context/userContext';
 import Bold from '../../Bold';
+import { MATCH_UPDATED } from '../../../graphql/subscriptions/subscriptions';
 
 interface RoundProps {
   tournament: Tournament;
@@ -47,6 +48,45 @@ const RoundStatusDetail = ({
       tournamentId: tournament._id,
       roundId: roundPreview._id
     }
+    // onCompleted: () => {
+    //   subscribeToMore({
+    //     document: MATCH_UPDATED,
+    //     variables: { matchIds: roundPreview.matches },
+    //     updateQuery: (prev, { subscriptionData }: MatchUpdateSubscription) => {
+    //       if (!subscriptionData.data || !prev.getRound) {
+    //         return prev;
+    //       }
+    //
+    //       // console.log(prev);
+    //       // console.log(subscriptionData.data);
+    //
+    //       const updatedMatches = prev.getRound.matches.map((match) => {
+    //         if (match._id === subscriptionData.data?.matchUpdated?._id) {
+    //           console.log(match);
+    //           console.log(subscriptionData.data.matchUpdated);
+    //
+    //           return {
+    //             ...match,
+    //             ...subscriptionData.data.matchUpdated
+    //           };
+    //         } else {
+    //           return match;
+    //         }
+    //       });
+    //
+    //       return {
+    //         ...prev,
+    //         getRound: { ...prev.getRound, matches: updatedMatches }
+    //       };
+    //     }
+    //   });
+    // }
+  });
+
+  const { data: updatedMatchData } = useSubscription<{
+    matchUpdated: Nullable<Partial<Match>>;
+  }>(MATCH_UPDATED, {
+    variables: { matchIds: roundPreview.matches }
   });
 
   const renderMatches = (match: Match, index: number): JSX.Element => {
@@ -112,9 +152,22 @@ const RoundStatusDetail = ({
     );
   };
 
-  const sortedMatches = [...(data?.getRound?.matches || [])].sort(
-    (a, b) => a.boardNumber - b.boardNumber
-  );
+  let matches = [...(data?.getRound?.matches || [])];
+
+  if (updatedMatchData) {
+    matches = matches.map((match) => {
+      if (match._id === updatedMatchData.matchUpdated?._id) {
+        return {
+          ...match,
+          ...updatedMatchData.matchUpdated
+        };
+      } else {
+        return match;
+      }
+    });
+  }
+
+  const sortedMatches = matches.sort((a, b) => a.boardNumber - b.boardNumber);
 
   return loading ? (
     <Box sx={{ width: '200px' }} mb={3}>

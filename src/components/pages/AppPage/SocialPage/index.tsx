@@ -25,7 +25,7 @@ const SocialPage = (): JSX.Element => {
       <Typography variant={'body1'}>
         Stay connected by joining our facebook and meetup groups!
       </Typography>
-      <Typography variant={'body1'}>We'd love to have you 🤗</Typography>
+      <Typography variant={'body1'}>We&apos;d love to have you 🤗</Typography>
 
       <Box mt={4} display={'flex'} justifyContent={'center'}>
         <IconButton

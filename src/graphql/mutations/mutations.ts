@@ -39,8 +39,11 @@ export const CREATE_TOURNAMENT = gql`
 `;
 
 export const UPDATE_TOURNAMENT = gql`
-  mutation UpdateTournament($name: String!) {
-    createTournament(name: $name)
+  mutation UpdateTournament(
+    $tournamentId: ID!
+    $payload: UpdateTournamentPayload!
+  ) {
+    updateTournament(tournamentId: $tournamentId, payload: $payload)
   }
 `;
 

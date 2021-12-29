@@ -85,7 +85,7 @@ const TournamentsTable = ({
       dataIndex: 'delete',
       width: '50px',
       render: (_: unknown, record: Tournament): JSX.Element =>
-        isAdmin ? <DeleteTournamentButton _id={record._id} /> : <></>
+        isAdmin ? <DeleteTournamentButton tournamentId={record._id} /> : <></>
     }
   ];
 

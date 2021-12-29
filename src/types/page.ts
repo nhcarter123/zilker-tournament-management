@@ -8,10 +8,7 @@ export enum Page {
   Donate = '/app/donate',
   Tournaments = '/app/listTournament',
   Tournament = '/app/tournament',
-  EditMatch = '/app/editMatch/:matchId',
+  EditMatch = '/app/editMatch/:matchId/tournament/:tournamentId',
   ViewTournament = '/app/viewTournament/:tournamentId',
-  Join = '/app/tournament/join',
-  Waiting = '/app/tournament/waiting',
-  Match = '/app/tournament/match',
   Upcoming = '/app/tournament/upcoming'
 }

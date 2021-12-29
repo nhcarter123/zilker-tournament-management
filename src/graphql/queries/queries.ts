@@ -44,6 +44,7 @@ export const GET_ACTIVE_TOURNAMENT = gql`
       date
       status
       players
+      totalRounds
       rounds {
         _id
         completed

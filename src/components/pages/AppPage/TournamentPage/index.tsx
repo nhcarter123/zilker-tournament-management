@@ -12,7 +12,6 @@ import { Box } from '@mui/material';
 import { NEW_ROUND_STARTED } from 'graphql/subscriptions/subscriptions';
 import UpcomingPage from '../UpcomingPage';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
-import TournamentHeader from '../../../MainHeader/TournamentHeader';
 
 const TournamentPage = (): JSX.Element => {
   const me = useContext(UserContext);
@@ -59,7 +58,7 @@ const TournamentPage = (): JSX.Element => {
       }
 
       if (match) {
-        return <MatchPage match={match} />;
+        return <MatchPage match={match} tournament={tournament} />;
       }
 
       return (
@@ -81,7 +80,6 @@ const TournamentPage = (): JSX.Element => {
           alignItems={'center'}
           justifyContent={'center'}
         >
-          <TournamentHeader tournament={tournament} />
           {contentRouter()}
         </Box>
       )}

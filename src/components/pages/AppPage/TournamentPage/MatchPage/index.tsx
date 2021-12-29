@@ -9,14 +9,16 @@ import ChessBoard from 'svg/chessBoard.svg';
 
 import { useStyles } from 'components/pages/AppPage/TournamentPage/MatchPage/styles';
 import { Box, Divider, Typography } from '@mui/material';
-import { MatchWithUserInfo } from 'types/types';
+import { MatchWithUserInfo, Tournament } from 'types/types';
 import { MATCH_UPDATED } from 'graphql/subscriptions/subscriptions';
+import TournamentHeader from '../../../../MainHeader/TournamentHeader';
 
 interface MatchPageProps {
   match: MatchWithUserInfo;
+  tournament: Nullable<Tournament>;
 }
 
-const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
+const MatchPage = ({ match, tournament }: MatchPageProps): JSX.Element => {
   const shortWindow = useMediaQuery({ query: '(max-height: 590px)' });
   const classes = useStyles();
 
@@ -40,6 +42,7 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
       justifyContent={'center'}
       width={'100%'}
     >
+      <TournamentHeader tournament={tournament} />
       {!whitePlayer || !blackPlayer || !mergedMatch ? (
         <div>
           <Typography>You don’t have an opponent for this round.</Typography>

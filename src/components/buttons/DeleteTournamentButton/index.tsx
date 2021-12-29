@@ -6,11 +6,13 @@ import { UPDATE_TOURNAMENT } from '../../../graphql/mutations/mutations';
 import { GET_TOURNAMENTS } from '../../../graphql/queries/queries';
 import { onError } from '../../../graphql/errorHandler';
 
-type DeletePlayerButtonProps = {
-  _id: string;
+type DeleteTournamentButtonProps = {
+  tournamentId: string;
 };
 
-const DeletePlayerButton = ({ _id }: DeletePlayerButtonProps): JSX.Element => {
+const DeleteTournamentButton = ({
+  tournamentId
+}: DeleteTournamentButtonProps): JSX.Element => {
   const [updateTournament, { loading }] = useMutation(UPDATE_TOURNAMENT, {
     refetchQueries: [GET_TOURNAMENTS],
     onError
@@ -21,7 +23,10 @@ const DeletePlayerButton = ({ _id }: DeletePlayerButtonProps): JSX.Element => {
       title="Are you sure?"
       onConfirm={(): void => {
         updateTournament({
-          variables: { tournamentId: _id, payload: { isDeleted: true } }
+          variables: {
+            tournamentId: tournamentId,
+            payload: { isDeleted: true }
+          }
         });
       }}
     >
@@ -35,4 +40,4 @@ const DeletePlayerButton = ({ _id }: DeletePlayerButtonProps): JSX.Element => {
   );
 };
 
-export default DeletePlayerButton;
+export default DeleteTournamentButton;

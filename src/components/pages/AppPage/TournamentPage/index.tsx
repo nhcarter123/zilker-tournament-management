@@ -45,7 +45,7 @@ const TournamentPage = (): JSX.Element => {
     getActiveTournament: Nullable<Tournament>;
   }>(GET_ACTIVE_TOURNAMENT, {
     skip: skipGetActiveTournament,
-    // fetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
       const tournament = data?.getActiveTournament;

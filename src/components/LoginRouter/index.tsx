@@ -26,8 +26,7 @@ const LoginRouter = (): JSX.Element => {
     networkStatus,
     refetch
   } = useQuery<{ me: Nullable<User> }>(GET_ME, {
-    // fetchPolicy: 'network-only',
-    // pollInterval: 5000,
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     onCompleted: () => {
       if (history.location.pathname !== Page.Login && !data?.me) {

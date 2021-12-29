@@ -9,16 +9,10 @@ import { GET_UPCOMING_TOURNAMENTS } from 'graphql/queries/queries';
 import Spinner from 'components/Spinner';
 import Bold from 'components/Bold';
 
-interface JoinPageProps {
-  tournament: Nullable<Tournament>;
-}
-
-const UpcomingPage = ({ tournament }: JoinPageProps): JSX.Element => {
+const UpcomingPage = (): JSX.Element => {
   const { data: tournamentData, loading } = useQuery<{
     getUpcomingTournaments: Tournament[];
-  }>(GET_UPCOMING_TOURNAMENTS, {
-    skip: Boolean(tournament)
-  });
+  }>(GET_UPCOMING_TOURNAMENTS);
 
   const upcomingTournaments = tournamentData?.getUpcomingTournaments || [];
 

@@ -74,7 +74,7 @@ const GetMoreDetailsForm = ({
       <div className={classes.root}>
         <div className={classes.input}>
           <TextField
-            error={!!errors.firstName && touched.firstName}
+            error={Boolean(errors.firstName && touched.firstName)}
             id="firstName"
             label="First Name"
             onChange={(e): void => {
@@ -91,7 +91,7 @@ const GetMoreDetailsForm = ({
 
         <div className={classes.input}>
           <TextField
-            error={!!errors.lastName && touched.lastName}
+            error={Boolean(errors.lastName && touched.lastName)}
             id="lastName"
             label="Last Name"
             onChange={(e): void => {
@@ -108,7 +108,7 @@ const GetMoreDetailsForm = ({
 
         <div className={classes.input}>
           <TextField
-            error={!!errors.rating && touched.rating}
+            error={Boolean(errors.rating && touched.rating)}
             id="rating"
             label="Online rating"
             onChange={(e): void => {

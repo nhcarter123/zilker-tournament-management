@@ -6,14 +6,10 @@ import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 
 import { Tournament } from 'types/types';
 interface JoinPageProps {
-  tournament: Nullable<Tournament>;
+  tournament: Tournament;
 }
 
 const JoinPage = ({ tournament }: JoinPageProps): JSX.Element => {
-  if (!tournament) {
-    return <></>;
-  }
-
   return (
     <div>
       <Typography variant={'h4'} align={'center'}>

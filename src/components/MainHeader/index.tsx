@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Route, useHistory, useLocation } from 'react-router-dom';
 
 import { IconButton, Box } from '@mui/material';
-import TournamentHeader from 'components/MainHeader/TournamentHeader';
 
 import { Page } from 'types/page';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -17,7 +16,8 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
   const history = useHistory();
   const page = useLocation().pathname;
 
-  const isBack = page.includes('/edit') || page.includes('/details');
+  const hasBackButton =
+    page.includes('/editMatch') || page.includes('/viewTournament');
 
   return (
     <Box display={'flex'} alignItems={'center'}>
@@ -25,14 +25,11 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
         <IconButton
           aria-label={'menu'}
           size={'large'}
-          onClick={() => (isBack ? history.goBack() : setOpen(true))}
+          onClick={() => (hasBackButton ? history.goBack() : setOpen(true))}
         >
-          {isBack ? <ArrowBackIcon /> : <MenuIcon />}
+          {hasBackButton ? <ArrowBackIcon /> : <MenuIcon />}
         </IconButton>
       </Box>
-      <Route path={Page.Waiting} component={TournamentHeader} exact />
-      <Route path={Page.Details} component={TournamentHeader} exact />
-      <Route path={Page.Match} component={TournamentHeader} />
       <Route
         path={Page.Upcoming}
         render={() => <SimpleHeader title={'Upcoming'} />}

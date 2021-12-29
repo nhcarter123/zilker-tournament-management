@@ -68,8 +68,6 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
 
     const getDestination = (text: string): string => {
       switch (text) {
-        case MenuItem.Profile:
-          return Page.Profile;
         case MenuItem.Tournaments:
           return Page.Tournaments;
         case MenuItem.Rules:
@@ -79,8 +77,10 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
         case MenuItem.Donate:
           return Page.Donate;
         case MenuItem.Play:
+          return Page.Tournament;
+        case MenuItem.Profile:
         default:
-          return Page.Tournament.replace(':tournamentId', 'find');
+          return Page.Profile;
       }
     };
 

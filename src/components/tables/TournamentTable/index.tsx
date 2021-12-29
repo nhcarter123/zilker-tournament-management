@@ -44,7 +44,9 @@ const TournamentsTable = ({
       render: (name: string, record: Tournament): JSX.Element => (
         <a
           onClick={(): void => {
-            history.push(Page.Details.replace(':tournamentId', record._id));
+            history.push(
+              Page.ViewTournament.replace(':tournamentId', record._id)
+            );
           }}
         >
           {name}

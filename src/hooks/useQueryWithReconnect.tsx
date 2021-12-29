@@ -9,7 +9,7 @@ import {
 } from '@apollo/client';
 import useOnlineStatus from '@rehooks/online-status';
 
-export const useQueryWithReconnect = <TData, TVariables>(
+export const useQueryWithReconnect = <TData, TVariables = {}>(
   query: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options: QueryHookOptions<TData, TVariables> | undefined
 ): QueryResult<TData, TVariables> => {

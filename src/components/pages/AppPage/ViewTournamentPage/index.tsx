@@ -4,18 +4,28 @@ import { useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material/';
 import Spinner from 'components/Spinner';
-import TournamentRounds from 'components/pages/AppPage/TournamentPage/DetailsPage/TournamentRounds';
-import TournamentPlayers from 'components/pages/AppPage/TournamentPage/DetailsPage/TournamentPlayers';
+import TournamentRounds from 'components/pages/AppPage/ViewTournamentPage/TournamentRounds';
+import TournamentPlayers from 'components/pages/AppPage/ViewTournamentPage/TournamentPlayers';
 
-import { GET_USERS } from 'graphql/queries/queries';
+import { GET_TOURNAMENT, GET_USERS } from 'graphql/queries/queries';
 import { Tournament, User } from 'types/types';
+import { useParams } from 'react-router-dom';
+import TournamentHeader from '../../../MainHeader/TournamentHeader';
 
-interface DetailsPageProps {
-  tournament: Nullable<Tournament>;
-}
-
-const DetailsPage = ({ tournament }: DetailsPageProps): JSX.Element => {
+const ViewTournamentPage = (): JSX.Element => {
   const [selectedRound, setSelectedRound] = useState<Nullable<string>>(null);
+  const { tournamentId } = useParams<{ tournamentId: string }>();
+
+  const { data: tournamentData, loading: loadingTournament } = useQuery<{
+    getTournament: Nullable<Tournament>;
+  }>(GET_TOURNAMENT, {
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      tournamentId
+    }
+  });
+
+  const tournament = tournamentData?.getTournament || null;
 
   const standings = tournament?.standings || [];
   const players = tournament?.players || [];
@@ -32,7 +42,7 @@ const DetailsPage = ({ tournament }: DetailsPageProps): JSX.Element => {
 
   const { data: usersData, loading } = useQuery<{
     getUsers: Nullable<User[]>;
-  }>(GET_USERS, { variables: { userIds } });
+  }>(GET_USERS, { variables: { userIds }, fetchPolicy: 'cache-and-network' });
 
   const users = usersData?.getUsers;
 
@@ -43,7 +53,8 @@ const DetailsPage = ({ tournament }: DetailsPageProps): JSX.Element => {
 
   return (
     <Box height={'100%'} width={'100%'}>
-      {loading ? (
+      <TournamentHeader tournament={tournament} />
+      {loading || loadingTournament ? (
         <Spinner />
       ) : (
         tournament &&
@@ -64,4 +75,4 @@ const DetailsPage = ({ tournament }: DetailsPageProps): JSX.Element => {
   );
 };
 
-export default DetailsPage;
+export default ViewTournamentPage;

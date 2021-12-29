@@ -126,6 +126,24 @@ export const GET_MY_MATCH = gql`
   query GetMyMatch {
     getMyMatch {
       _id
+      white {
+        _id
+        firstName
+        lastName
+        photo
+      }
+      black {
+        _id
+        firstName
+        lastName
+        photo
+      }
+      whiteRating
+      blackRating
+      newWhiteRating
+      newBlackRating
+      boardNumber
+      result
     }
   }
 `;

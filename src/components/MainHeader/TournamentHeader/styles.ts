@@ -2,9 +2,12 @@ import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
   root: {
-    paddingLeft: '8px',
+    position: 'absolute',
+    top: '18px',
+    left: '88px',
     textOverflow: 'ellipsis',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    display: 'grid'
   },
   noWrap: {
     textOverflow: 'ellipsis',

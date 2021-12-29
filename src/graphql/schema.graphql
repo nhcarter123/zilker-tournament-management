@@ -133,7 +133,7 @@ type Query {
   getTournament(tournamentId: ID!): Tournament
 
   getMatch(matchId: ID!): MatchWithUserInfo
-  getMyMatch: Match
+  getMyMatch: MatchWithUserInfo
   getRound(tournamentId: ID!, roundId: ID!): Round
 }
 

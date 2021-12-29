@@ -19,13 +19,9 @@ import { MatchResult, MatchWithUserInfo } from 'types/types';
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
-  matchLoading: boolean;
 }
 
-const MatchResultSelect = ({
-  match,
-  matchLoading
-}: MatchResultSelectProps): JSX.Element => {
+const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
   const classes = useStyles();
 
   const [updateMatch, { loading }] = useMutation(UPDATE_MATCH, {
@@ -51,7 +47,7 @@ const MatchResultSelect = ({
         justifyContent={'center'}
         sx={{ height: '84px', width: '100%' }}
       >
-        {matchLoading || loading ? (
+        {loading ? (
           <Box mt={5} width={'220px'}>
             <Spinner linear />
           </Box>

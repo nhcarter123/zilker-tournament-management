@@ -1,28 +1,16 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Tournament } from 'types/types';
-import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
-import { useParams } from 'react-router-dom';
-import { useQueryWithReconnect } from '../../../hooks/useQueryWithReconnect';
 
-const TournamentHeader = (): JSX.Element => {
+interface TournamentHeaderProps {
+  tournament: Nullable<Tournament>;
+}
+
+const TournamentHeader = ({
+  tournament
+}: TournamentHeaderProps): JSX.Element => {
   const classes = useStyles();
-  const { tournamentId } = useParams<{ tournamentId: string }>();
-
-  const { data } = useQueryWithReconnect<
-    {
-      getTournament: Nullable<Tournament>;
-    },
-    { tournamentId: string }
-  >(GET_TOURNAMENT, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      tournamentId
-    }
-  });
-
-  const tournament = data?.getTournament;
 
   if (!tournament) {
     return <Box sx={{ height: '64px' }} />;
@@ -34,7 +22,7 @@ const TournamentHeader = (): JSX.Element => {
   return (
     <Box className={classes.root}>
       <Typography className={classes.noWrap} variant={'h5'}>
-        {tournament?.name}
+        {tournament.name}
       </Typography>
 
       <Box display={'flex'} alignItems={'center'} className={classes.noWrap}>
@@ -45,7 +33,7 @@ const TournamentHeader = (): JSX.Element => {
         )}
 
         <Box display={'flex'} className={classes.noWrap}>
-          <Typography variant={'subtitle2'}>
+          <Typography variant={'subtitle2'} className={classes.noWrap}>
             {`${tournament.players.length} player${
               tournament.players.length !== 1 ? 's' : ''
             } ${totalRounds} rounds`}

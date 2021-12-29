@@ -18,6 +18,7 @@ import {
   MATCH_UPDATED,
   NEW_ROUND_STARTED
 } from '../../../../../graphql/subscriptions/subscriptions';
+import { useQueryWithReconnect } from '../../../../../hooks/useQueryWithReconnect';
 
 interface MatchPageProps {
   tournament: Nullable<Tournament>;
@@ -32,27 +33,23 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
   // todo this !== 'bye' shit has to get abstracted to somewhere
 
   const { data: newRoundData } = useSubscription<{
-    newRoundStarted: boolean;
-  }>(NEW_ROUND_STARTED);
+    newRoundStarted: { tournamentId: string };
+  }>(NEW_ROUND_STARTED, { variables: { tournamentId: tournament?._id || '' } });
 
   useEffect(() => {
-    if (newRoundData?.newRoundStarted && tournament) {
-      console.log(newRoundData?.newRoundStarted);
-
-      history.push(
-        Page.Match.replace(':tournamentId', tournament._id).replace(
-          ':matchId',
-          'find'
-        )
-      );
+    if (newRoundData?.newRoundStarted) {
+      history.push(Page.Match.replace(':tournamentId', 'find'));
     }
-  }, [newRoundData, history, tournament]);
+  }, [newRoundData, history]);
 
-  const { loading: loadingGetMyMatch } = useQuery<{
-    getMyMatch: Nullable<Match>;
-  }>(GET_MY_MATCH, {
+  const { loading: loadingGetMyMatch } = useQueryWithReconnect<
+    {
+      getMyMatch: Nullable<Match>;
+    },
+    {}
+  >(GET_MY_MATCH, {
     fetchPolicy: 'network-only',
-    skip: matchId === 'none' || matchId !== 'find',
+    skip: matchId !== 'find',
     onCompleted: (data) => {
       if (tournament) {
         history.push(
@@ -70,24 +67,6 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
   }>(GET_MATCH, {
     skip: matchId === 'find' || matchId === 'none',
     variables: { matchId }
-    // onCompleted: () =>
-    //   subscribeToMore({
-    //     document: MATCH_UPDATED,
-    //     variables: { matchIds: [matchId] },
-    //     updateQuery: (prev, { subscriptionData }: MatchUpdateSubscription) => {
-    //       if (!subscriptionData.data) {
-    //         return prev;
-    //       }
-    //
-    //       return {
-    //         ...prev,
-    //         getMatch: {
-    //           ...prev.getMatch,
-    //           ...subscriptionData.data.matchUpdated
-    //         } as MatchWithUserInfo
-    //       };
-    //     }
-    //   })
   });
 
   const { data: updatedMatchData } = useSubscription<{
@@ -96,24 +75,6 @@ const MatchPage = ({ tournament }: MatchPageProps): JSX.Element => {
     variables: { matchIds: [matchId] },
     skip: matchId === 'find' || matchId === 'none'
   });
-
-  // const { data } = useSubscription(MATCH_UPDATED, {
-  //   variables: { matchIds: [matchId] },
-  //   skip: matchId === 'find' || matchId === 'none'
-  // });
-  // console.log(data);
-
-  // useEffect(() => {
-  //   if (matchId !== 'find' && matchId !== 'none' && !subscribed) {
-  //     console.log(matchId);
-  //     setSubscribed(true);
-  //
-  //     subscribeToMore({
-  //       document: MATCH_UPDATED,
-  //       variables: { matchIds: [matchId] }
-  //     });
-  //   }
-  // }, [subscribeToMore, matchId, subscribed]);
 
   const whitePlayer = matchData?.getMatch?.white;
   const blackPlayer = matchData?.getMatch?.black;

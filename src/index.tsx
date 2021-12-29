@@ -28,6 +28,7 @@ wsClient.onReconnected(() => console.log('websocket reconnected!!'));
 
 const wsLink = new WebSocketLink(wsClient);
 
+// eslint-disable-next-line
 const uploadLink: any = createUploadLink({
   uri: process.env.REACT_APP_SERVER_URI
 }); // forced to type as any until @types/apollo-upload-client is updated

@@ -12,7 +12,9 @@ export const MATCH_UPDATED = gql`
 `;
 
 export const NEW_ROUND_STARTED = gql`
-  subscription NewRoundStarted {
-    newRoundStarted
+  subscription NewRoundStarted($tournamentId: ID!) {
+    newRoundStarted(tournamentId: $tournamentId) {
+      tournamentId
+    }
   }
 `;

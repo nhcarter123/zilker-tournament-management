@@ -22,6 +22,10 @@ input UpdateMatchPayload {
   rating: Int!
 }
 
+type NewRoundStartedData {
+  tournamentId: String!
+}
+
 type User {
   _id: String!
   firstName: String
@@ -156,7 +160,7 @@ type Mutation {
 
 type Subscription {
   matchUpdated(matchIds: [ID!]!): Match
-  newRoundStarted: Boolean
+  newRoundStarted(tournamentId: ID!): NewRoundStartedData
 }
 
 schema {

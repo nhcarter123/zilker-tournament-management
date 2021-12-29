@@ -1,18 +1,21 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { useQuery } from '@apollo/client';
 import { Tournament } from 'types/types';
 import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
 import { useParams } from 'react-router-dom';
+import { useQueryWithReconnect } from '../../../hooks/useQueryWithReconnect';
 
 const TournamentHeader = (): JSX.Element => {
   const classes = useStyles();
   const { tournamentId } = useParams<{ tournamentId: string }>();
 
-  const { data } = useQuery<{
-    getTournament: Nullable<Tournament>;
-  }>(GET_TOURNAMENT, {
+  const { data } = useQueryWithReconnect<
+    {
+      getTournament: Nullable<Tournament>;
+    },
+    { tournamentId: string }
+  >(GET_TOURNAMENT, {
     notifyOnNetworkStatusChange: true,
     variables: {
       tournamentId

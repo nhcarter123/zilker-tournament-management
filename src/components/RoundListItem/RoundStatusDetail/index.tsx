@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { find } from 'lodash';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useSubscription } from '@apollo/client';
 import { GET_ROUND } from 'graphql/queries/queries';
 import { Box, IconButton, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
@@ -22,6 +22,12 @@ import WinnerText from 'components/WinnerText';
 import { UserContext } from 'context/userContext';
 import Bold from '../../Bold';
 import { MATCH_UPDATED } from '../../../graphql/subscriptions/subscriptions';
+import { useQueryWithReconnect } from '../../../hooks/useQueryWithReconnect';
+
+interface GetRoundArgs {
+  tournamentId: string;
+  roundId: string;
+}
 
 interface RoundProps {
   tournament: Tournament;
@@ -41,46 +47,16 @@ const RoundStatusDetail = ({
 }: RoundProps): JSX.Element => {
   const me = useContext(UserContext);
   const history = useHistory();
-  const { data, loading } = useQuery<{
-    getRound: Nullable<Round>;
-  }>(GET_ROUND, {
+  const { data, loading } = useQueryWithReconnect<
+    {
+      getRound: Nullable<Round>;
+    },
+    GetRoundArgs
+  >(GET_ROUND, {
     variables: {
       tournamentId: tournament._id,
       roundId: roundPreview._id
     }
-    // onCompleted: () => {
-    //   subscribeToMore({
-    //     document: MATCH_UPDATED,
-    //     variables: { matchIds: roundPreview.matches },
-    //     updateQuery: (prev, { subscriptionData }: MatchUpdateSubscription) => {
-    //       if (!subscriptionData.data || !prev.getRound) {
-    //         return prev;
-    //       }
-    //
-    //       // console.log(prev);
-    //       // console.log(subscriptionData.data);
-    //
-    //       const updatedMatches = prev.getRound.matches.map((match) => {
-    //         if (match._id === subscriptionData.data?.matchUpdated?._id) {
-    //           console.log(match);
-    //           console.log(subscriptionData.data.matchUpdated);
-    //
-    //           return {
-    //             ...match,
-    //             ...subscriptionData.data.matchUpdated
-    //           };
-    //         } else {
-    //           return match;
-    //         }
-    //       });
-    //
-    //       return {
-    //         ...prev,
-    //         getRound: { ...prev.getRound, matches: updatedMatches }
-    //       };
-    //     }
-    //   });
-    // }
   });
 
   const { data: updatedMatchData } = useSubscription<{

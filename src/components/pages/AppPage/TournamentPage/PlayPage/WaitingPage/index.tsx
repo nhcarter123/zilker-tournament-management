@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@mui/material/';
-import { useStyles } from 'components/pages/AppPage/TournamentPage/WaitingPage/styles';
+import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/WaitingPage/styles';
 
 interface WaitingPageProps {
   tournamentStarted: boolean;
@@ -14,8 +14,8 @@ const WaitingPage = ({ tournamentStarted }: WaitingPageProps): JSX.Element => {
       <div>
         {tournamentStarted ? (
           <>
-            <Typography variant={'h4'} align={'center'}>
-              Please stand by... 🕒
+            <Typography mb={2} variant={'h4'} align={'center'}>
+              Please stand by
             </Typography>
 
             <Typography variant={'body1'}>
@@ -28,7 +28,7 @@ const WaitingPage = ({ tournamentStarted }: WaitingPageProps): JSX.Element => {
           </>
         ) : (
           <>
-            <Typography variant={'h4'} align={'center'}>
+            <Typography mb={2} variant={'h4'} align={'center'}>
               Getting things ready
             </Typography>
 

@@ -16,8 +16,7 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
   const history = useHistory();
   const page = useLocation().pathname;
 
-  const hasBackButton =
-    page.includes('/editMatch') || page.includes('/viewTournament');
+  const hasBackButton = page.includes('/view');
 
   return (
     <Box display={'flex'} alignItems={'center'}>
@@ -30,16 +29,6 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
           {hasBackButton ? <ArrowBackIcon /> : <MenuIcon />}
         </IconButton>
       </Box>
-      <Route
-        path={Page.Upcoming}
-        render={() => <SimpleHeader title={'Upcoming'} />}
-        exact
-      />
-      <Route
-        path={Page.Join}
-        render={() => <SimpleHeader title={'Join'} />}
-        exact
-      />
       <Route
         path={Page.Tournaments}
         render={() => <SimpleHeader title={'Tournaments'} />}

@@ -1,87 +1,70 @@
-import React, { useContext, useEffect } from 'react';
-import { useQuery, useSubscription } from '@apollo/client';
+import React from 'react';
+import { Redirect } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
-import Spinner from 'components/Spinner';
-import JoinPage from 'components/pages/AppPage/TournamentPage/JoinPage';
-import WaitingPage from 'components/pages/AppPage/TournamentPage/WaitingPage';
-import MatchPage from 'components/pages/AppPage/TournamentPage/MatchPage';
-import { GET_ACTIVE_TOURNAMENT, GET_MY_MATCH } from 'graphql/queries/queries';
-import { MatchWithUserInfo, Tournament } from 'types/types';
-import { UserContext } from 'context/userContext';
 import { Box } from '@mui/material';
-import { NEW_ROUND_STARTED } from 'graphql/subscriptions/subscriptions';
-import UpcomingPage from '../UpcomingPage';
-import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
+import Spinner from 'components/Spinner';
+import ViewTournamentPage from 'components/pages/AppPage/TournamentPage/ViewTournamentPage';
+import PlayPage from 'components/pages/AppPage/TournamentPage/PlayPage';
+import TournamentHeader from 'components/MainHeader/TournamentHeader';
+import ViewMatchPage from 'components/pages/AppPage/TournamentPage/ViewMatchPage';
+import LeaveTournamentButton from 'components/pages/AppPage/TournamentPage/LeaveTournamentButton';
 
-const TournamentPage = (): JSX.Element => {
-  const me = useContext(UserContext);
+import { Page } from 'types/page';
+import { Tournament } from 'types/types';
 
-  const {
-    data: tournamentData,
-    loading: loadingTournament,
-    refetch: refetchTournament
-  } = useQuery<{
-    getActiveTournament: Nullable<Tournament>;
-  }>(GET_ACTIVE_TOURNAMENT, {
-    fetchPolicy: 'cache-and-network'
-  });
+interface TournamentPageProps {
+  tournament: Nullable<Tournament>;
+  loading: boolean;
+  refetchTournament: Function;
+}
 
-  const { data: matchData, refetch: refetchMatch } = useQueryWithReconnect<{
-    getMyMatch: Nullable<MatchWithUserInfo>;
-  }>(GET_MY_MATCH, {
-    fetchPolicy: 'cache-and-network'
-  });
-
-  // todo should we use skip here?
-  const { data: newRoundData } = useSubscription<{
-    newRoundStarted: { tournamentId: string };
-  }>(NEW_ROUND_STARTED, {
-    variables: { tournamentId: tournamentData?.getActiveTournament?._id || '' }
-  });
-
-  useEffect(() => {
-    // todo test with onSubData
-    if (newRoundData?.newRoundStarted) {
-      void refetchMatch();
-      void refetchTournament();
-    }
-  }, [newRoundData, refetchMatch, refetchTournament]);
-
-  const tournament = tournamentData?.getActiveTournament || null;
-  const inTournament = Boolean(tournament?.players.includes(me?._id || ''));
-  const match = matchData?.getMyMatch || null;
-
+const TournamentPage = ({
+  tournament,
+  loading,
+  refetchTournament
+}: TournamentPageProps): JSX.Element => {
+  const page = useLocation().pathname;
   const contentRouter = () => {
+    if (page.includes('view')) {
+      if (page.includes('match')) {
+        return <ViewMatchPage />;
+      }
+
+      return <ViewTournamentPage tournament={tournament} />;
+    }
+
     if (tournament) {
-      if (!inTournament) {
-        return <JoinPage tournament={tournament} />;
-      }
-
-      if (match) {
-        return <MatchPage match={match} tournament={tournament} />;
-      }
-
       return (
-        <WaitingPage tournamentStarted={Boolean(tournament.rounds.length)} />
+        <PlayPage
+          tournament={tournament}
+          refetchTournament={refetchTournament}
+        />
       );
     }
 
-    return <UpcomingPage />;
+    return <Redirect to={Page.Tournaments} />;
   };
 
   return (
     <>
-      {loadingTournament ? (
+      {loading && !tournament ? (
         <Spinner />
       ) : (
-        <Box
-          sx={{ height: '100%' }}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-        >
-          {contentRouter()}
-        </Box>
+        <>
+          <TournamentHeader tournament={tournament} />
+          {tournament && !page.includes('view') && (
+            <LeaveTournamentButton tournamentId={tournament._id} />
+          )}
+          <Box
+            sx={{ height: '100%' }}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+          >
+            {contentRouter()}
+          </Box>
+        </>
       )}
     </>
   );

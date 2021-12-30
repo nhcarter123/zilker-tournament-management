@@ -1,7 +1,10 @@
 import React from 'react';
+import { findIndex } from 'lodash';
+import { matchPath, useLocation } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { Tournament } from 'types/types';
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
+import { Page } from 'types/page';
 
 interface TournamentHeaderProps {
   tournament: Nullable<Tournament>;
@@ -11,12 +14,26 @@ const TournamentHeader = ({
   tournament
 }: TournamentHeaderProps): JSX.Element => {
   const classes = useStyles();
+  const page = useLocation().pathname;
+  const pathMatch = matchPath<{ matchId?: string }>(page, {
+    path: Page.ViewMatch,
+    exact: false,
+    strict: false
+  });
+
+  const idFromRoute = pathMatch?.params.matchId;
 
   if (!tournament) {
     return <Box sx={{ height: '64px' }} />;
   }
 
-  const currentRound = tournament.rounds.length;
+  // Show round number from matchId if it is present
+  const matchRound =
+    findIndex(tournament.rounds, (round) =>
+      round.matches.includes(idFromRoute || '')
+    ) + 1;
+
+  const currentRound = matchRound || tournament.rounds.length;
   const totalRounds = tournament.totalRounds;
 
   return (

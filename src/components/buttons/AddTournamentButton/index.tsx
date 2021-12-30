@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
+import { Box } from '@mui/material/';
 import { useMutation } from '@apollo/client';
 import { CREATE_TOURNAMENT } from 'graphql/mutations/mutations';
 import { GET_TOURNAMENTS } from 'graphql/queries/queries';
@@ -12,16 +13,18 @@ const AddTournamentButton = (): JSX.Element => {
   });
 
   return (
-    <Button
-      size={'large'}
-      type="primary"
-      onClick={(): void => {
-        createTournament({ variables: { name: 'New Tournament' } });
-      }}
-      loading={loading}
-    >
-      Create
-    </Button>
+    <Box display={'flex'} justifyContent={'center'} mr={1} mb={1}>
+      <Button
+        type="default"
+        onClick={(): void => {
+          createTournament({ variables: { name: 'New Tournament' } });
+        }}
+        loading={loading}
+        block
+      >
+        Create
+      </Button>
+    </Box>
   );
 };
 

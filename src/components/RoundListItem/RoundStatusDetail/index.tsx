@@ -56,7 +56,8 @@ const RoundStatusDetail = ({
     variables: {
       tournamentId: tournament._id,
       roundId: roundPreview._id
-    }
+    },
+    fetchPolicy: 'cache-and-network'
   });
 
   const { data: updatedMatchData } = useSubscription<{
@@ -112,9 +113,10 @@ const RoundStatusDetail = ({
             color={'info'}
             onClick={() =>
               history.push(
-                Page.EditMatch.replace(':tournamentId', tournament._id)
-                  .replace(':matchId', match._id)
-                  .replace(':tournamentId', tournament._id)
+                Page.ViewMatch.replace(':tournamentId', tournament._id).replace(
+                  ':matchId',
+                  match._id
+                )
               )
             }
           >
@@ -144,7 +146,7 @@ const RoundStatusDetail = ({
 
   const sortedMatches = matches.sort((a, b) => a.boardNumber - b.boardNumber);
 
-  return loading ? (
+  return loading && !sortedMatches.length ? (
     <Box sx={{ width: '200px' }} mb={3}>
       <Spinner linear />
     </Box>

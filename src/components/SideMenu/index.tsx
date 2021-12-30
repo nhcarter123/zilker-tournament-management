@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -35,7 +35,6 @@ interface SideMenuProps {
 
 const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
   const classes = useStyles();
-  const path = useLocation().pathname;
   const history = useHistory();
 
   const menuItems = [
@@ -77,7 +76,7 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
         case MenuItem.Donate:
           return Page.Donate;
         case MenuItem.Play:
-          return Page.Tournament;
+          return Page.Tournament.replace(':tournamentId', '');
         case MenuItem.Profile:
         default:
           return Page.Profile;
@@ -90,12 +89,7 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           <div key={text}>
             <ListItem
               button
-              onClick={(): void => {
-                const destination = getDestination(text);
-                if (!path.includes(destination)) {
-                  history.push(destination);
-                }
-              }}
+              onClick={(): void => history.push(getDestination(text))}
             >
               <div className={classes.listItem}>
                 <ListItemIcon sx={{ color: '#3878ff' }}>

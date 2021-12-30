@@ -26,29 +26,10 @@ export const GET_USERS = gql`
   }
 `;
 
-export const GET_UPCOMING_TOURNAMENTS = gql`
-  query GetUpcomingTournaments {
-    getUpcomingTournaments {
+export const GET_MY_TOURNAMENT = gql`
+  query GetMyTournament {
+    getMyTournament {
       _id
-      name
-      date
-    }
-  }
-`;
-
-export const GET_ACTIVE_TOURNAMENT = gql`
-  query GetActiveTournament {
-    getActiveTournament {
-      _id
-      name
-      date
-      status
-      players
-      totalRounds
-      rounds {
-        _id
-        completed
-      }
     }
   }
 `;
@@ -60,11 +41,6 @@ export const GET_TOURNAMENTS = gql`
       name
       date
       status
-      players
-      rounds {
-        _id
-        completed
-      }
     }
   }
 `;

@@ -12,6 +12,7 @@ export const useStyles = makeStyles({
   noWrap: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    maxWidth: '215px'
   }
 });

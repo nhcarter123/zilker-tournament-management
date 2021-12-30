@@ -30,6 +30,7 @@ export const GET_MY_TOURNAMENT = gql`
   query GetMyTournament {
     getMyTournament {
       _id
+      players
     }
   }
 `;
@@ -41,6 +42,7 @@ export const GET_TOURNAMENTS = gql`
       name
       date
       status
+      players
     }
   }
 `;

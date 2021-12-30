@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import moment from 'moment';
 
-import { Box, Card, Typography } from '@mui/material/';
+import { Box, Card, Chip, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import ViewTournamentButton from 'components/buttons/ViewTournamentButton';
@@ -31,9 +31,9 @@ const JoinTournamentList = ({
         <Box
           sx={{
             position: 'absolute',
-            width: '10px',
+            width: '8px',
             height: '30vh',
-            background: '#f8f8f8',
+            background: '#fafafa',
             right: '0px',
             border: '1px solid',
             borderColor: '#eaeaea'
@@ -42,7 +42,7 @@ const JoinTournamentList = ({
       </Box>
       <Box
         sx={{
-          background: '#efefef',
+          background: '#f3f3f3',
           height: '30vh',
           overflow: 'auto',
           borderTop: '2px solid',
@@ -53,38 +53,55 @@ const JoinTournamentList = ({
       >
         {isAdmin && withCreateButton && <AddTournamentButton />}
 
-        {tournaments.map((tournament, index) => (
-          <Card
-            key={index}
-            sx={{
-              padding: '4px 8px',
-              marginBottom: `${index !== tournaments.length - 1 ? '12px' : ''}`,
-              marginRight: '8px'
-            }}
-          >
-            <Box
-              display={'flex'}
-              alignItems={'center'}
-              justifyContent={'space-between'}
-            >
-              <Box>
-                <Typography variant={'body1'} component={'span'}>
-                  <Bold>{tournament.name}</Bold>
-                </Typography>
-                <Typography variant={'body2'}>
-                  {moment(tournament.date).format('ll')}
-                </Typography>
-              </Box>
+        {tournaments.map((tournament, index) => {
+          const amParticipant = tournament.players.includes(me?._id || '');
 
-              <Box display={'flex'}>
-                <ViewTournamentButton tournamentId={tournament._id} />
-                {tournament.status === TournamentStatus.Active && (
-                  <JoinTournamentButton tournamentId={tournament._id} />
+          return (
+            <Card
+              key={index}
+              sx={{
+                padding: '4px 8px',
+                marginBottom: `${
+                  index !== tournaments.length - 1 ? '12px' : ''
+                }`,
+                marginRight: '8px'
+              }}
+            >
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'space-between'}
+              >
+                <Box>
+                  <Typography variant={'body1'} component={'span'}>
+                    <Bold>{tournament.name}</Bold>
+                  </Typography>
+                  <Typography variant={'body2'}>
+                    {moment(tournament.date).format('ll')}
+                  </Typography>
+                </Box>
+
+                {amParticipant && (
+                  <Chip
+                    label={`${
+                      tournament.status === TournamentStatus.Active
+                        ? 'Joined'
+                        : 'Played'
+                    }`}
+                  />
                 )}
+
+                <Box display={'flex'}>
+                  <ViewTournamentButton tournamentId={tournament._id} />
+                  {!amParticipant &&
+                    tournament.status === TournamentStatus.Active && (
+                      <JoinTournamentButton tournamentId={tournament._id} />
+                    )}
+                </Box>
               </Box>
-            </Box>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </Box>
     </Box>
   );

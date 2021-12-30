@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Typography } from '@mui/material/';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/WaitingPage/styles';
 import { Button } from 'antd';
 import { Page } from 'types/page';
+import { MyTournamentContext } from '../../../../../../context/myTournamentContext';
 
 interface CompletedPageProps {
   tournamentId: string;
 }
 
 const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
+  const { setMyTournamentId } = useContext(MyTournamentContext);
   const history = useHistory();
   const classes = useStyles();
 
@@ -25,11 +27,12 @@ const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
             size={'large'}
             type="primary"
             className={classes.root}
-            onClick={(): void =>
+            onClick={(): void => {
+              setMyTournamentId(null);
               history.push(
                 Page.ViewTournament.replace(':tournamentId', tournamentId)
-              )
-            }
+              );
+            }}
           >
             Check Results
           </Button>
@@ -39,9 +42,12 @@ const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
           <Button
             type={'default'}
             className={classes.root}
-            onClick={(): void => history.push(Page.Tournaments)}
+            onClick={(): void => {
+              setMyTournamentId(null);
+              history.push(Page.Tournaments);
+            }}
           >
-            Return to tournaments
+            Back to tournaments
           </Button>
         </Box>
       </div>

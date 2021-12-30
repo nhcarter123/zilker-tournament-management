@@ -49,7 +49,9 @@ export const UPDATE_TOURNAMENT = gql`
 
 export const JOIN_TOURNAMENT = gql`
   mutation JoinTournament($tournamentId: ID!, $userId: ID!) {
-    joinTournament(tournamentId: $tournamentId, userId: $userId)
+    joinTournament(tournamentId: $tournamentId, userId: $userId) {
+      tournamentId
+    }
   }
 `;
 

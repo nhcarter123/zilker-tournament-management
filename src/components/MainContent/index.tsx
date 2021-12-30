@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Route, matchPath, useLocation, useHistory } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { matchPath, Route, useHistory, useLocation } from 'react-router-dom';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 
 import TournamentPage from 'components/pages/AppPage/TournamentPage';
@@ -8,13 +8,20 @@ import RulesPage from 'components/pages/AppPage/RulesPage';
 import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import SocialPage from 'components/pages/AppPage/SocialPage';
 import DonatePage from 'components/pages/AppPage/DonatePage';
+import SearchPage from 'components/pages/AppPage/SearchPage';
 
-import { GET_TOURNAMENT } from 'graphql/queries/queries';
-import { Tournament } from 'types/types';
+import { GET_MY_MATCH, GET_TOURNAMENT } from 'graphql/queries/queries';
+import { MatchWithUserInfo, Tournament, TournamentStatus } from 'types/types';
 import { Page } from 'types/page';
+import { useSubscription } from '@apollo/client';
+import { NEW_ROUND_STARTED } from '../../graphql/subscriptions/subscriptions';
+import { MyTournamentContext } from '../../context/myTournamentContext';
+import { UserContext } from '../../context/userContext';
 
 const MainContent = (): JSX.Element => {
   const history = useHistory();
+  const me = useContext(UserContext);
+  const { myTournamentId, setMyTournamentId } = useContext(MyTournamentContext);
   const page = useLocation().pathname;
   const match = matchPath<{ tournamentId?: string }>(page, {
     path: Page.Tournament,
@@ -23,24 +30,26 @@ const MainContent = (): JSX.Element => {
   });
   const idFromRoute = match?.params.tournamentId || null;
 
-  const [myTournamentId, setMyTournamentId] =
-    useState<Nullable<string>>(idFromRoute);
+  const {
+    data: myMatchData,
+    loading: myMatchLoading,
+    refetch: refetchMatch
+  } = useQueryWithReconnect<{
+    getMyMatch: Nullable<MatchWithUserInfo>;
+  }>(GET_MY_MATCH, {
+    fetchPolicy: 'cache-and-network'
+  });
 
   useEffect(() => {
     if (page === Page.Tournament.replace(':tournamentId', '')) {
       if (myTournamentId) {
         history.push(Page.Tournament.replace(':tournamentId', myTournamentId));
+        void refetchMatch();
       } else {
-        history.push(Page.Tournaments);
+        history.push(Page.Search);
       }
     }
-  }, [myTournamentId, history, page]);
-
-  useEffect(() => {
-    if (idFromRoute && !page.includes('view')) {
-      setMyTournamentId(idFromRoute);
-    }
-  }, [idFromRoute, page]);
+  }, [myTournamentId, history, page, refetchMatch]);
 
   const {
     data,
@@ -54,10 +63,40 @@ const MainContent = (): JSX.Element => {
   >(GET_TOURNAMENT, {
     fetchPolicy: 'cache-and-network',
     variables: { tournamentId: idFromRoute || '' },
-    skip: !idFromRoute
+    skip: !idFromRoute,
+    onCompleted: (data) => {
+      const tournament = data.getTournament;
+      if (
+        tournament &&
+        tournament.players.includes(me?._id || '') &&
+        tournament.status === TournamentStatus.Active
+      ) {
+        setMyTournamentId(tournament._id);
+      }
+    }
   });
 
   const tournament = data?.getTournament || null;
+  const myMatch = myMatchData?.getMyMatch || null;
+
+  useSubscription<{
+    newRoundStarted: { tournamentId: string };
+  }>(NEW_ROUND_STARTED, {
+    variables: { tournamentId: myTournamentId },
+    skip: !myTournamentId,
+    onSubscriptionData: () => {
+      void refetchMatch();
+      void refetchTournament();
+
+      const target = Page.Tournament.replace(
+        ':tournamentId',
+        myTournamentId || ''
+      );
+      if (page !== target) {
+        history.push(target);
+      }
+    }
+  });
 
   return (
     <>
@@ -66,13 +105,15 @@ const MainContent = (): JSX.Element => {
       <Route path={Page.Rules} component={RulesPage} />
       <Route path={Page.Donate} component={DonatePage} />
       <Route path={Page.Tournaments} component={TournamentsPage} />
+      <Route path={Page.Search} component={SearchPage} />
       <Route
         path={Page.Tournament}
         render={(): JSX.Element => (
           <TournamentPage
             tournament={tournament}
             loading={loading}
-            refetchTournament={refetchTournament}
+            myMatch={myMatch}
+            myMatchLoading={myMatchLoading}
           />
         )}
       />

@@ -26,6 +26,10 @@ type NewRoundStartedData {
   tournamentId: String!
 }
 
+type JoinTournamentResult {
+  tournamentId: String!
+}
+
 type User {
   _id: String!
   firstName: String
@@ -140,7 +144,7 @@ type Mutation {
   #   Tournament
   completeRound(tournamentId: ID!, newRound: Boolean!, textAlert: Boolean!): Boolean!
   deleteRound(tournamentId: ID!, roundId: ID!): Boolean!
-  joinTournament(tournamentId: ID!, userId: ID!): Boolean!
+  joinTournament(tournamentId: ID!, userId: ID!): JoinTournamentResult!
   kickPlayer(tournamentId: ID!, userId: ID!): Boolean!
   createTournament(name: String!): Boolean!
   updateTournament(tournamentId: ID!, payload: UpdateTournamentPayload!): Boolean!

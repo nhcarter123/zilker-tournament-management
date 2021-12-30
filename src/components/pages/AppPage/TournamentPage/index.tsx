@@ -1,6 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router';
 
 import { Box } from '@mui/material';
 import Spinner from 'components/Spinner';
@@ -10,19 +9,21 @@ import TournamentHeader from 'components/MainHeader/TournamentHeader';
 import ViewMatchPage from 'components/pages/AppPage/TournamentPage/ViewMatchPage';
 import LeaveTournamentButton from 'components/pages/AppPage/TournamentPage/LeaveTournamentButton';
 
+import { MatchWithUserInfo, Tournament } from 'types/types';
 import { Page } from 'types/page';
-import { Tournament } from 'types/types';
 
 interface TournamentPageProps {
   tournament: Nullable<Tournament>;
   loading: boolean;
-  refetchTournament: Function;
+  myMatch: Nullable<MatchWithUserInfo>;
+  myMatchLoading: boolean;
 }
 
 const TournamentPage = ({
   tournament,
   loading,
-  refetchTournament
+  myMatch,
+  myMatchLoading
 }: TournamentPageProps): JSX.Element => {
   const page = useLocation().pathname;
   const contentRouter = () => {
@@ -38,12 +39,14 @@ const TournamentPage = ({
       return (
         <PlayPage
           tournament={tournament}
-          refetchTournament={refetchTournament}
+          loading={loading}
+          myMatch={myMatch}
+          myMatchLoading={myMatchLoading}
         />
       );
     }
 
-    return <Redirect to={Page.Tournaments} />;
+    return <Redirect to={Page.Search} />;
   };
 
   return (
@@ -52,10 +55,10 @@ const TournamentPage = ({
         <Spinner />
       ) : (
         <>
-          <TournamentHeader tournament={tournament} />
           {tournament && !page.includes('view') && (
             <LeaveTournamentButton tournamentId={tournament._id} />
           )}
+          <TournamentHeader tournament={tournament} />
           <Box
             sx={{ height: '100%' }}
             display={'flex'}

@@ -24,6 +24,10 @@ const JoinTournamentList = ({
   const me = useContext(UserContext);
   const isAdmin = me?.role === Role.Admin;
 
+  const inNoneOfTheseTournaments = !tournaments.some((tournament) =>
+    tournament.players.includes(me?._id || '')
+  );
+
   return (
     <Box mb={3}>
       <Typography variant={'h6'}>{label}</Typography>
@@ -83,6 +87,12 @@ const JoinTournamentList = ({
 
                 {amParticipant && (
                   <Chip
+                    size={'small'}
+                    sx={{
+                      background: '#8c48ff',
+                      color: 'white',
+                      marginLeft: '8px'
+                    }}
                     label={`${
                       tournament.status === TournamentStatus.Active
                         ? 'Joined'
@@ -93,7 +103,7 @@ const JoinTournamentList = ({
 
                 <Box display={'flex'}>
                   <ViewTournamentButton tournamentId={tournament._id} />
-                  {!amParticipant &&
+                  {inNoneOfTheseTournaments &&
                     tournament.status === TournamentStatus.Active && (
                       <JoinTournamentButton tournamentId={tournament._id} />
                     )}

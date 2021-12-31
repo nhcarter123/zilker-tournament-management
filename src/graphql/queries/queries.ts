@@ -102,8 +102,8 @@ export const GET_MATCH = gql`
 `;
 
 export const GET_MY_MATCH = gql`
-  query GetMyMatch {
-    getMyMatch {
+  query GetMyMatch($tournamentId: ID!) {
+    getMyMatch(tournamentId: $tournamentId) {
       _id
       white {
         _id

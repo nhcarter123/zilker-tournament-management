@@ -34,10 +34,15 @@ const MainContent = (): JSX.Element => {
     data: myMatchData,
     loading: myMatchLoading,
     refetch: refetchMatch
-  } = useQueryWithReconnect<{
-    getMyMatch: Nullable<MatchWithUserInfo>;
-  }>(GET_MY_MATCH, {
-    fetchPolicy: 'cache-and-network'
+  } = useQueryWithReconnect<
+    {
+      getMyMatch: Nullable<MatchWithUserInfo>;
+    },
+    { tournamentId: string }
+  >(GET_MY_MATCH, {
+    fetchPolicy: 'cache-and-network',
+    variables: { tournamentId: idFromRoute || '' },
+    skip: !idFromRoute
   });
 
   useEffect(() => {
@@ -50,6 +55,8 @@ const MainContent = (): JSX.Element => {
       }
     }
   }, [myTournamentId, history, page, refetchMatch]);
+
+  // todo add subscriber for tournament
 
   const {
     data,
@@ -72,6 +79,8 @@ const MainContent = (): JSX.Element => {
         tournament.status === TournamentStatus.Active
       ) {
         setMyTournamentId(tournament._id);
+      } else {
+        setMyTournamentId(null);
       }
     }
   });

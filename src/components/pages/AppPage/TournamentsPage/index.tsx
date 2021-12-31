@@ -1,6 +1,5 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import moment from 'moment';
 
 import { Box } from '@mui/material/';
 import JoinTournamentList from './JoinTournamentList';
@@ -17,24 +16,16 @@ const TournamentsPage = (): JSX.Element => {
     fetchPolicy: 'cache-and-network'
   });
 
-  const startOfDay = moment().startOf('day');
-
   const tournaments = tournamentsData?.getTournaments || [];
 
-  const futureTournaments = tournaments.filter(
-    (tournament) => startOfDay.diff(moment(tournament.date)) <= 0
-  );
-  const pastTournaments = tournaments.filter(
-    (tournament) =>
-      startOfDay.diff(moment(tournament.date)) > 0 ||
-      tournament.status === TournamentStatus.Completed
-  );
-
-  const activeTournaments = futureTournaments.filter(
+  const activeTournaments = tournaments.filter(
     (tournament) => tournament.status === TournamentStatus.Active
   );
-  const scheduledTournaments = futureTournaments.filter(
+  const scheduledTournaments = tournaments.filter(
     (tournament) => tournament.status === TournamentStatus.Created
+  );
+  const completedTournaments = tournaments.filter(
+    (tournament) => tournament.status === TournamentStatus.Completed
   );
 
   return tournamentsLoading && !tournamentsData ? (
@@ -51,8 +42,8 @@ const TournamentsPage = (): JSX.Element => {
         withCreateButton
       />
       <JoinTournamentList
-        label={'Past Tournaments'}
-        tournaments={pastTournaments}
+        label={'Completed Tournaments'}
+        tournaments={completedTournaments}
       />
     </Box>
   );

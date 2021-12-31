@@ -42,7 +42,9 @@ const LeaveTournamentButton = ({
         }}
       >
         <Button loading={loading} type="default" size={'middle'}>
-          <div style={{ color: 'red' }}>Leave</div>
+          <div style={{ color: 'red', width: '40px' }}>
+            {loading ? '' : 'Leave'}
+          </div>
         </Button>
       </Popconfirm>
     </Box>

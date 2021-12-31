@@ -6,6 +6,7 @@ import { Box } from '@mui/material/';
 import Spinner from 'components/Spinner';
 import TournamentRounds from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentRounds';
 import TournamentPlayers from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentPlayers';
+import TournamentDetails from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails';
 
 import { GET_USERS } from 'graphql/queries/queries';
 import { Tournament, User } from 'types/types';
@@ -44,13 +45,14 @@ const ViewTournamentPage = ({
   // leave tournament button
 
   return (
-    <Box height={'100%'} width={'100%'}>
+    <Box sx={{ height: '100%', maxWidth: '360px', width: '100%' }} mx={'auto'}>
       {loading && !users ? (
         <Spinner />
       ) : (
         tournament &&
         users && (
           <>
+            <TournamentDetails tournament={tournament} />
             <TournamentRounds
               users={users}
               tournament={tournament}

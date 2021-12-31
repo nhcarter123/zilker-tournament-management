@@ -1,22 +1,24 @@
 import React, { useContext } from 'react';
 import { Button } from 'antd';
 import { Box } from '@mui/material/';
-
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+
 import { JOIN_TOURNAMENT } from 'graphql/mutations/mutations';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
-import { useHistory } from 'react-router-dom';
+import { MyTournamentContext } from 'context/myTournamentContext';
 
-interface AddTournamentButtonProps {
+interface JoinTournamentButtonProps {
   tournamentId: string;
 }
 
 const JoinTournamentButton = ({
   tournamentId
-}: AddTournamentButtonProps): JSX.Element => {
+}: JoinTournamentButtonProps): JSX.Element => {
   const me = useContext(UserContext);
+  const { setMyTournamentId } = useContext(MyTournamentContext);
   const history = useHistory();
 
   const [joinTournament, { loading }] = useMutation<{
@@ -25,6 +27,7 @@ const JoinTournamentButton = ({
     onError,
     onCompleted: (data) => {
       if (data.joinTournament?.tournamentId) {
+        setMyTournamentId(data.joinTournament.tournamentId);
         history.push(
           Page.Tournament.replace(
             ':tournamentId',

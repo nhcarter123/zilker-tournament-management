@@ -5,7 +5,6 @@ import { Button, Popconfirm } from 'antd';
 import { Box, Typography, Divider, Checkbox } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
-import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { NEXT_ROUND } from 'graphql/mutations/mutations';
 import { Role, Tournament, User } from 'types/types';
 import { onError } from 'graphql/errorHandler';
@@ -31,7 +30,6 @@ const TournamentRounds = ({
   const [completeRound, { loading: nextRoundLoading }] = useMutation(
     NEXT_ROUND,
     {
-      refetchQueries: [GET_TOURNAMENT],
       onError
     }
   );
@@ -39,7 +37,7 @@ const TournamentRounds = ({
   return (
     <>
       <Typography variant={'h5'} align={'center'} mb={1} mt={2}>
-        Rounds
+        {`Rounds (${tournament.rounds.length})`}
       </Typography>
 
       <Divider />

@@ -2,7 +2,6 @@ import React, { Dispatch, useContext } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
-import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { DELETE_ROUND } from 'graphql/mutations/mutations';
 
 import { Button, Popconfirm } from 'antd';
@@ -36,7 +35,6 @@ const RoundListItem = ({
 }: RoundListItemProps): JSX.Element => {
   const me = useContext(UserContext);
   const [deleteRound, { loading }] = useMutation(DELETE_ROUND, {
-    refetchQueries: [GET_TOURNAMENT],
     onError
   });
 

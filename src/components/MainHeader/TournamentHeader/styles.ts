@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 export const useStyles = makeStyles({
   root: {
     position: 'absolute',
-    top: '18px',
+    top: '10px',
     left: '88px',
     textOverflow: 'ellipsis',
     overflow: 'hidden',

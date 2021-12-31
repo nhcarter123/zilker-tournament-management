@@ -83,7 +83,9 @@ export type Tournament = {
   totalRounds: number;
 };
 
-// export interface TournamentWithStats extends Tournament {
-//   medianRating: number;
-//   playerCount: number;
-// }
+export type TournamentUpdateData = {
+  tournamentUpdated: {
+    tournament: Tournament;
+    newRound: boolean;
+  };
+};

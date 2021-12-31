@@ -4,14 +4,14 @@ import { Box, Typography } from '@mui/material/';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/WaitingPage/styles';
 import { Button } from 'antd';
 import { Page } from 'types/page';
-import { MyTournamentContext } from '../../../../../../context/myTournamentContext';
+import { MyTournamentContext } from 'context/myTournamentContext';
 
 interface CompletedPageProps {
   tournamentId: string;
 }
 
 const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
-  const { setMyTournamentId } = useContext(MyTournamentContext);
+  const { exitTournament } = useContext(MyTournamentContext);
   const history = useHistory();
   const classes = useStyles();
 
@@ -28,7 +28,7 @@ const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
             type="primary"
             className={classes.root}
             onClick={(): void => {
-              setMyTournamentId(null);
+              exitTournament();
               history.push(
                 Page.ViewTournament.replace(':tournamentId', tournamentId)
               );
@@ -43,7 +43,7 @@ const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
             type={'default'}
             className={classes.root}
             onClick={(): void => {
-              setMyTournamentId(null);
+              exitTournament();
               history.push(Page.Tournaments);
             }}
           >

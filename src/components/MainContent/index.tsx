@@ -11,17 +11,20 @@ import DonatePage from 'components/pages/AppPage/DonatePage';
 import SearchPage from 'components/pages/AppPage/SearchPage';
 
 import { GET_MY_MATCH, GET_TOURNAMENT } from 'graphql/queries/queries';
-import { MatchWithUserInfo, Tournament, TournamentStatus } from 'types/types';
+import {
+  MatchWithUserInfo,
+  Tournament,
+  TournamentUpdateData
+} from 'types/types';
 import { Page } from 'types/page';
 import { useSubscription } from '@apollo/client';
-import { NEW_ROUND_STARTED } from '../../graphql/subscriptions/subscriptions';
-import { MyTournamentContext } from '../../context/myTournamentContext';
-import { UserContext } from '../../context/userContext';
+import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
+import { MyTournamentContext } from 'context/myTournamentContext';
 
 const MainContent = (): JSX.Element => {
   const history = useHistory();
-  const me = useContext(UserContext);
-  const { myTournamentId, setMyTournamentId } = useContext(MyTournamentContext);
+  const { myTournamentId, myTournamentSubData, setMyTournamentSubData } =
+    useContext(MyTournamentContext);
   const page = useLocation().pathname;
   const match = matchPath<{ tournamentId?: string }>(page, {
     path: Page.Tournament,
@@ -29,6 +32,7 @@ const MainContent = (): JSX.Element => {
     strict: false
   });
   const idFromRoute = match?.params.tournamentId || null;
+  const tournamentId = idFromRoute || myTournamentId;
 
   const {
     data: myMatchData,
@@ -41,8 +45,8 @@ const MainContent = (): JSX.Element => {
     { tournamentId: string }
   >(GET_MY_MATCH, {
     fetchPolicy: 'cache-and-network',
-    variables: { tournamentId: idFromRoute || '' },
-    skip: !idFromRoute
+    variables: { tournamentId: tournamentId || '' },
+    skip: !tournamentId
   });
 
   useEffect(() => {
@@ -56,56 +60,44 @@ const MainContent = (): JSX.Element => {
     }
   }, [myTournamentId, history, page, refetchMatch]);
 
-  // todo add subscriber for tournament
-
-  const {
-    data,
-    loading,
-    refetch: refetchTournament
-  } = useQueryWithReconnect<
+  const { data, loading } = useQueryWithReconnect<
     {
       getTournament: Nullable<Tournament>;
     },
     { tournamentId: string }
   >(GET_TOURNAMENT, {
     fetchPolicy: 'cache-and-network',
-    variables: { tournamentId: idFromRoute || '' },
-    skip: !idFromRoute,
-    onCompleted: (data) => {
-      const tournament = data.getTournament;
-      if (
-        tournament &&
-        tournament.players.includes(me?._id || '') &&
-        tournament.status === TournamentStatus.Active
-      ) {
-        setMyTournamentId(tournament._id);
-      } else {
-        setMyTournamentId(null);
-      }
-    }
+    variables: { tournamentId: tournamentId || '' },
+    skip: !tournamentId
   });
 
-  const tournament = data?.getTournament || null;
-  const myMatch = myMatchData?.getMyMatch || null;
-
-  useSubscription<{
-    newRoundStarted: { tournamentId: string };
-  }>(NEW_ROUND_STARTED, {
+  useSubscription<TournamentUpdateData>(TOURNAMENT_UPDATED, {
     variables: { tournamentId: myTournamentId },
     skip: !myTournamentId,
-    onSubscriptionData: () => {
-      void refetchMatch();
-      void refetchTournament();
+    onSubscriptionData: (data) => {
+      setMyTournamentSubData(data.subscriptionData.data || null);
 
-      const target = Page.Tournament.replace(
-        ':tournamentId',
-        myTournamentId || ''
-      );
-      if (page !== target) {
-        history.push(target);
+      if (data.subscriptionData.data?.tournamentUpdated.newRound) {
+        void refetchMatch();
+
+        const target = Page.Tournament.replace(
+          ':tournamentId',
+          myTournamentId || ''
+        );
+        if (page !== target) {
+          history.push(target);
+        }
       }
     }
   });
+
+  const mergedTournament = data?.getTournament
+    ? {
+        ...data.getTournament,
+        ...(myTournamentSubData || {})
+      }
+    : null;
+  const myMatch = myMatchData?.getMyMatch || null;
 
   return (
     <>
@@ -119,7 +111,7 @@ const MainContent = (): JSX.Element => {
         path={Page.Tournament}
         render={(): JSX.Element => (
           <TournamentPage
-            tournament={tournament}
+            tournament={mergedTournament}
             loading={loading}
             myMatch={myMatch}
             myMatchLoading={myMatchLoading}

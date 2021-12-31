@@ -15,10 +15,10 @@ const AddTournamentButton = (): JSX.Element => {
   return (
     <Box display={'flex'} justifyContent={'center'} mr={1} mb={1}>
       <Button
-        type="default"
-        onClick={(): void => {
-          createTournament({ variables: { name: 'New Tournament' } });
-        }}
+        type={'primary'}
+        onClick={(): void =>
+          void createTournament({ variables: { name: 'New Tournament' } })
+        }
         loading={loading}
         block
       >

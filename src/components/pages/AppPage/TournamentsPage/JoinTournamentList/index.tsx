@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import moment from 'moment';
 
-import { Box, Card, Chip, Typography } from '@mui/material/';
+import { Box, Card, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import ViewTournamentButton from 'components/buttons/ViewTournamentButton';
@@ -9,6 +9,7 @@ import ViewTournamentButton from 'components/buttons/ViewTournamentButton';
 import { Role, Tournament, TournamentStatus } from 'types/types';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import { UserContext } from 'context/userContext';
+import TournamentStatusChip from '../../TournamentPage/TournamentStatusChip';
 
 interface JoinTournamentListProps {
   label: string;
@@ -46,7 +47,7 @@ const JoinTournamentList = ({
       </Box>
       <Box
         sx={{
-          background: '#f3f3f3',
+          background: '#f7f7f7',
           height: '30vh',
           overflow: 'auto',
           borderTop: '2px solid',
@@ -86,19 +87,7 @@ const JoinTournamentList = ({
                 </Box>
 
                 {amParticipant && (
-                  <Chip
-                    size={'small'}
-                    sx={{
-                      background: '#8c48ff',
-                      color: 'white',
-                      marginLeft: '8px'
-                    }}
-                    label={`${
-                      tournament.status === TournamentStatus.Active
-                        ? 'Joined'
-                        : 'Played'
-                    }`}
-                  />
+                  <TournamentStatusChip status={tournament.status} />
                 )}
 
                 <Box display={'flex'}>

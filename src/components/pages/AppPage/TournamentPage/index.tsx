@@ -7,7 +7,6 @@ import ViewTournamentPage from 'components/pages/AppPage/TournamentPage/ViewTour
 import PlayPage from 'components/pages/AppPage/TournamentPage/PlayPage';
 import TournamentHeader from 'components/MainHeader/TournamentHeader';
 import ViewMatchPage from 'components/pages/AppPage/TournamentPage/ViewMatchPage';
-import LeaveTournamentButton from 'components/pages/AppPage/TournamentPage/LeaveTournamentButton';
 
 import { MatchWithUserInfo, Tournament } from 'types/types';
 import { Page } from 'types/page';
@@ -55,9 +54,6 @@ const TournamentPage = ({
         <Spinner />
       ) : (
         <>
-          {tournament && !page.includes('view') && (
-            <LeaveTournamentButton tournamentId={tournament._id} />
-          )}
           <TournamentHeader tournament={tournament} />
           <Box
             sx={{ height: '100%' }}

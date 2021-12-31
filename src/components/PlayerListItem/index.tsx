@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
-import { GET_TOURNAMENT } from 'graphql/queries/queries';
 
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography, Divider } from '@mui/material';
@@ -28,7 +27,6 @@ const PlayerListItem = ({
 }: PlayerListItemProps): JSX.Element => {
   const me = useContext(UserContext);
   const [kickUser, { loading }] = useMutation(KICK_PLAYER, {
-    refetchQueries: [GET_TOURNAMENT],
     onError
   });
 

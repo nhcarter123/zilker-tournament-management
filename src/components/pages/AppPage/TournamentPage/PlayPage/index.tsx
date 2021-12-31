@@ -37,6 +37,10 @@ const PlayPage = ({
       return <CompletedPage tournamentId={tournament._id} />;
     }
 
+    if (tournament.status === TournamentStatus.Created) {
+      return <Redirect to={Page.Tournaments} />;
+    }
+
     if (myMatch) {
       return <MatchPage match={myMatch} />;
     }
@@ -45,6 +49,8 @@ const PlayPage = ({
       <WaitingPage tournamentStarted={Boolean(tournament.rounds.length)} />
     );
   };
+
+  // todo maybe hide loading for when the match is null but not undefined?
 
   return (
     <>

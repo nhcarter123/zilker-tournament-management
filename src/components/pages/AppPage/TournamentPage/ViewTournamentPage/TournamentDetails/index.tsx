@@ -5,7 +5,6 @@ import { Box, FormGroup, TextField, Typography } from '@mui/material/';
 import { LocalizationProvider, MobileDatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
-import { GET_TOURNAMENT } from 'graphql/queries/queries';
 import { UPDATE_TOURNAMENT } from 'graphql/mutations/mutations';
 import { Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
@@ -24,7 +23,6 @@ const TournamentDetails = ({
   const [tournamentName, setTournamentName] = useState<string>(tournament.name);
 
   const [updateTournament] = useMutation(UPDATE_TOURNAMENT, {
-    refetchQueries: [GET_TOURNAMENT], // todo make obsolete with subscription
     onError
   });
 

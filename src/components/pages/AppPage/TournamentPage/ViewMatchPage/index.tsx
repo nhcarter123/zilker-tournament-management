@@ -10,7 +10,7 @@ import { MatchWithUserInfo } from 'types/types';
 import { Page } from 'types/page';
 
 const ViewMatchPage = (): JSX.Element => {
-  // todo this can probably be dont better button I cannot think of a good solution and it is 12:16AM
+  // todo maybe grab match from props?
   const page = useLocation().pathname;
   const pathMatch = matchPath<{ matchId?: string }>(page, {
     path: Page.ViewMatch,

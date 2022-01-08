@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { findIndex } from 'lodash';
-import { matchPath, useLocation } from 'react-router-dom';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 
 import LeaveTournamentButton from 'components/pages/AppPage/TournamentPage/LeaveTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
 import ConnectionStatus from 'components/pages/AppPage/TournamentPage/ConnectionStatusChip';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography, Divider, Link } from '@mui/material';
 
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
 import { UserContext } from 'context/userContext';
@@ -19,9 +19,10 @@ interface TournamentHeaderProps {
 const TournamentHeader = ({
   tournament
 }: TournamentHeaderProps): JSX.Element => {
+  const history = useHistory();
   const me = useContext(UserContext);
-  const classes = useStyles();
   const page = useLocation().pathname;
+  const classes = useStyles();
   const pathMatch = matchPath<{ matchId?: string }>(page, {
     path: Page.ViewMatch,
     exact: false,
@@ -43,6 +44,11 @@ const TournamentHeader = ({
 
   const currentRound = matchRound || tournament.rounds.length;
   const totalRounds = tournament.totalRounds;
+
+  const linkTarget = Page.ViewTournament.replace(
+    ':tournamentId',
+    tournament._id
+  );
 
   return (
     <>
@@ -66,9 +72,19 @@ const TournamentHeader = ({
       )}
 
       <Box className={classes.root}>
-        <Typography className={classes.noWrap} variant={'h5'}>
-          {tournament.name}
-        </Typography>
+        {page === linkTarget ? (
+          <Typography className={classes.noWrap} variant={'h5'}>
+            {tournament.name}
+          </Typography>
+        ) : (
+          <Link
+            className={classes.noWrap}
+            variant={'h5'}
+            onClick={() => history.push(linkTarget)}
+          >
+            {tournament.name}
+          </Link>
+        )}
 
         <Box display={'flex'} alignItems={'center'} className={classes.noWrap}>
           {currentRound > 0 && (

@@ -8,6 +8,7 @@ import Spinner from 'components/Spinner';
 import {
   Match,
   MatchResult,
+  MatchWithUserInfo,
   Role,
   Round,
   RoundPreview,
@@ -56,12 +57,13 @@ const RoundStatusDetail = ({
     variables: {
       tournamentId: tournament._id,
       roundId: roundPreview._id
-    },
-    fetchPolicy: 'cache-and-network'
+    }
+    // fetchPolicy: 'cache-and-network'
   });
 
+  // todo investigate this more
   const { data: updatedMatchData } = useSubscription<{
-    matchUpdated: Nullable<Partial<Match>>;
+    matchUpdated: Nullable<MatchWithUserInfo>;
   }>(MATCH_UPDATED, {
     variables: { matchIds: roundPreview.matches }
   });
@@ -136,7 +138,11 @@ const RoundStatusDetail = ({
       if (match._id === updatedMatchData.matchUpdated?._id) {
         return {
           ...match,
-          ...updatedMatchData.matchUpdated
+          ...{
+            ...updatedMatchData.matchUpdated,
+            white: updatedMatchData.matchUpdated.white?._id || '',
+            black: updatedMatchData.matchUpdated.black?._id || ''
+          }
         };
       } else {
         return match;
@@ -153,8 +159,8 @@ const RoundStatusDetail = ({
   ) : (
     <Box mb={2}>
       <Typography variant={'body1'} component={'span'} color={'gray'}>
-        <Bold>{`${data?.getRound?.matches.filter(isComplete).length}/${
-          data?.getRound?.matches.length
+        <Bold>{`${matches.filter(isComplete).length}/${
+          matches.length
         } completed`}</Bold>
       </Typography>
 

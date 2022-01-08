@@ -21,9 +21,9 @@ import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
 import WinnerText from 'components/WinnerText';
 import { UserContext } from 'context/userContext';
-import Bold from '../../Bold';
-import { MATCH_UPDATED } from '../../../graphql/subscriptions/subscriptions';
-import { useQueryWithReconnect } from '../../../hooks/useQueryWithReconnect';
+import Bold from 'components/Bold';
+import { MATCH_UPDATED } from 'graphql/subscriptions/subscriptions';
+import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 
 interface GetRoundArgs {
   tournamentId: string;

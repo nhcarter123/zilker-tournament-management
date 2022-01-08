@@ -7,8 +7,8 @@ import { Button, Popconfirm } from 'antd';
 import { Box, Typography, Divider } from '@mui/material';
 import { Role, Standing, User } from 'types/types';
 import { KICK_PLAYER } from 'graphql/mutations/mutations';
-import { UserContext } from '../../context/userContext';
-import Bold from '../Bold';
+import { UserContext } from 'context/userContext';
+import Bold from 'components/Bold';
 
 interface PlayerListItemProps {
   user: User;

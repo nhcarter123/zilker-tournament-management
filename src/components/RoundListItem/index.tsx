@@ -12,7 +12,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { Tournament, RoundPreview, User, Role } from 'types/types';
 import { DeleteOutlined } from '@ant-design/icons';
-import { UserContext } from '../../context/userContext';
+import { UserContext } from 'context/userContext';
 
 interface RoundListItemProps {
   index: number;

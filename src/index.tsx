@@ -15,16 +15,13 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { createUploadLink } from 'apollo-upload-client';
 import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
+import WebsocketContextProvider from './context/websocketContext';
 
 const typeDefs = loader('./graphql/schema.graphql');
 
 const wsClient = new SubscriptionClient(process.env.REACT_APP_WS_URI || '', {
   reconnect: true
 });
-
-wsClient.onConnected(() => console.log('websocket connected!!'));
-wsClient.onDisconnected(() => console.log('websocket disconnected!!'));
-wsClient.onReconnected(() => console.log('websocket reconnected!!'));
 
 const wsLink = new WebSocketLink(wsClient);
 
@@ -85,7 +82,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <WebsocketContextProvider wsClient={wsClient}>
+      <App />
+    </WebsocketContextProvider>
   </ApolloProvider>,
   document.getElementById('root')
 );

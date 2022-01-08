@@ -16,7 +16,7 @@ const SearchPage = (): JSX.Element => {
   useQuery<{
     getMyTournament: Nullable<Tournament>;
   }>(GET_MY_TOURNAMENT, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     onCompleted: (data) => {
       if (data.getMyTournament?._id) {
         setMyTournamentId(data.getMyTournament._id);

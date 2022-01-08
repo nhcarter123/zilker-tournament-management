@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material/';
 import JoinTournamentList from './JoinTournamentList';
@@ -8,13 +7,17 @@ import Spinner from 'components/Spinner';
 import { GET_TOURNAMENTS } from 'graphql/queries/queries';
 
 import { Tournament, TournamentStatus } from 'types/types';
+import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 
 const TournamentsPage = (): JSX.Element => {
-  const { data: tournamentsData, loading: tournamentsLoading } = useQuery<{
-    getTournaments: Tournament[];
-  }>(GET_TOURNAMENTS, {
-    fetchPolicy: 'cache-and-network'
-  });
+  const { data: tournamentsData, loading: tournamentsLoading } =
+    useQueryWithReconnect<{
+      getTournaments: Tournament[];
+    }>(GET_TOURNAMENTS, {
+      fetchPolicy: 'cache-and-network'
+    });
+
+  // todo subscribe to changes to all tournaments?
 
   const tournaments = tournamentsData?.getTournaments || [];
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { uniq } from 'lodash';
 import { useQuery, useSubscription } from '@apollo/client';
 
@@ -12,7 +12,7 @@ import { GET_USERS } from 'graphql/queries/queries';
 import { Role, Tournament, TournamentUpdateData, User } from 'types/types';
 import { UserContext } from 'context/userContext';
 import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
-import { MyTournamentContext } from '../../../../../context/myTournamentContext';
+import { MyTournamentContext } from 'context/myTournamentContext';
 
 interface ViewTournamentPageProps {
   tournament: Nullable<Tournament>;
@@ -26,22 +26,12 @@ const ViewTournamentPage = ({
   const me = useContext(UserContext);
   const isAdmin = me?.role === Role.Admin;
 
-  const { data: updatedViewedTournamentData } =
-    useSubscription<TournamentUpdateData>(TOURNAMENT_UPDATED, {
-      variables: { tournamentId: tournament?._id || '' },
-      skip: tournament?._id === myTournamentId
-    });
+  useSubscription<TournamentUpdateData>(TOURNAMENT_UPDATED, {
+    variables: { tournamentId: tournament?._id || '' },
+    skip: tournament?._id === myTournamentId
+  });
 
-  const mergedTournament: Nullable<Tournament> = useMemo(
-    () =>
-      tournament
-        ? {
-            ...tournament,
-            ...(updatedViewedTournamentData?.tournamentUpdated.tournament || {})
-          }
-        : null,
-    [tournament, updatedViewedTournamentData]
-  );
+  const mergedTournament = tournament || null;
 
   const standings = mergedTournament?.standings || [];
   const players = mergedTournament?.players || [];

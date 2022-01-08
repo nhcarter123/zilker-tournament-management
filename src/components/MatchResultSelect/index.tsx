@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useContext } from 'react';
 
 import {
   Box,
@@ -16,12 +16,14 @@ import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MatchResultSelect/styles';
 import { MatchResult, MatchWithUserInfo } from 'types/types';
+import { WebsocketContext } from '../../context/websocketContext';
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
 }
 
 const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
+  const { isOnline } = useContext(WebsocketContext);
   const classes = useStyles();
 
   const [updateMatch, { loading }] = useMutation(UPDATE_MATCH, {
@@ -29,7 +31,7 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
   });
 
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    updateMatch({
+    void updateMatch({
       variables: { matchId: match._id, payload: { result: e.target.value } }
     });
   };
@@ -62,6 +64,7 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
               >
                 <Box className={classes.container}>
                   <FormControlLabel
+                    disabled={!isOnline}
                     control={<Radio />}
                     label={`${match.white?.firstName} won`}
                     value={MatchResult.WhiteWon}
@@ -70,6 +73,7 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
                 </Box>
                 <Box className={classes.container}>
                   <FormControlLabel
+                    disabled={!isOnline}
                     control={<Radio />}
                     label={`${match.black?.firstName} won`}
                     value={MatchResult.BlackWon}
@@ -84,11 +88,13 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
                 row
               >
                 <FormControlLabel
+                  disabled={!isOnline}
                   control={<Radio />}
                   label="Draw"
                   value={MatchResult.Draw}
                 />
                 <FormControlLabel
+                  disabled={!isOnline}
                   control={<Radio />}
                   label="Did not start"
                   value={MatchResult.DidNotStart}

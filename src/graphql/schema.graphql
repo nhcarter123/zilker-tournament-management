@@ -165,7 +165,7 @@ type Mutation {
 }
 
 type Subscription {
-  matchUpdated(matchIds: [ID!]!): Match
+  matchUpdated(matchIds: [ID!]!): MatchWithUserInfo
   tournamentUpdated(tournamentId: ID!): TournamentUpdateResult
 }
 

@@ -84,7 +84,7 @@ export type Tournament = {
 };
 
 export type TournamentUpdateData = {
-  tournamentUpdated: {
+  tournamentUpdated?: {
     tournament: Tournament;
     newRound: boolean;
   };

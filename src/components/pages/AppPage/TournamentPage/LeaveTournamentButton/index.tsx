@@ -4,7 +4,7 @@ import { UserContext } from 'context/userContext';
 import { useMutation } from '@apollo/client';
 import { KICK_PLAYER } from 'graphql/mutations/mutations';
 import { onError } from 'graphql/errorHandler';
-import { Page } from '../../../../../types/page';
+import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
 import { MyTournamentContext } from 'context/myTournamentContext';
 

@@ -45,7 +45,7 @@ const TournamentPage = ({
       );
     }
 
-    return <Redirect to={Page.Search} />;
+    return <Redirect to={Page.Tournaments} />;
   };
 
   return (

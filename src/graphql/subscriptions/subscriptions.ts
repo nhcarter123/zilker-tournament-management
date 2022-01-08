@@ -4,9 +4,24 @@ export const MATCH_UPDATED = gql`
   subscription MatchUpdated($matchIds: [ID!]!) {
     matchUpdated(matchIds: $matchIds) {
       _id
-      result
+      white {
+        _id
+        firstName
+        lastName
+        photo
+      }
+      black {
+        _id
+        firstName
+        lastName
+        photo
+      }
+      whiteRating
+      blackRating
       newWhiteRating
       newBlackRating
+      boardNumber
+      result
     }
   }
 `;

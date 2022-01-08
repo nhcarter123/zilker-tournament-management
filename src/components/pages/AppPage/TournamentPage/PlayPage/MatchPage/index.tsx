@@ -20,7 +20,7 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
   const shortWindow = useMediaQuery({ query: '(max-height: 590px)' });
   const classes = useStyles();
 
-  const { data: updatedMatchData } = useSubscription<{
+  useSubscription<{
     matchUpdated: Nullable<Partial<MatchWithUserInfo>>;
   }>(MATCH_UPDATED, {
     variables: { matchIds: [match._id] }
@@ -28,10 +28,6 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
 
   const whitePlayer = match.white;
   const blackPlayer = match.black;
-  const mergedMatch = {
-    ...match,
-    ...(updatedMatchData?.matchUpdated || {})
-  };
 
   return (
     <Box
@@ -40,7 +36,7 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
       justifyContent={'center'}
       width={'100%'}
     >
-      {!whitePlayer || !blackPlayer || !mergedMatch ? (
+      {!whitePlayer || !blackPlayer || !match ? (
         <div>
           <Typography>You have a bye this round 😑</Typography>
           <Typography>You’ll be playing again next round!</Typography>
@@ -49,8 +45,8 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
         <Box sx={{ width: '100%' }} pt={2}>
           <Player
             player={blackPlayer}
-            ratingBefore={mergedMatch.blackRating}
-            ratingAfter={mergedMatch.newBlackRating}
+            ratingBefore={match.blackRating}
+            ratingAfter={match.newBlackRating}
             hideAvatar={shortWindow}
           />
 
@@ -63,7 +59,7 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
               }}
             >
               <div className={classes.boardNumber}>
-                <Typography variant="h6">{`#${mergedMatch.boardNumber}`}</Typography>
+                <Typography variant="h6">{`#${match.boardNumber}`}</Typography>
               </div>
               <img
                 src={ChessBoard}
@@ -76,14 +72,14 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
 
           <Player
             player={whitePlayer}
-            ratingBefore={mergedMatch.whiteRating}
-            ratingAfter={mergedMatch.newWhiteRating}
+            ratingBefore={match.whiteRating}
+            ratingAfter={match.newWhiteRating}
             hideAvatar={shortWindow}
           />
 
           <Divider />
 
-          <MatchResultSelect match={mergedMatch} />
+          <MatchResultSelect match={match} />
         </Box>
       )}
     </Box>

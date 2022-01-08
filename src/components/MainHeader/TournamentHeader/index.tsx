@@ -3,14 +3,14 @@ import { findIndex } from 'lodash';
 import { matchPath, useLocation } from 'react-router-dom';
 
 import LeaveTournamentButton from 'components/pages/AppPage/TournamentPage/LeaveTournamentButton';
-import { Box, Typography } from '@mui/material';
+import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
+import ConnectionStatus from 'components/pages/AppPage/TournamentPage/ConnectionStatusChip';
+import { Box, Typography, Divider } from '@mui/material';
 
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { Tournament, TournamentStatus } from 'types/types';
-import { Divider } from '@mui/material/';
-import TournamentStatusChip from '../../pages/AppPage/TournamentPage/TournamentStatusChip';
 
 interface TournamentHeaderProps {
   tournament: Nullable<Tournament>;
@@ -54,6 +54,7 @@ const TournamentHeader = ({
             justifyContent={'space-between'}
           >
             <TournamentStatusChip status={tournament.status} />
+            <ConnectionStatus />
             {tournament.status === TournamentStatus.Active && (
               <LeaveTournamentButton tournamentId={tournament._id} />
             )}

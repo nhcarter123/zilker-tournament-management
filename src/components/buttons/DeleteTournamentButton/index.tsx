@@ -2,9 +2,9 @@ import React from 'react';
 import { Button, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useMutation } from '@apollo/client';
-import { UPDATE_TOURNAMENT } from '../../../graphql/mutations/mutations';
-import { GET_TOURNAMENTS } from '../../../graphql/queries/queries';
-import { onError } from '../../../graphql/errorHandler';
+import { UPDATE_TOURNAMENT } from 'graphql/mutations/mutations';
+import { GET_TOURNAMENTS } from 'graphql/queries/queries';
+import { onError } from 'graphql/errorHandler';
 
 type DeleteTournamentButtonProps = {
   tournamentId: string;

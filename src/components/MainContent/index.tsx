@@ -8,23 +8,25 @@ import RulesPage from 'components/pages/AppPage/RulesPage';
 import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import SocialPage from 'components/pages/AppPage/SocialPage';
 import DonatePage from 'components/pages/AppPage/DonatePage';
-import SearchPage from 'components/pages/AppPage/SearchPage';
 
-import { GET_MY_MATCH, GET_TOURNAMENT } from 'graphql/queries/queries';
+import {
+  GET_MY_MATCH,
+  GET_MY_TOURNAMENT,
+  GET_TOURNAMENT
+} from 'graphql/queries/queries';
 import {
   MatchWithUserInfo,
   Tournament,
   TournamentUpdateData
 } from 'types/types';
 import { Page } from 'types/page';
-import { useSubscription } from '@apollo/client';
 import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
 import { MyTournamentContext } from 'context/myTournamentContext';
+import { useSubscription } from '@apollo/client';
 
 const MainContent = (): JSX.Element => {
   const history = useHistory();
-  const { myTournamentId, myTournamentSubData, setMyTournamentSubData } =
-    useContext(MyTournamentContext);
+  const { myTournamentId, setMyTournamentId } = useContext(MyTournamentContext);
   const page = useLocation().pathname;
   const match = matchPath<{ tournamentId?: string }>(page, {
     path: Page.Tournament,
@@ -55,7 +57,7 @@ const MainContent = (): JSX.Element => {
         history.push(Page.Tournament.replace(':tournamentId', myTournamentId));
         void refetchMatch();
       } else {
-        history.push(Page.Search);
+        history.push(Page.Tournaments);
       }
     }
   }, [myTournamentId, history, page, refetchMatch]);
@@ -71,19 +73,33 @@ const MainContent = (): JSX.Element => {
     skip: !tournamentId
   });
 
+  console.log(data);
+
+  const { data: myTournamentData } = useQueryWithReconnect<{
+    getMyTournament: Nullable<Tournament>;
+  }>(GET_MY_TOURNAMENT, {
+    fetchPolicy: 'cache-and-network'
+  });
+
+  useEffect(() => {
+    const newTournamentId = myTournamentData?.getMyTournament?._id;
+    if (newTournamentId && newTournamentId !== myTournamentId) {
+      setMyTournamentId(newTournamentId);
+    }
+  }, [setMyTournamentId, myTournamentData, myTournamentId]);
+
   useSubscription<TournamentUpdateData>(TOURNAMENT_UPDATED, {
     variables: { tournamentId: myTournamentId },
     skip: !myTournamentId,
     onSubscriptionData: (data) => {
-      setMyTournamentSubData(data.subscriptionData.data || null);
-
-      if (data.subscriptionData.data?.tournamentUpdated.newRound) {
+      if (data.subscriptionData.data?.tournamentUpdated?.newRound) {
         void refetchMatch();
 
         const target = Page.Tournament.replace(
           ':tournamentId',
           myTournamentId || ''
         );
+
         if (page !== target) {
           history.push(target);
         }
@@ -91,12 +107,8 @@ const MainContent = (): JSX.Element => {
     }
   });
 
-  const mergedTournament = data?.getTournament
-    ? {
-        ...data.getTournament,
-        ...(myTournamentSubData || {})
-      }
-    : null;
+  const tournament = data?.getTournament || null;
+
   const myMatch = myMatchData?.getMyMatch || null;
 
   return (
@@ -106,12 +118,11 @@ const MainContent = (): JSX.Element => {
       <Route path={Page.Rules} component={RulesPage} />
       <Route path={Page.Donate} component={DonatePage} />
       <Route path={Page.Tournaments} component={TournamentsPage} />
-      <Route path={Page.Search} component={SearchPage} />
       <Route
         path={Page.Tournament}
         render={(): JSX.Element => (
           <TournamentPage
-            tournament={mergedTournament}
+            tournament={tournament}
             loading={loading}
             myMatch={myMatch}
             myMatchLoading={myMatchLoading}

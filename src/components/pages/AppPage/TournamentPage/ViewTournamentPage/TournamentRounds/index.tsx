@@ -6,12 +6,11 @@ import { Box, Typography, Divider, Checkbox } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
 import { NEXT_ROUND } from 'graphql/mutations/mutations';
-import { Role, Tournament, User } from 'types/types';
+import { Role, Tournament } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';
 
 interface TournamentRoundsProps {
-  users: User[];
   tournament: Tournament;
   selectedRound: Nullable<string>;
   setSelectedRound: Dispatch<SetStateAction<Nullable<string>>>;
@@ -19,7 +18,6 @@ interface TournamentRoundsProps {
 
 const TournamentRounds = ({
   tournament,
-  users,
   selectedRound,
   setSelectedRound
 }: TournamentRoundsProps): JSX.Element => {
@@ -49,7 +47,6 @@ const TournamentRounds = ({
           setSelectedRound={setSelectedRound}
           index={index}
           tournament={tournament}
-          users={users}
           roundPreview={roundPreview}
           isLastRound={index === tournament.rounds.length - 1}
         />

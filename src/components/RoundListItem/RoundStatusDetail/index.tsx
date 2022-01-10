@@ -1,19 +1,16 @@
 import React, { useContext } from 'react';
 
-import { find } from 'lodash';
 import { useSubscription } from '@apollo/client';
 import { GET_ROUND } from 'graphql/queries/queries';
 import { Box, IconButton, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
 import {
-  Match,
   MatchResult,
   MatchWithUserInfo,
   Role,
   Round,
   RoundPreview,
-  Tournament,
-  User
+  Tournament
 } from 'types/types';
 
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -32,22 +29,21 @@ interface GetRoundArgs {
 
 interface RoundProps {
   tournament: Tournament;
-  users: User[];
   roundPreview: RoundPreview;
 }
 
-const isComplete = (match: Match): boolean =>
+const isComplete = (match: MatchWithUserInfo): boolean =>
   match.result !== MatchResult.DidNotStart ||
-  match.white === 'bye' ||
-  match.black === 'bye';
+  match.white?._id === 'bye' ||
+  match.black?._id === 'bye';
 
 const RoundStatusDetail = ({
   tournament,
-  roundPreview,
-  users
+  roundPreview
 }: RoundProps): JSX.Element => {
   const me = useContext(UserContext);
   const history = useHistory();
+
   const { data, loading } = useQueryWithReconnect<
     {
       getRound: Nullable<Round>;
@@ -57,33 +53,32 @@ const RoundStatusDetail = ({
     variables: {
       tournamentId: tournament._id,
       roundId: roundPreview._id
-    }
-    // fetchPolicy: 'cache-and-network'
+    },
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
   });
 
-  // todo investigate this more
-  const { data: updatedMatchData } = useSubscription<{
+  useSubscription<{
     matchUpdated: Nullable<MatchWithUserInfo>;
   }>(MATCH_UPDATED, {
     variables: { matchIds: roundPreview.matches }
   });
 
-  const renderMatches = (match: Match, index: number): JSX.Element => {
-    const white = find(users, (user) => user._id === match.white);
-    const black = find(users, (user) => user._id === match.black);
-
+  const renderMatches = (
+    match: MatchWithUserInfo,
+    index: number
+  ): JSX.Element => {
     // todo add enum for bye
-    const isByeRound = match.black === 'bye' || match.white === 'bye';
+    const isByeRound = match.black?._id === 'bye' || match.white?._id === 'bye';
 
     return (
       <Box key={index} display={'flex'} justifyContent={'space-between'} pt={1}>
         <Box display={'flex'} alignItems={'center'}>
           <WinnerText
             won={match.result === MatchResult.WhiteWon}
-            name={`${white?.firstName} ${(white?.lastName || '').substring(
-              0,
-              1
-            )}`}
+            name={`${match.white?.firstName} ${(
+              match.white?.lastName || ''
+            ).substring(0, 1)}`}
           />
 
           {match.result === MatchResult.Draw ? (
@@ -99,12 +94,11 @@ const RoundStatusDetail = ({
           <WinnerText
             won={match.result === MatchResult.BlackWon}
             name={
-              match.black === 'bye'
+              match.black?._id === 'bye'
                 ? 'Bye'
-                : `${black?.firstName} ${(black?.lastName || '').substring(
-                    0,
-                    1
-                  )}`
+                : `${match.black?.firstName} ${(
+                    match.black?.lastName || ''
+                  ).substring(0, 1)}`
             }
           />
         </Box>
@@ -131,24 +125,7 @@ const RoundStatusDetail = ({
     );
   };
 
-  let matches = [...(data?.getRound?.matches || [])];
-
-  if (updatedMatchData) {
-    matches = matches.map((match) => {
-      if (match._id === updatedMatchData.matchUpdated?._id) {
-        return {
-          ...match,
-          ...{
-            ...updatedMatchData.matchUpdated,
-            white: updatedMatchData.matchUpdated.white?._id || '',
-            black: updatedMatchData.matchUpdated.black?._id || ''
-          }
-        };
-      } else {
-        return match;
-      }
-    });
-  }
+  const matches = [...(data?.getRound?.matches || [])];
 
   const sortedMatches = matches.sort((a, b) => a.boardNumber - b.boardNumber);
 

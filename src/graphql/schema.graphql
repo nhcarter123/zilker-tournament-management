@@ -109,7 +109,7 @@ type Standing {
 type Round {
   _id: String!
   completed: Boolean!
-  matches: [Match!]!
+  matches: [MatchWithUserInfo!]!
 }
 
 type RoundPreview {

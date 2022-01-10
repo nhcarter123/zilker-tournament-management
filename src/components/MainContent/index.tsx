@@ -46,7 +46,8 @@ const MainContent = (): JSX.Element => {
     },
     { tournamentId: string }
   >(GET_MY_MATCH, {
-    // fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
     variables: { tournamentId: tournamentId || '' },
     skip: !tournamentId
   });
@@ -68,7 +69,8 @@ const MainContent = (): JSX.Element => {
     },
     { tournamentId: string }
   >(GET_TOURNAMENT, {
-    // fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
     variables: { tournamentId: tournamentId || '' },
     skip: !tournamentId
   });
@@ -76,7 +78,8 @@ const MainContent = (): JSX.Element => {
   const { data: myTournamentData } = useQueryWithReconnect<{
     getMyTournament: Nullable<Tournament>;
   }>(GET_MY_TOURNAMENT, {
-    // fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
   });
 
   useEffect(() => {

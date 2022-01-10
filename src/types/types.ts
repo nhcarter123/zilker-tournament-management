@@ -63,7 +63,7 @@ export type Standing = {
 export type Round = {
   _id: string;
   completed: boolean;
-  matches: Match[];
+  matches: MatchWithUserInfo[];
 };
 
 export type RoundPreview = {

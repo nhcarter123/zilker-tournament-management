@@ -10,7 +10,7 @@ import RoundStatusDetail from 'components/RoundListItem/RoundStatusDetail';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import { Tournament, RoundPreview, User, Role } from 'types/types';
+import { Tournament, RoundPreview, Role } from 'types/types';
 import { DeleteOutlined } from '@ant-design/icons';
 import { UserContext } from 'context/userContext';
 
@@ -19,7 +19,6 @@ interface RoundListItemProps {
   selectedRound: Nullable<string>;
   setSelectedRound: Dispatch<React.SetStateAction<Nullable<string>>>;
   tournament: Tournament;
-  users: User[];
   roundPreview: RoundPreview;
   isLastRound: boolean;
 }
@@ -30,7 +29,6 @@ const RoundListItem = ({
   setSelectedRound,
   roundPreview,
   tournament,
-  users,
   isLastRound
 }: RoundListItemProps): JSX.Element => {
   const me = useContext(UserContext);
@@ -92,7 +90,6 @@ const RoundListItem = ({
       <Box>
         {selectedRound === roundPreview._id && (
           <RoundStatusDetail
-            users={users}
             tournament={tournament}
             roundPreview={roundPreview}
           />

@@ -26,7 +26,8 @@ const ViewMatchPage = (): JSX.Element => {
     },
     { matchId: string }
   >(GET_MATCH, {
-    // fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
     variables: { matchId: idFromRoute || '' },
     skip: !idFromRoute
   });

@@ -109,7 +109,6 @@ const MainContent = (): JSX.Element => {
   });
 
   const tournament = data?.getTournament || null;
-
   const myMatch = myMatchData?.getMyMatch || null;
 
   return (

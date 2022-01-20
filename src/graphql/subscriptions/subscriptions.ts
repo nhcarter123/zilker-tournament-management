@@ -14,8 +14,8 @@ export const MATCH_UPDATED = gql`
 `;
 
 export const TOURNAMENT_UPDATED = gql`
-  subscription TournamentUpdated($tournamentId: ID!) {
-    tournamentUpdated(tournamentId: $tournamentId) {
+  subscription TournamentUpdated($tournamentIds: [ID!]!) {
+    tournamentUpdated(tournamentIds: $tournamentIds) {
       tournament {
         _id
         name

@@ -6,6 +6,8 @@ import { Box, IconButton, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
 import {
   MatchResult,
+  MatchUpdatedData,
+  MatchUpdatedVariables,
   MatchWithUserInfo,
   Role,
   Round,
@@ -33,9 +35,7 @@ interface RoundProps {
 }
 
 const isComplete = (match: MatchWithUserInfo): boolean =>
-  match.result !== MatchResult.DidNotStart ||
-  match.white?._id === 'bye' ||
-  match.black?._id === 'bye';
+  match.result !== MatchResult.DidNotStart || !match.white || !match.black;
 
 const RoundStatusDetail = ({
   tournament,
@@ -58,9 +58,7 @@ const RoundStatusDetail = ({
     nextFetchPolicy: 'cache-first'
   });
 
-  useSubscription<{
-    matchUpdated: Nullable<MatchWithUserInfo>;
-  }>(MATCH_UPDATED, {
+  useSubscription<MatchUpdatedData, MatchUpdatedVariables>(MATCH_UPDATED, {
     variables: { matchIds: roundPreview.matches }
   });
 
@@ -68,8 +66,7 @@ const RoundStatusDetail = ({
     match: MatchWithUserInfo,
     index: number
   ): JSX.Element => {
-    // todo add enum for bye
-    const isByeRound = match.black?._id === 'bye' || match.white?._id === 'bye';
+    const isByeRound = !match.black || !match.white;
 
     return (
       <Box key={index} display={'flex'} justifyContent={'space-between'} pt={1}>
@@ -94,11 +91,11 @@ const RoundStatusDetail = ({
           <WinnerText
             won={match.result === MatchResult.BlackWon}
             name={
-              match.black?._id === 'bye'
-                ? 'Bye'
-                : `${match.black?.firstName} ${(
+              match.black
+                ? `${match.black?.firstName} ${(
                     match.black?.lastName || ''
                   ).substring(0, 1)}`
+                : 'Bye'
             }
           />
         </Box>

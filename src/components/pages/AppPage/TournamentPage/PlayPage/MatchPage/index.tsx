@@ -9,7 +9,11 @@ import ChessBoard from 'svg/chessBoard.svg';
 
 import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/MatchPage/styles';
 import { Box, Divider, Typography } from '@mui/material';
-import { MatchWithUserInfo } from 'types/types';
+import {
+  MatchUpdatedData,
+  MatchUpdatedVariables,
+  MatchWithUserInfo
+} from 'types/types';
 import { MATCH_UPDATED } from 'graphql/subscriptions/subscriptions';
 
 interface MatchPageProps {
@@ -20,9 +24,7 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
   const shortWindow = useMediaQuery({ query: '(max-height: 590px)' });
   const classes = useStyles();
 
-  useSubscription<{
-    matchUpdated: Nullable<Partial<MatchWithUserInfo>>;
-  }>(MATCH_UPDATED, {
+  useSubscription<MatchUpdatedData, MatchUpdatedVariables>(MATCH_UPDATED, {
     variables: { matchIds: [match._id] }
   });
 

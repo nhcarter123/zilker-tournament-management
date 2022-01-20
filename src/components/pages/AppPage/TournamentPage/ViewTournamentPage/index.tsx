@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { uniq } from 'lodash';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material/';
 import Spinner from 'components/Spinner';
@@ -9,10 +9,8 @@ import TournamentPlayers from 'components/pages/AppPage/TournamentPage/ViewTourn
 import TournamentDetails from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails';
 
 import { GET_USERS } from 'graphql/queries/queries';
-import { Role, Tournament, TournamentUpdateData, User } from 'types/types';
+import { Role, Tournament, User } from 'types/types';
 import { UserContext } from 'context/userContext';
-import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
-import { MyTournamentContext } from 'context/myTournamentContext';
 
 interface ViewTournamentPageProps {
   tournament: Nullable<Tournament>;
@@ -22,14 +20,8 @@ const ViewTournamentPage = ({
   tournament
 }: ViewTournamentPageProps): JSX.Element => {
   const [selectedRound, setSelectedRound] = useState<Nullable<string>>(null);
-  const { myTournamentId } = useContext(MyTournamentContext);
   const me = useContext(UserContext);
   const isAdmin = me?.role === Role.Admin;
-
-  useSubscription<TournamentUpdateData>(TOURNAMENT_UPDATED, {
-    variables: { tournamentId: tournament?._id || '' },
-    skip: tournament?._id === myTournamentId
-  });
 
   const standings = tournament?.standings || [];
   const players = tournament?.players || [];

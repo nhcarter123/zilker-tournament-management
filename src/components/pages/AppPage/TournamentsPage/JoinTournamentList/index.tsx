@@ -5,11 +5,11 @@ import { Box, Card, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import ViewTournamentButton from 'components/buttons/ViewTournamentButton';
+import AddTournamentButton from 'components/buttons/AddTournamentButton';
+import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
 
 import { Role, Tournament, TournamentStatus } from 'types/types';
-import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import { UserContext } from 'context/userContext';
-import TournamentStatusChip from '../../TournamentPage/TournamentStatusChip';
 
 interface JoinTournamentListProps {
   label: string;

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { matchPath, Route, useHistory, useLocation } from 'react-router-dom';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
+import { uniq } from 'lodash';
 
 import TournamentPage from 'components/pages/AppPage/TournamentPage';
 import TournamentsPage from 'components/pages/AppPage/TournamentsPage';
@@ -17,7 +18,8 @@ import {
 import {
   MatchWithUserInfo,
   Tournament,
-  TournamentUpdateData
+  TournamentUpdatedData,
+  TournamentUpdatedVariables
 } from 'types/types';
 import { Page } from 'types/page';
 import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
@@ -46,10 +48,19 @@ const MainContent = (): JSX.Element => {
     },
     { tournamentId: string }
   >(GET_MY_MATCH, {
+    notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
-    variables: { tournamentId: tournamentId || '' },
-    skip: !tournamentId
+    ...(myTournamentId
+      ? { variables: { tournamentId: myTournamentId } }
+      : { skip: true }),
+    onReconnect: () => {
+      if (myTournamentId) {
+        const target = Page.Tournament.replace(':tournamentId', myTournamentId);
+
+        history.push(target);
+      }
+    }
   });
 
   useEffect(() => {
@@ -71,42 +82,52 @@ const MainContent = (): JSX.Element => {
   >(GET_TOURNAMENT, {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
-    variables: { tournamentId: tournamentId || '' },
-    skip: !tournamentId
+    ...(tournamentId ? { variables: { tournamentId } } : { skip: true })
   });
 
-  const { data: myTournamentData } = useQueryWithReconnect<{
+  useQueryWithReconnect<{
     getMyTournament: Nullable<Tournament>;
   }>(GET_MY_TOURNAMENT, {
     fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first'
-  });
-
-  useEffect(() => {
-    const newTournamentId = myTournamentData?.getMyTournament?._id;
-    if (newTournamentId && newTournamentId !== myTournamentId) {
-      setMyTournamentId(newTournamentId);
-    }
-  }, [setMyTournamentId, myTournamentData, myTournamentId]);
-
-  useSubscription<TournamentUpdateData>(TOURNAMENT_UPDATED, {
-    variables: { tournamentId: myTournamentId },
-    skip: !myTournamentId,
-    onSubscriptionData: (data) => {
-      if (data.subscriptionData.data?.tournamentUpdated?.newRound) {
-        void refetchMatch();
-
-        const target = Page.Tournament.replace(
-          ':tournamentId',
-          myTournamentId || ''
-        );
-
-        if (page !== target) {
-          history.push(target);
-        }
+    nextFetchPolicy: 'cache-first',
+    onCompleted: (data) => {
+      const newTournamentId = data.getMyTournament?._id;
+      if (newTournamentId && newTournamentId !== myTournamentId) {
+        setMyTournamentId(newTournamentId);
       }
     }
   });
+
+  const subscribedTournaments = uniq(
+    [idFromRoute, myTournamentId].flatMap((v) => (v ? [v] : []))
+  );
+
+  useSubscription<TournamentUpdatedData, TournamentUpdatedVariables>(
+    TOURNAMENT_UPDATED,
+    {
+      ...(subscribedTournaments.length
+        ? { variables: { tournamentIds: subscribedTournaments } }
+        : { skip: true }),
+      onSubscriptionData: (data) => {
+        if (
+          data.subscriptionData.data?.tournamentUpdated?.newRound &&
+          data.subscriptionData.data.tournamentUpdated.tournament._id ===
+            myTournamentId
+        ) {
+          void refetchMatch();
+
+          const target = Page.Tournament.replace(
+            ':tournamentId',
+            myTournamentId || ''
+          );
+
+          if (page !== target) {
+            history.push(target);
+          }
+        }
+      }
+    }
+  );
 
   const tournament = data?.getTournament || null;
   const myMatch = myMatchData?.getMyMatch || null;

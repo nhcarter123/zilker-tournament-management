@@ -16,7 +16,7 @@ import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MatchResultSelect/styles';
 import { MatchResult, MatchWithUserInfo } from 'types/types';
-import { WebsocketContext } from '../../context/websocketContext';
+import { WebsocketContext } from 'context/websocketContext';
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
@@ -37,12 +37,10 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
   };
 
   return (
-    <Box mt={2}>
-      <Box mb={1}>
-        <Typography variant={'h5'} align={'center'}>
-          Match result
-        </Typography>
-      </Box>
+    <Box mt={0.5}>
+      <Typography variant={'h5'} align={'center'}>
+        Match result
+      </Typography>
 
       <Box
         display={'flex'}

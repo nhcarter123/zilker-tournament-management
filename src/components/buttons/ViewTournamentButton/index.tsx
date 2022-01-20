@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { Page } from '../../../types/page';
+import { Page } from 'types/page';
 import { Box } from '@mui/material/';
 interface AddTournamentButtonProps {
   tournamentId: string;

@@ -1,25 +1,45 @@
 import React from 'react';
 
-import { Box } from '@mui/material/';
-import JoinTournamentList from './JoinTournamentList';
+import { Box } from '@mui/material';
+import JoinTournamentList from 'components/pages/AppPage/TournamentsPage/JoinTournamentList';
 import Spinner from 'components/Spinner';
 
 import { GET_TOURNAMENTS } from 'graphql/queries/queries';
 
-import { Tournament, TournamentStatus } from 'types/types';
+import {
+  Tournament,
+  TournamentStatus,
+  TournamentUpdatedData,
+  TournamentUpdatedVariables
+} from 'types/types';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
+import { useSubscription } from '@apollo/client';
+import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
 
 const TournamentsPage = (): JSX.Element => {
-  const { data: tournamentsData, loading: tournamentsLoading } =
-    useQueryWithReconnect<{
-      getTournaments: Tournament[];
-    }>(GET_TOURNAMENTS, {
-      fetchPolicy: 'cache-and-network'
-    });
+  const { data, loading } = useQueryWithReconnect<{
+    getTournaments: Tournament[];
+  }>(GET_TOURNAMENTS, {
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first'
+  });
 
-  // todo subscribe to changes to all tournaments?
+  useSubscription<TournamentUpdatedData, TournamentUpdatedVariables>(
+    TOURNAMENT_UPDATED,
+    {
+      ...(data?.getTournaments
+        ? {
+            variables: {
+              tournamentIds: data.getTournaments.map(
+                (tournament) => tournament._id
+              )
+            }
+          }
+        : { skip: true })
+    }
+  );
 
-  const tournaments = tournamentsData?.getTournaments || [];
+  const tournaments = data?.getTournaments || [];
 
   const activeTournaments = tournaments.filter(
     (tournament) => tournament.status === TournamentStatus.Active
@@ -31,7 +51,7 @@ const TournamentsPage = (): JSX.Element => {
     (tournament) => tournament.status === TournamentStatus.Completed
   );
 
-  return tournamentsLoading && !tournamentsData ? (
+  return loading && !data ? (
     <Spinner />
   ) : (
     <Box>

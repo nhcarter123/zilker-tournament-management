@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from 'types/types';
 import { Avatar, Box, Typography } from '@mui/material/';
-import { getColorFromName, getFirstLetter } from '../../helpers/helpers';
+import { getColorFromName, getFirstLetter } from 'helpers/helpers';
 
 interface PlayPageProps {
   player: User;
@@ -10,7 +10,7 @@ interface PlayPageProps {
 
 const PlayerAvatar = ({ player, size }: PlayPageProps): JSX.Element => {
   return (
-    <Box display={'flex'} justifyContent={'center'} mb={1}>
+    <Box display={'flex'} justifyContent={'center'} mb={0.5}>
       <Avatar
         src={player.photo}
         sx={{

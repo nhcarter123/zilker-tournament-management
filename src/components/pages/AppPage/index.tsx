@@ -6,7 +6,7 @@ import MainContent from 'components/MainContent';
 
 import { useStyles } from 'components/pages/AppPage/styles';
 import { Box, Divider } from '@mui/material/';
-import MyTournamentContextProvider from '../../../context/myTournamentContext';
+import MyTournamentContextProvider from 'context/myTournamentContext';
 
 const AppPage = (): JSX.Element => {
   const [open, setOpen] = useState(false);

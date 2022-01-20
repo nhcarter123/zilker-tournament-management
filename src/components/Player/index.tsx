@@ -2,7 +2,7 @@ import React from 'react';
 import { User } from 'types/types';
 import { Box, Typography } from '@mui/material/';
 import PlayerAvatar from 'components/PlayerAvatar';
-import Bold from '../Bold';
+import Bold from 'components/Bold';
 
 interface PlayerProps {
   player: User;

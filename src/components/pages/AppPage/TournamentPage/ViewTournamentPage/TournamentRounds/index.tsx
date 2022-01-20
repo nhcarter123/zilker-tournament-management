@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Typography, Divider, Checkbox } from '@mui/material/';
+import { Box, Checkbox, Divider, Typography } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
 import { NEXT_ROUND } from 'graphql/mutations/mutations';
-import { Role, Tournament } from 'types/types';
+import { Role, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';
 
@@ -109,6 +109,7 @@ const TournamentRounds = ({
               }}
             >
               <Button
+                disabled={tournament.status === TournamentStatus.Completed}
                 size={'large'}
                 type="primary"
                 loading={!isMutationNewRound && nextRoundLoading}

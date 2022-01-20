@@ -1,58 +1,41 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material/';
-import { WebsocketContext } from 'context/websocketContext';
+import Bold from 'components/Bold';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-const ConnectionStatus = (): JSX.Element => {
-  const { isOnline } = useContext(WebsocketContext);
+interface ConnectionStatusProps {
+  isOnline: boolean;
+}
 
-  const lightBody = isOnline ? '#26FF00' : '#ff2323';
-  const highlight = isOnline ? '#b3ffa6' : '#ff8c8c';
-
+const ConnectionStatus = ({ isOnline }: ConnectionStatusProps): JSX.Element => {
   return (
-    <Box display={'flex'} alignItems={'center'}>
+    <Box
+      display={'flex'}
+      alignItems={'center'}
+      justifyContent={'space-between'}
+      px={0.5}
+    >
       {isOnline ? (
-        <Typography>Connected</Typography>
-      ) : (
-        <Typography>Reconnecting...</Typography>
-      )}
-      <Box sx={{ width: '26px' }}>
-        <Box
-          sx={{
-            position: 'relative',
-            marginLeft: '8px',
-            background: lightBody,
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            boxShadow: `0 0 5px ${lightBody}`,
-            border: '1px solid',
-            borderColor: '#7a7a7a'
-          }}
-        >
-          {!isOnline && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '-6px',
-                left: '-6px'
-              }}
-            >
-              <CircularProgress size={20} color={'error'} thickness={1} />
-            </Box>
-          )}
-          <Box
-            sx={{
-              position: 'absolute',
-              background: `${highlight}`,
-              width: '4px',
-              height: '4px',
-              top: '2px',
-              left: '2px',
-              borderRadius: '50%'
-            }}
+        <>
+          <Typography>
+            <Bold>Connected</Bold>
+          </Typography>
+          <CheckCircleOutlineIcon
+            sx={{ marginLeft: '4px', width: '18px', height: '18px' }}
           />
-        </Box>
-      </Box>
+        </>
+      ) : (
+        <>
+          <Typography>
+            <Bold>Reconnecting...</Bold>
+          </Typography>
+          <CircularProgress
+            size={16}
+            sx={{ color: 'white', marginLeft: '4px' }}
+            thickness={6}
+          />
+        </>
+      )}
     </Box>
   );
 };

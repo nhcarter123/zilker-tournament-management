@@ -6,7 +6,7 @@ import { IconButton, Box } from '@mui/material';
 import { Page } from 'types/page';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import SimpleHeader from './SimpleHeader';
+import SimpleHeader from 'components/MainHeader/SimpleHeader';
 
 interface MainHeaderProps {
   setOpen: Dispatch<SetStateAction<boolean>>;

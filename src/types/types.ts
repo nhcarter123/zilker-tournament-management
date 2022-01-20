@@ -83,9 +83,21 @@ export type Tournament = {
   totalRounds: number;
 };
 
-export type TournamentUpdateData = {
+export type MatchUpdatedData = {
+  matchUpdated: Nullable<Partial<MatchWithUserInfo>>;
+};
+
+export type MatchUpdatedVariables = {
+  matchIds: string[];
+};
+
+export type TournamentUpdatedData = {
   tournamentUpdated?: {
     tournament: Tournament;
     newRound: boolean;
   };
+};
+
+export type TournamentUpdatedVariables = {
+  tournamentIds: string[];
 };

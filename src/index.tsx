@@ -17,7 +17,7 @@ import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
 import WebsocketContextProvider from 'context/websocketContext';
 
-const typeDefs = loader('graphql/schema.graphql');
+const typeDefs = loader('./graphql/schema.graphql');
 
 const wsClient = new SubscriptionClient(process.env.REACT_APP_WS_URI || '', {
   reconnect: true

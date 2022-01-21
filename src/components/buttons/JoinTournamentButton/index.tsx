@@ -42,7 +42,7 @@ const JoinTournamentButton = ({
     <Box ml={1}>
       <Button
         size={'large'}
-        type="primary"
+        type="default"
         loading={loading}
         onClick={(): void => {
           me && joinTournament({ variables: { tournamentId, userId: me._id } });

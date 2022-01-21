@@ -5,12 +5,12 @@ import { onError } from 'graphql/errorHandler';
 import { DELETE_ROUND } from 'graphql/mutations/mutations';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import RoundStatusDetail from 'components/RoundListItem/RoundStatusDetail';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import { Tournament, RoundPreview, Role } from 'types/types';
+import { Tournament, RoundPreview, Role, TournamentStatus } from 'types/types';
 import { DeleteOutlined } from '@ant-design/icons';
 import { UserContext } from 'context/userContext';
 
@@ -44,6 +44,7 @@ const RoundListItem = ({
           ? setSelectedRound(null)
           : setSelectedRound(roundPreview._id)
       }
+      px={0.5}
     >
       <Box
         display={'flex'}
@@ -54,14 +55,14 @@ const RoundListItem = ({
         <Typography variant={'h6'}>{`Round ${index + 1}`}</Typography>
 
         <Box height={'32px'} display={'flex'} alignItems={'center'}>
-          {isLastRound ? (
+          {isLastRound && tournament.status !== TournamentStatus.Completed ? (
             me?.role === Role.Admin && (
               <Popconfirm
                 title="Are you sure?"
                 placement={'left'}
                 onConfirm={(e): void => {
                   e?.stopPropagation();
-                  deleteRound({
+                  void deleteRound({
                     variables: {
                       tournamentId: tournament._id,
                       roundId: roundPreview._id
@@ -95,8 +96,6 @@ const RoundListItem = ({
           />
         )}
       </Box>
-
-      <Divider />
     </Box>
   );
 };

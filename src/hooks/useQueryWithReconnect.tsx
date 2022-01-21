@@ -9,14 +9,9 @@ import {
 import { onError } from 'graphql/errorHandler';
 import { WebsocketContext } from 'context/websocketContext';
 
-interface QueryHookOptionsReconnect<TData, TVariables>
-  extends QueryHookOptions<TData, TVariables> {
-  onReconnect?: () => void;
-}
-
 export const useQueryWithReconnect = <TData, TVariables = {}>(
   query: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options: QueryHookOptionsReconnect<TData, TVariables> | undefined
+  options: QueryHookOptions<TData, TVariables> | undefined
 ): QueryResult<TData, TVariables> => {
   const { isOnline } = useContext(WebsocketContext);
   const [wasOnline, setWasOnline] = useState<boolean>(true);
@@ -28,11 +23,7 @@ export const useQueryWithReconnect = <TData, TVariables = {}>(
 
   useEffect(() => {
     if (isOnline && !wasOnline && !options?.skip) {
-      void queryResult.refetch().then(() => {
-        if (options?.onReconnect) {
-          options.onReconnect();
-        }
-      });
+      void queryResult.refetch();
     }
 
     setWasOnline(isOnline);

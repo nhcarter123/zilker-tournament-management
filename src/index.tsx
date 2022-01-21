@@ -16,6 +16,7 @@ import { createUploadLink } from 'apollo-upload-client';
 import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
 import WebsocketContextProvider from 'context/websocketContext';
+import { RoundPreview } from 'types/types';
 
 const typeDefs = loader('./graphql/schema.graphql');
 
@@ -76,7 +77,19 @@ const splitLink = split(
 
 const client = new ApolloClient({
   link: from([authLink, checkVersionLink, splitLink]),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Tournament: {
+        fields: {
+          rounds: {
+            merge(_existing, incoming: RoundPreview[]) {
+              return incoming;
+            }
+          }
+        }
+      }
+    }
+  }),
   typeDefs
 });
 

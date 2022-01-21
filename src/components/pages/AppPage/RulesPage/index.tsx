@@ -45,20 +45,7 @@ const RulesPage = (): JSX.Element => {
     );
   };
 
-  return (
-    <Box>
-      {rules.map((rule, index) => renderRule(rule, index))}
-
-      <Typography variant={'h5'} align={'center'}>
-        Legal contract
-      </Typography>
-      <ol>
-        <li>You cannot stop playing the game.</li>
-        <li>Refusing to play will result in elimination.</li>
-        <li>The games can be stopped with a majority vote</li>
-      </ol>
-    </Box>
-  );
+  return <Box>{rules.map((rule, index) => renderRule(rule, index))}</Box>;
 };
 
 export default RulesPage;

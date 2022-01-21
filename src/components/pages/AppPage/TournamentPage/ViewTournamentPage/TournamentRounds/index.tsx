@@ -38,19 +38,25 @@ const TournamentRounds = ({
         {`Rounds (${tournament.rounds.length})`}
       </Typography>
 
-      <Divider />
-
-      {tournament.rounds.map((roundPreview, index) => (
-        <RoundListItem
-          key={index}
-          selectedRound={selectedRound}
-          setSelectedRound={setSelectedRound}
-          index={index}
-          tournament={tournament}
-          roundPreview={roundPreview}
-          isLastRound={index === tournament.rounds.length - 1}
-        />
-      ))}
+      <Box
+        sx={{
+          '&>:nth-of-type(2n+1)': {
+            background: '#f9f9f9'
+          }
+        }}
+      >
+        {tournament.rounds.map((roundPreview, index) => (
+          <RoundListItem
+            key={index}
+            selectedRound={selectedRound}
+            setSelectedRound={setSelectedRound}
+            index={index}
+            tournament={tournament}
+            roundPreview={roundPreview}
+            isLastRound={index === tournament.rounds.length - 1}
+          />
+        ))}
+      </Box>
 
       {me?.role === Role.Admin && (
         <>

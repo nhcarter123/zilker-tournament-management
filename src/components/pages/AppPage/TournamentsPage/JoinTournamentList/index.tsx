@@ -4,12 +4,13 @@ import moment from 'moment';
 import { Box, Card, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
-import ViewTournamentButton from 'components/buttons/ViewTournamentButton';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
 
 import { Role, Tournament, TournamentStatus } from 'types/types';
 import { UserContext } from 'context/userContext';
+import { Page } from 'types/page';
+import { useHistory } from 'react-router-dom';
 
 interface JoinTournamentListProps {
   label: string;
@@ -22,6 +23,7 @@ const JoinTournamentList = ({
   tournaments,
   withCreateButton
 }: JoinTournamentListProps): JSX.Element => {
+  const history = useHistory();
   const me = useContext(UserContext);
   const isAdmin = me?.role === Role.Admin;
 
@@ -65,12 +67,19 @@ const JoinTournamentList = ({
             <Card
               key={index}
               sx={{
+                color: 'white',
+                background: amParticipant ? '#7a37e9' : '#1890ff',
                 padding: '4px 8px',
                 marginBottom: `${
-                  index !== tournaments.length - 1 ? '12px' : ''
+                  index !== tournaments.length - 1 ? '8px' : ''
                 }`,
                 marginRight: '8px'
               }}
+              onClick={(): void =>
+                history.push(
+                  Page.ViewTournament.replace(':tournamentId', tournament._id)
+                )
+              }
             >
               <Box
                 display={'flex'}
@@ -90,13 +99,10 @@ const JoinTournamentList = ({
                   <TournamentStatusChip status={tournament.status} />
                 )}
 
-                <Box display={'flex'}>
-                  <ViewTournamentButton tournamentId={tournament._id} />
-                  {inNoneOfTheseTournaments &&
-                    tournament.status === TournamentStatus.Active && (
-                      <JoinTournamentButton tournamentId={tournament._id} />
-                    )}
-                </Box>
+                {inNoneOfTheseTournaments &&
+                  tournament.status === TournamentStatus.Active && (
+                    <JoinTournamentButton tournamentId={tournament._id} />
+                  )}
               </Box>
             </Card>
           );

@@ -17,7 +17,7 @@ const ConnectionStatus = ({ isOnline }: ConnectionStatusProps): JSX.Element => {
     >
       {isOnline ? (
         <>
-          <Typography>
+          <Typography component={'span'}>
             <Bold>Connected</Bold>
           </Typography>
           <CheckCircleOutlineIcon
@@ -26,7 +26,7 @@ const ConnectionStatus = ({ isOnline }: ConnectionStatusProps): JSX.Element => {
         </>
       ) : (
         <>
-          <Typography>
+          <Typography component={'span'}>
             <Bold>Reconnecting...</Bold>
           </Typography>
           <CircularProgress

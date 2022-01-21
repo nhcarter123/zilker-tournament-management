@@ -53,15 +53,24 @@ const MainContent = (): JSX.Element => {
     nextFetchPolicy: 'cache-first',
     ...(myTournamentId
       ? { variables: { tournamentId: myTournamentId } }
-      : { skip: true }),
-    onReconnect: () => {
+      : { skip: true })
+  });
+
+  useEffect(() => {
+    const matchId = myMatchData?.getMyMatch?._id;
+
+    const savedMatch = localStorage.getItem('savedMatch');
+
+    if (matchId && savedMatch !== matchId) {
+      localStorage.setItem('savedMatch', matchId);
+
       if (myTournamentId) {
         const target = Page.Tournament.replace(':tournamentId', myTournamentId);
 
         history.push(target);
       }
     }
-  });
+  }, [history, myTournamentId, myMatchData]);
 
   useEffect(() => {
     if (page === Page.Tournament.replace(':tournamentId', '')) {
@@ -116,14 +125,14 @@ const MainContent = (): JSX.Element => {
         ) {
           void refetchMatch();
 
-          const target = Page.Tournament.replace(
-            ':tournamentId',
-            myTournamentId || ''
-          );
-
-          if (page !== target) {
-            history.push(target);
-          }
+          // const target = Page.Tournament.replace(
+          //   ':tournamentId',
+          //   myTournamentId || ''
+          // );
+          //
+          // if (page !== target) {
+          //   history.push(target);
+          // }
         }
       }
     }

@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Role, Standing, User } from 'types/types';
 import { KICK_PLAYER } from 'graphql/mutations/mutations';
 import { UserContext } from 'context/userContext';
@@ -36,9 +36,9 @@ const PlayerListItem = ({
         display={'flex'}
         alignItems={'center'}
         justifyContent={'space-between'}
-        py={1}
+        p={1}
       >
-        <Typography sx={{ width: '40px' }} component={'span'}>
+        <Typography sx={{ width: '0' }} mr={4} component={'span'}>
           <Bold>{index + 1} </Bold>
         </Typography>
         <Box sx={{ width: '100%' }}>
@@ -85,7 +85,7 @@ const PlayerListItem = ({
         )}
       </Box>
 
-      <Divider />
+      {/*<Divider />*/}
     </>
   );
 };

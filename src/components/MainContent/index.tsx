@@ -8,6 +8,7 @@ import TournamentsPage from 'components/pages/AppPage/TournamentsPage';
 import RulesPage from 'components/pages/AppPage/RulesPage';
 import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import SocialPage from 'components/pages/AppPage/SocialPage';
+import StatsPage from 'components/pages/AppPage/StatsPage';
 import DonatePage from 'components/pages/AppPage/DonatePage';
 
 import {
@@ -67,7 +68,7 @@ const MainContent = (): JSX.Element => {
       if (myTournamentId) {
         const target = Page.Tournament.replace(':tournamentId', myTournamentId);
 
-        history.push(target);
+        history.push(target + history.location.search);
       }
     }
   }, [history, myTournamentId, myMatchData]);
@@ -75,10 +76,13 @@ const MainContent = (): JSX.Element => {
   useEffect(() => {
     if (page === Page.Tournament.replace(':tournamentId', '')) {
       if (myTournamentId) {
-        history.push(Page.Tournament.replace(':tournamentId', myTournamentId));
+        history.push(
+          Page.Tournament.replace(':tournamentId', myTournamentId) +
+            history.location.search
+        );
         void refetchMatch();
       } else {
-        history.push(Page.Tournaments);
+        history.push(Page.Tournaments + history.location.search);
       }
     }
   }, [myTournamentId, history, page, refetchMatch]);
@@ -147,6 +151,7 @@ const MainContent = (): JSX.Element => {
       <Route path={Page.Social} component={SocialPage} />
       <Route path={Page.Rules} component={RulesPage} />
       <Route path={Page.Donate} component={DonatePage} />
+      <Route path={Page.Stats} component={StatsPage} />
       <Route path={Page.Tournaments} component={TournamentsPage} />
       <Route
         path={Page.Tournament}

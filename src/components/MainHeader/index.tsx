@@ -49,6 +49,10 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
         path={Page.Donate}
         render={() => <SimpleHeader title={'Donate'} />}
       />
+      <Route
+        path={Page.Stats}
+        render={() => <SimpleHeader title={'Stats'} />}
+      />
     </Box>
   );
 };

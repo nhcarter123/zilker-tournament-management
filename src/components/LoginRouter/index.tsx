@@ -30,7 +30,8 @@ const LoginRouter = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
     onCompleted: () => {
       if (history.location.pathname !== Page.Login && !data?.me) {
-        return history.push(Page.Login);
+        console.log('here');
+        return history.push(Page.Login + history.location.search);
       }
 
       if (
@@ -39,11 +40,11 @@ const LoginRouter = (): JSX.Element => {
           history.location.pathname === Page.MoreInfo) &&
         data?.me?.firstName
       ) {
-        return history.push(Page.Tournaments);
+        return history.push(Page.Tournaments + history.location.search);
       }
 
       if (data?.me && !data?.me.firstName) {
-        return history.push(Page.MoreInfo);
+        return history.push(Page.MoreInfo + history.location.search);
       }
     }
   });
@@ -69,7 +70,8 @@ const LoginRouter = (): JSX.Element => {
 
   return (
     <div className={classes.root}>
-      {(meLoading && networkStatus !== NetworkStatus.refetch) ||
+      {(meLoading &&
+        (!me?.firstName || networkStatus !== NetworkStatus.refetch)) ||
       verifyCodeLoading ? (
         <Spinner />
       ) : (

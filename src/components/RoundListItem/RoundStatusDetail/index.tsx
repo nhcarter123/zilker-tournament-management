@@ -109,7 +109,7 @@ const RoundStatusDetail = ({
                 Page.ViewMatch.replace(':tournamentId', tournament._id).replace(
                   ':matchId',
                   match._id
-                )
+                ) + history.location.search
               )
             }
           >

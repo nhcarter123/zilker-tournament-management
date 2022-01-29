@@ -24,10 +24,10 @@ const TournamentPage = ({
   myMatch,
   myMatchLoading
 }: TournamentPageProps): JSX.Element => {
-  const page = useLocation().pathname;
+  const { pathname, search } = useLocation();
   const contentRouter = () => {
-    if (page.includes('view')) {
-      if (page.includes('match')) {
+    if (pathname.includes('view')) {
+      if (pathname.includes('match')) {
         return <ViewMatchPage />;
       }
 
@@ -45,7 +45,7 @@ const TournamentPage = ({
       );
     }
 
-    return <Redirect to={Page.Tournaments} />;
+    return <Redirect to={{ pathname: Page.Tournaments, search }} />;
   };
 
   return (

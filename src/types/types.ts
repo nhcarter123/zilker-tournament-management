@@ -81,6 +81,7 @@ export type Tournament = {
   rounds: RoundPreview[];
   standings: Standing[];
   totalRounds: number;
+  location?: string;
 };
 
 export type MatchUpdatedData = {

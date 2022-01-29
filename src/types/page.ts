@@ -6,6 +6,7 @@ export enum Page {
   Social = '/app/social',
   Rules = '/app/rules',
   Donate = '/app/donate',
+  Stats = '/app/stats',
   Tournaments = '/app/tournaments',
   Tournament = '/app/tournament/:tournamentId',
   Search = '/app/search',

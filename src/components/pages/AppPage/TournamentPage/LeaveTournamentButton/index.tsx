@@ -22,7 +22,7 @@ const LeaveTournamentButton = ({
     onError,
     onCompleted: () => {
       exitTournament();
-      history.push(Page.Tournaments);
+      history.push(Page.Tournaments + history.location.search);
     }
   });
   const userId = me?._id || '';

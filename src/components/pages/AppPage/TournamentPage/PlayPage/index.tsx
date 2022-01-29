@@ -10,6 +10,7 @@ import { Box } from '@mui/material';
 import { UserContext } from 'context/userContext';
 import { MatchWithUserInfo, Tournament, TournamentStatus } from 'types/types';
 import { Page } from 'types/page';
+import { useLocation } from 'react-router-dom';
 
 interface PlayPageProps {
   tournament: Tournament;
@@ -25,12 +26,13 @@ const PlayPage = ({
   myMatchLoading
 }: PlayPageProps): JSX.Element => {
   const me = useContext(UserContext);
+  const search = useLocation().search;
 
   const contentRouter = () => {
     const inTournament = Boolean(tournament?.players.includes(me?._id || ''));
 
     if (!inTournament && !loading) {
-      return <Redirect to={Page.Tournaments} />;
+      return <Redirect to={{ pathname: Page.Tournaments, search }} />;
     }
 
     if (tournament.status === TournamentStatus.Completed) {
@@ -38,7 +40,7 @@ const PlayPage = ({
     }
 
     if (tournament.status === TournamentStatus.Created) {
-      return <Redirect to={Page.Tournaments} />;
+      return <Redirect to={{ pathname: Page.Tournaments, search }} />;
     }
 
     if (myMatch) {

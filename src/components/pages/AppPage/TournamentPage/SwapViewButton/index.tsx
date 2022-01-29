@@ -23,7 +23,7 @@ const SwapViewButton = ({
           ? Page.Tournament.replace(':tournamentId', tournamentId)
           : Page.ViewTournament.replace(':tournamentId', tournamentId);
 
-        history.push(target);
+        history.push(target + history.location.search);
       }}
     >
       <div>{isTournamentPage ? 'View match' : 'View Tournament'}</div>

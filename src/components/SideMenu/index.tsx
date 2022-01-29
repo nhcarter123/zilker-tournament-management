@@ -15,6 +15,7 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ArticleIcon from '@mui/icons-material/Article';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PaidIcon from '@mui/icons-material/Paid';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 import { Page } from 'types/page';
 import { useStyles } from 'components/SideMenu/styles';
@@ -25,6 +26,7 @@ enum MenuItem {
   Tournaments = 'Tournaments',
   Rules = 'Rules',
   Social = 'Social',
+  Stats = 'Stats',
   Donate = 'Donate'
 }
 
@@ -39,10 +41,11 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
 
   const menuItems = [
     MenuItem.Play,
+    MenuItem.Tournaments,
     MenuItem.Profile,
     MenuItem.Social,
-    MenuItem.Tournaments,
     MenuItem.Rules,
+    MenuItem.Stats,
     MenuItem.Donate
   ];
 
@@ -59,6 +62,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return <GroupsIcon />;
         case MenuItem.Donate:
           return <PaidIcon />;
+        case MenuItem.Stats:
+          return <TrendingUpIcon />;
         case MenuItem.Play:
         default:
           return <SportsEsportsIcon />;
@@ -75,6 +80,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return Page.Social;
         case MenuItem.Donate:
           return Page.Donate;
+        case MenuItem.Stats:
+          return Page.Stats;
         case MenuItem.Play:
           return Page.Tournament.replace(':tournamentId', '');
         case MenuItem.Profile:
@@ -89,7 +96,9 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           <div key={text}>
             <ListItem
               button
-              onClick={(): void => history.push(getDestination(text))}
+              onClick={(): void =>
+                history.push(getDestination(text) + history.location.search)
+              }
             >
               <div className={classes.listItem}>
                 <ListItemIcon sx={{ color: '#3878ff' }}>

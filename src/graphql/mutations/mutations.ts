@@ -86,3 +86,11 @@ export const UPDATE_MATCH = gql`
     updateMatch(matchId: $matchId, payload: $payload)
   }
 `;
+
+export const AUTO_JOIN_TOURNAMENT = gql`
+  mutation AutoJoinTournament($organizationId: ID!) {
+    autoJoinTournament(organizationId: $organizationId) {
+      tournamentId
+    }
+  }
+`;

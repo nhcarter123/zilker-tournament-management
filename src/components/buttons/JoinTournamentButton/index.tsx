@@ -32,7 +32,7 @@ const JoinTournamentButton = ({
           Page.Tournament.replace(
             ':tournamentId',
             data.joinTournament.tournamentId
-          )
+          ) + history.location.search
         );
       }
     }

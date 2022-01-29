@@ -57,17 +57,18 @@ const WebsocketContextProvider = ({
         isOnline
       }}
     >
-      <Snackbar open={open} TransitionComponent={SlideTransition}>
+      <Snackbar
+        open={open}
+        TransitionComponent={SlideTransition}
+        sx={{ bottom: '0 !important' }}
+      >
         <Box
           sx={{
             width: '165px',
             background: isOnline ? '#40a500' : '#9f0000',
             color: '#fff',
             borderTopLeftRadius: '6px',
-            borderTopRightRadius: '6px',
-            marginBottom: '-8px',
-            border: '1px solid white',
-            borderBottom: 'none'
+            borderTopRightRadius: '6px'
           }}
           px={1}
           py={0.5}

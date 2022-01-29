@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import moment from 'moment';
 
-import { Box, Card, Typography } from '@mui/material/';
+import { Box, Card, IconButton, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
+
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 import { Role, Tournament, TournamentStatus } from 'types/types';
 import { UserContext } from 'context/userContext';
@@ -77,7 +79,8 @@ const JoinTournamentList = ({
               }}
               onClick={(): void =>
                 history.push(
-                  Page.ViewTournament.replace(':tournamentId', tournament._id)
+                  Page.ViewTournament.replace(':tournamentId', tournament._id) +
+                    history.location.search
                 )
               }
             >
@@ -94,6 +97,16 @@ const JoinTournamentList = ({
                     {moment(tournament.date).format('ll')}
                   </Typography>
                 </Box>
+
+                {tournament.location && (
+                  <IconButton
+                    aria-label="view"
+                    color={'info'}
+                    onClick={() => window.open(tournament.location)}
+                  >
+                    <LocationOnIcon />
+                  </IconButton>
+                )}
 
                 {amParticipant && (
                   <TournamentStatusChip status={tournament.status} />

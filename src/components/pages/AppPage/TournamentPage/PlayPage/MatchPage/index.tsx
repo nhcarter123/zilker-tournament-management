@@ -15,6 +15,7 @@ import {
   MatchWithUserInfo
 } from 'types/types';
 import { MATCH_UPDATED } from 'graphql/subscriptions/subscriptions';
+import clsx from 'clsx';
 
 interface MatchPageProps {
   match: MatchWithUserInfo;
@@ -60,6 +61,12 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
                 borderRadius: '8px'
               }}
             >
+              <div className={clsx(classes.whiteScore, classes.scoreNumber)}>
+                <Typography variant="body1">{match.whiteScore}</Typography>
+              </div>
+              <div className={clsx(classes.blackScore, classes.scoreNumber)}>
+                <Typography variant="body1">{match.blackScore}</Typography>
+              </div>
               <div className={classes.boardNumber}>
                 <Typography variant="h6">{`#${match.boardNumber}`}</Typography>
               </div>

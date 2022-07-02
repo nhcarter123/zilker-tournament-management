@@ -38,8 +38,8 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
         render={() => <SimpleHeader title={'Profile'} />}
       />
       <Route
-        path={Page.Social}
-        render={() => <SimpleHeader title={'Social'} />}
+        path={Page.Community}
+        render={() => <SimpleHeader title={'Community'} />}
       />
       <Route
         path={Page.Rules}

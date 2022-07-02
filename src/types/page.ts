@@ -3,7 +3,7 @@ export enum Page {
   MoreInfo = '/moreInfo',
   App = '/app',
   Profile = '/app/profile',
-  Social = '/app/social',
+  Community = '/app/Community',
   Rules = '/app/rules',
   Donate = '/app/donate',
   Stats = '/app/stats',

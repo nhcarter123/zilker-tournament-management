@@ -28,26 +28,23 @@ export enum TournamentStatus {
   Completed = 'completed'
 }
 
-export type Match = {
+export type MatchWithUserInfo = {
   _id: string;
   tournamentId: string;
-  white: string;
-  black: string;
+  white: User | null;
+  black: User | null;
   whiteRating: number;
   blackRating: number;
   newWhiteRating?: number;
   newBlackRating?: number;
+  whiteScore: number;
+  blackScore: number;
   whiteMatchesPlayed: number;
   blackMatchesPlayed: number;
   boardNumber: number;
   result: MatchResult;
   completed: boolean;
 };
-
-export interface MatchWithUserInfo extends Omit<Match, 'white' | 'black'> {
-  white: User | null;
-  black: User | null;
-}
 
 export type Standing = {
   _id: string;

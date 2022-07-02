@@ -25,7 +25,7 @@ enum MenuItem {
   Profile = 'Profile',
   Tournaments = 'Tournaments',
   Rules = 'Rules',
-  Social = 'Social',
+  Community = 'Community',
   Stats = 'Stats',
   Donate = 'Donate'
 }
@@ -43,7 +43,7 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
     MenuItem.Play,
     MenuItem.Tournaments,
     MenuItem.Profile,
-    MenuItem.Social,
+    MenuItem.Community,
     MenuItem.Rules,
     MenuItem.Stats,
     MenuItem.Donate
@@ -58,7 +58,7 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return <ArticleIcon />;
         case MenuItem.Rules:
           return <MenuBookIcon />;
-        case MenuItem.Social:
+        case MenuItem.Community:
           return <GroupsIcon />;
         case MenuItem.Donate:
           return <PaidIcon />;
@@ -76,8 +76,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return Page.Tournaments;
         case MenuItem.Rules:
           return Page.Rules;
-        case MenuItem.Social:
-          return Page.Social;
+        case MenuItem.Community:
+          return Page.Community;
         case MenuItem.Donate:
           return Page.Donate;
         case MenuItem.Stats:

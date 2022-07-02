@@ -63,22 +63,6 @@ enum TournamentStatus {
   completed
 }
 
-type Match {
-  _id: String!
-  tournamentId: String!
-  white: String!
-  black: String!
-  whiteRating: Int!
-  blackRating: Int!
-  newWhiteRating: Int
-  newBlackRating: Int
-  whiteMatchesPlayed: Int!
-  blackMatchesPlayed: Int!
-  boardNumber: Int!
-  result: MatchResult!
-  completed: Boolean!
-}
-
 type MatchWithUserInfo {
   _id: String!
   tournamentId: String!
@@ -86,6 +70,8 @@ type MatchWithUserInfo {
   black: User
   whiteRating: Int!
   blackRating: Int!
+  whiteScore: Float!
+  blackScore: Float!
   newWhiteRating: Int
   newBlackRating: Int
   whiteMatchesPlayed: Int!

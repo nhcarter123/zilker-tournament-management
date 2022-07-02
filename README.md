@@ -1,5 +1,5 @@
 # Zilker Tournament Client
-This is the client for our tournament management solution. Players join, get parings, and enter their math results on their phones.\
+This is the client for our tournament management solution. Players join, get parings, and enter their match results on their phones.\
 Visit https://zilkerchess.com to find out more!
 
 The [Zilker Tournament Server](https://github.com/nhcarter123/zilker-tournament-server) is the backend that this client communicates with.
@@ -10,8 +10,8 @@ The [Zilker Tournament Server](https://github.com/nhcarter123/zilker-tournament-
 - Apollo client
 - Typescript / React
 
-### Live Data
-Notably this client implements websocket to sync the data in real time. There are reconnection hooks that refetch data after lost connection e.g. a player takes their phone out of their pocket after playing chess for 10 minutes.
+### Live Data (Subscriptions)
+Notably this client implements websockets to sync data in real time. There are reconnection hooks that refetch data after lost connection e.g. a player takes their phone out of their pocket after playing chess for 10 minutes.
 
 ### Getting started
 

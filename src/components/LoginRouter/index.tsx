@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 
@@ -20,6 +20,10 @@ const LoginRouter = (): JSX.Element => {
   const history = useHistory();
   const classes = useStyles();
 
+  const [token, setToken] = useState<Nullable<string>>(
+    localStorage.getItem('token')
+  );
+
   const {
     data,
     loading: meLoading,
@@ -30,7 +34,6 @@ const LoginRouter = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
     onCompleted: () => {
       if (history.location.pathname !== Page.Login && !data?.me) {
-        console.log('here');
         return history.push(Page.Login + history.location.search);
       }
 
@@ -55,10 +58,18 @@ const LoginRouter = (): JSX.Element => {
       onError,
       onCompleted: (data) => {
         localStorage.setItem('token', data.verifyCode.token);
-        refetch();
+        setToken(data.verifyCode.token);
       }
     }
   );
+
+  // refetch if the token changes
+  // TODO: this works but maybe find a better way to handle this
+  useEffect(() => {
+    if (token) {
+      void refetch();
+    }
+  }, [refetch, token]);
 
   const [updateUserDetails, { loading: updateUserDetailsLoading }] =
     useMutation(UPDATE_USER_DETAILS, {

@@ -9,18 +9,27 @@ interface PlayerProps {
   ratingBefore: number;
   ratingAfter?: number;
   hideAvatar?: boolean;
+  matchPoints?: number;
 }
 
 const Player = ({
   player,
   hideAvatar,
   ratingBefore,
-  ratingAfter
+  ratingAfter,
+  matchPoints
 }: PlayerProps): JSX.Element => {
   const isPositive = Math.sign((ratingAfter || 0) - ratingBefore) >= 0;
   return (
     <Box mb={1}>
       {!hideAvatar && <PlayerAvatar player={player} size={60} />}
+      {matchPoints !== undefined && (
+        <Box>
+          <div>
+            <Typography variant="body1">{matchPoints}</Typography>
+          </div>
+        </Box>
+      )}
 
       <Typography align={'center'} component={'span'}>
         <Bold>{`${player.firstName} ${player.lastName}`}</Bold>
@@ -31,17 +40,15 @@ const Player = ({
             {ratingAfter ? ratingAfter : ratingBefore}
           </Typography>
           {ratingAfter && (
-            <>
-              <Typography
-                ml={0.5}
-                color={isPositive ? '#22bc00' : 'error'}
-                variant={'subtitle2'}
-              >
-                {`(${isPositive ? '+' : '-'}${Math.abs(
-                  ratingAfter - ratingBefore
-                )})`}
-              </Typography>
-            </>
+            <Typography
+              ml={0.5}
+              color={isPositive ? '#22bc00' : 'error'}
+              variant={'subtitle2'}
+            >
+              {`(${isPositive ? '+' : '-'}${Math.abs(
+                ratingAfter - ratingBefore
+              )})`}
+            </Typography>
           )}
         </Box>
       </Box>

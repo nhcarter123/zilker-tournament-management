@@ -93,6 +93,8 @@ export const GET_MATCH = gql`
       }
       whiteRating
       blackRating
+      whiteScore
+      blackScore
       newWhiteRating
       newBlackRating
       boardNumber
@@ -119,6 +121,8 @@ export const GET_MY_MATCH = gql`
       }
       whiteRating
       blackRating
+      whiteScore
+      blackScore
       newWhiteRating
       newBlackRating
       boardNumber

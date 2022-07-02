@@ -4,6 +4,8 @@ export const MATCH_UPDATED = gql`
   subscription MatchUpdated($matchIds: [ID!]!) {
     matchUpdated(matchIds: $matchIds) {
       _id
+      whiteScore
+      blackScore
       whiteRating
       blackRating
       newWhiteRating

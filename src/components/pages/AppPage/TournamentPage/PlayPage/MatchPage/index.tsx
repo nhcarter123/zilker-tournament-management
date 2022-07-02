@@ -62,10 +62,10 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
               }}
             >
               <div className={clsx(classes.whiteScore, classes.scoreNumber)}>
-                <Typography variant="body1">{match.whiteScore}</Typography>
+                <Typography variant="body1">{match.blackScore}</Typography>
               </div>
               <div className={clsx(classes.blackScore, classes.scoreNumber)}>
-                <Typography variant="body1">{match.blackScore}</Typography>
+                <Typography variant="body1">{match.whiteScore}</Typography>
               </div>
               <div className={classes.boardNumber}>
                 <Typography variant="h6">{`#${match.boardNumber}`}</Typography>

@@ -18,6 +18,7 @@ input UpdateTournamentPayload {
   active: TournamentStatus
   date: Date
   isDeleted: Boolean
+  pairingAlgorithm: PairingAlgorithm
 }
 
 input UpdateMatchPayload {
@@ -61,6 +62,11 @@ enum TournamentStatus {
   created
   active
   completed
+}
+
+enum PairingAlgorithm {
+  swiss
+  rating
 }
 
 type MatchWithUserInfo {
@@ -113,6 +119,7 @@ type Tournament {
   rounds: [RoundPreview!]!
   standings: [Standing!]!
   totalRounds: Int!
+  pairingAlgorithm: PairingAlgorithm!
   location: String
 }
 

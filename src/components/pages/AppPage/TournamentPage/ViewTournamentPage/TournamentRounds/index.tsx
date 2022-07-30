@@ -23,6 +23,7 @@ const TournamentRounds = ({
 }: TournamentRoundsProps): JSX.Element => {
   const [sendAlert, setSendAlert] = useState(false);
   const me = useContext(UserContext);
+  // don't remember the purpose of this but it is a weird pattern :s
   const [isMutationNewRound, setIsMutationNewRound] = useState<boolean>(true);
 
   const [completeRound, { loading: nextRoundLoading }] = useMutation(
@@ -89,6 +90,7 @@ const TournamentRounds = ({
               }}
             >
               <Button
+                disabled={tournament.status === TournamentStatus.Completed}
                 size={'large'}
                 type="primary"
                 loading={isMutationNewRound && nextRoundLoading}

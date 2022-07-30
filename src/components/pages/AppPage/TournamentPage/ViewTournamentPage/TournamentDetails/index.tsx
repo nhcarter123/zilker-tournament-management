@@ -6,7 +6,7 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import { UPDATE_TOURNAMENT } from 'graphql/mutations/mutations';
-import { Tournament, TournamentStatus } from 'types/types';
+import { PairingAlgorithm, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import Input from 'antd/lib/input';
 import { Button, Radio } from 'antd';
@@ -15,6 +15,17 @@ import { useStyles } from 'components/pages/AppPage/TournamentPage/ViewTournamen
 interface TournamentDetailsProps {
   tournament: Tournament;
 }
+
+const statusOptions = [
+  { label: 'Scheduled', value: TournamentStatus.Created },
+  { label: 'Active', value: TournamentStatus.Active },
+  { label: 'Completed', value: TournamentStatus.Completed, disabled: true }
+];
+
+const pairingAlgorithmOptions = [
+  { label: 'Swiss', value: PairingAlgorithm.Swiss },
+  { label: 'Rating', value: PairingAlgorithm.Rating }
+];
 
 const TournamentDetails = ({
   tournament
@@ -25,12 +36,6 @@ const TournamentDetails = ({
   const [updateTournament] = useMutation(UPDATE_TOURNAMENT, {
     onError
   });
-
-  const optionsWithDisabled = [
-    { label: 'Scheduled', value: TournamentStatus.Created },
-    { label: 'Active', value: TournamentStatus.Active },
-    { label: 'Completed', value: TournamentStatus.Completed, disabled: true }
-  ];
 
   // todo maybe rewrite this as form?
 
@@ -66,6 +71,7 @@ const TournamentDetails = ({
 
         <Box mt={1}>
           <Radio.Group
+            disabled={tournament.status === TournamentStatus.Completed}
             className={classes.root}
             onChange={(e) =>
               updateTournament({
@@ -75,8 +81,26 @@ const TournamentDetails = ({
                 }
               })
             }
-            options={optionsWithDisabled}
+            options={statusOptions}
             value={tournament.status}
+            optionType="button"
+            buttonStyle="solid"
+          />
+        </Box>
+
+        <Box mt={1}>
+          <Radio.Group
+            className={classes.root}
+            onChange={(e) =>
+              updateTournament({
+                variables: {
+                  tournamentId: tournament._id,
+                  payload: { pairingAlgorithm: e.target.value }
+                }
+              })
+            }
+            options={pairingAlgorithmOptions}
+            value={tournament.pairingAlgorithm}
             optionType="button"
             buttonStyle="solid"
           />

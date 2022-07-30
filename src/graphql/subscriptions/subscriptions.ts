@@ -39,6 +39,7 @@ export const TOURNAMENT_UPDATED = gql`
           draw
           bye
         }
+        pairingAlgorithm
         totalRounds
       }
       newRound

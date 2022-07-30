@@ -145,7 +145,7 @@ const PictureEditor = (): JSX.Element => {
             onInput={() => {
               const files = inputFile.current?.files;
               if (files && files.length) {
-                setLocalFile(files[0]);
+                setLocalFile(files[0] || null);
               }
             }}
           />

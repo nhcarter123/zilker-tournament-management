@@ -54,6 +54,7 @@ export const GET_TOURNAMENT = gql`
       name
       date
       status
+      pairingAlgorithm
       players
       rounds {
         _id

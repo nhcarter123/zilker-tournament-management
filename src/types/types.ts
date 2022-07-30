@@ -28,6 +28,11 @@ export enum TournamentStatus {
   Completed = 'completed'
 }
 
+export enum PairingAlgorithm {
+  Swiss = 'swiss',
+  Rating = 'rating'
+}
+
 export type MatchWithUserInfo = {
   _id: string;
   tournamentId: string;
@@ -78,6 +83,7 @@ export type Tournament = {
   rounds: RoundPreview[];
   standings: Standing[];
   totalRounds: number;
+  pairingAlgorithm: PairingAlgorithm;
   location?: string;
 };
 

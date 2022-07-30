@@ -32,7 +32,9 @@ const ViewTournamentPage = ({
 
   useEffect(() => {
     if (tournament?.rounds.length) {
-      setSelectedRound(tournament.rounds[tournament.rounds.length - 1]._id);
+      setSelectedRound(
+        tournament.rounds[tournament.rounds.length - 1]?._id || ''
+      );
     }
   }, [tournament]);
 

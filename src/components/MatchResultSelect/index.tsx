@@ -11,7 +11,7 @@ import {
 import Spinner from 'components/Spinner';
 
 import { useMutation } from '@apollo/client';
-import { UPDATE_MATCH } from 'graphql/mutations/mutations';
+import { UPDATE_MATCH } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MatchResultSelect/styles';

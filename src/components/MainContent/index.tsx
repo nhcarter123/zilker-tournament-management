@@ -15,7 +15,7 @@ import {
   GET_MY_MATCH,
   GET_MY_TOURNAMENT,
   GET_TOURNAMENT
-} from 'graphql/queries/queries';
+} from 'graphql/definitions/queries';
 import {
   MatchWithUserInfo,
   Tournament,
@@ -23,7 +23,7 @@ import {
   TournamentUpdatedVariables
 } from 'types/types';
 import { Page } from 'types/page';
-import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
+import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
 import { MyTournamentContext } from 'context/myTournamentContext';
 import { useSubscription } from '@apollo/client';
 

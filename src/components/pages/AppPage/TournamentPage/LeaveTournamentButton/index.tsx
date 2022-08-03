@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Popconfirm } from 'antd';
 import { UserContext } from 'context/userContext';
 import { useMutation } from '@apollo/client';
-import { KICK_PLAYER } from 'graphql/mutations/mutations';
+import { KICK_PLAYER } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';

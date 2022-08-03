@@ -5,7 +5,7 @@ import { Button, Popconfirm } from 'antd';
 import { Box, Checkbox, Divider, Typography } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
-import { NEXT_ROUND } from 'graphql/mutations/mutations';
+import { NEXT_ROUND } from 'graphql/definitions/mutations';
 import { Role, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';

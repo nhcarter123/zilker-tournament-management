@@ -74,6 +74,12 @@ export type RoundPreview = {
   matches: string[];
 };
 
+export interface IConfig {
+  totalRounds: number;
+  maxPunchDown: number;
+  performanceWeight: number;
+}
+
 export type Tournament = {
   _id: string;
   name: string;
@@ -82,7 +88,7 @@ export type Tournament = {
   players: string[];
   rounds: RoundPreview[];
   standings: Standing[];
-  totalRounds: number;
+  config: IConfig;
   pairingAlgorithm: PairingAlgorithm;
   location?: string;
 };

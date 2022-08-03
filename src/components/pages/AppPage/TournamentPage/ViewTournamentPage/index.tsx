@@ -8,7 +8,7 @@ import TournamentRounds from 'components/pages/AppPage/TournamentPage/ViewTourna
 import TournamentPlayers from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentPlayers';
 import TournamentDetails from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails';
 
-import { GET_USERS } from 'graphql/queries/queries';
+import { GET_USERS } from 'graphql/definitions/queries';
 import { Role, Tournament, User } from 'types/types';
 import { UserContext } from 'context/userContext';
 

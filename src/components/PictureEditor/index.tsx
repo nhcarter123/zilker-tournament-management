@@ -5,8 +5,8 @@ import AvatarEditor from 'react-avatar-editor';
 import { Button } from 'antd';
 import PlayerAvatar from 'components/PlayerAvatar';
 import { useMutation } from '@apollo/client';
-import { DELETE_PHOTO, UPLOAD_PHOTO } from 'graphql/mutations/mutations';
-import { GET_ME } from 'graphql/queries/queries';
+import { DELETE_PHOTO, UPLOAD_PHOTO } from 'graphql/definitions/mutations';
+import { GET_ME } from 'graphql/definitions/queries';
 import { onError } from 'graphql/errorHandler';
 import Spinner from 'components/Spinner';
 

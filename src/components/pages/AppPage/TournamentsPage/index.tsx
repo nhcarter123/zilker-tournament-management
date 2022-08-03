@@ -5,9 +5,9 @@ import { Box } from '@mui/material';
 import JoinTournamentList from 'components/pages/AppPage/TournamentsPage/JoinTournamentList';
 import Spinner from 'components/Spinner';
 
-import { GET_TOURNAMENTS } from 'graphql/queries/queries';
-import { TOURNAMENT_UPDATED } from 'graphql/subscriptions/subscriptions';
-import { AUTO_JOIN_TOURNAMENT } from 'graphql/mutations/mutations';
+import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
+import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
+import { AUTO_JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
 
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 import { useMutation, useSubscription } from '@apollo/client';

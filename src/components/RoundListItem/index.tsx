@@ -2,7 +2,7 @@ import React, { Dispatch, useContext } from 'react';
 
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
-import { DELETE_ROUND } from 'graphql/mutations/mutations';
+import { DELETE_ROUND } from 'graphql/definitions/mutations';
 
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography } from '@mui/material';

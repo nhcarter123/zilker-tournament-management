@@ -61,6 +61,11 @@ export const GET_TOURNAMENT = gql`
         matches
         completed
       }
+      config {
+        totalRounds
+        maxPunchDown
+        performanceWeight
+      }
       standings {
         _id
         userId
@@ -71,7 +76,6 @@ export const GET_TOURNAMENT = gql`
         draw
         bye
       }
-      totalRounds
     }
   }
 `;

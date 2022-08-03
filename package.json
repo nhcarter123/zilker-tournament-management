@@ -2,7 +2,7 @@
   "name": "zilker-tournament-management",
   "version": "0.1.0",
   "author": "nhcarter123",
-  "license": "MIT",
+  "license": "GNU General Public License v3.0",
   "dependencies": {
     "@apollo/client": "^3.4.17",
     "@emotion/react": "^11.5.0",

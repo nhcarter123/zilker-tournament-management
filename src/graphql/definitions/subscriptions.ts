@@ -29,6 +29,11 @@ export const TOURNAMENT_UPDATED = gql`
           matches
           completed
         }
+        config {
+          totalRounds
+          maxPunchDown
+          performanceWeight
+        }
         standings {
           _id
           userId
@@ -40,7 +45,6 @@ export const TOURNAMENT_UPDATED = gql`
           bye
         }
         pairingAlgorithm
-        totalRounds
       }
       newRound
     }

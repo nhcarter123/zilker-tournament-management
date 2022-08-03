@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from 'antd';
 import { Box } from '@mui/material/';
 import { useMutation } from '@apollo/client';
-import { CREATE_TOURNAMENT } from 'graphql/mutations/mutations';
-import { GET_TOURNAMENTS } from 'graphql/queries/queries';
+import { CREATE_TOURNAMENT } from 'graphql/definitions/mutations';
+import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
 import { onError } from 'graphql/errorHandler';
 
 const AddTournamentButton = (): JSX.Element => {

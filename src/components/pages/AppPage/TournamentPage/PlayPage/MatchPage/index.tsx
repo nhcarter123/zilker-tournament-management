@@ -7,6 +7,7 @@ import MatchResultSelect from 'components/MatchResultSelect';
 
 import ChessBoard from 'svg/chessBoard.svg';
 
+import { MATCH_UPDATED } from 'graphql/definitions/subscriptions';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/MatchPage/styles';
 import { Box, Divider, Typography } from '@mui/material';
 import {
@@ -14,7 +15,6 @@ import {
   MatchUpdatedVariables,
   MatchWithUserInfo
 } from 'types/types';
-import { MATCH_UPDATED } from 'graphql/subscriptions/subscriptions';
 import clsx from 'clsx';
 
 interface MatchPageProps {

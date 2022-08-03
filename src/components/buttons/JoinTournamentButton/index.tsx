@@ -4,7 +4,7 @@ import { Box } from '@mui/material/';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { JOIN_TOURNAMENT } from 'graphql/mutations/mutations';
+import { JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';

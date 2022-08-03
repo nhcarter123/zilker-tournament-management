@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { useSubscription } from '@apollo/client';
-import { GET_ROUND } from 'graphql/queries/queries';
+import { GET_ROUND } from 'graphql/definitions/queries';
 import { Box, IconButton, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
 import {
@@ -21,7 +21,7 @@ import { Page } from 'types/page';
 import WinnerText from 'components/WinnerText';
 import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
-import { MATCH_UPDATED } from 'graphql/subscriptions/subscriptions';
+import { MATCH_UPDATED } from 'graphql/definitions/subscriptions';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 
 interface GetRoundArgs {

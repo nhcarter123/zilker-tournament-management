@@ -6,7 +6,7 @@ import { onError } from 'graphql/errorHandler';
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography } from '@mui/material';
 import { Role, Standing, User } from 'types/types';
-import { KICK_PLAYER } from 'graphql/mutations/mutations';
+import { KICK_PLAYER } from 'graphql/definitions/mutations';
 import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
 

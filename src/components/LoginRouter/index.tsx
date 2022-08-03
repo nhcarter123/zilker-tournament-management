@@ -7,10 +7,13 @@ import MoreInfoPage from 'components/pages/MoreInfoPage';
 import AppPage from 'components/pages/AppPage';
 import Spinner from 'components/Spinner';
 
-import { GET_ME } from 'graphql/queries/queries';
+import { GET_ME } from 'graphql/definitions/queries';
 import { Page } from 'types/page';
 import { User } from 'types/types';
-import { UPDATE_USER_DETAILS, VERIFY_CODE } from 'graphql/mutations/mutations';
+import {
+  UPDATE_USER_DETAILS,
+  VERIFY_CODE
+} from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/LoginRouter/styles';

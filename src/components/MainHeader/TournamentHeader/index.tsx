@@ -42,7 +42,7 @@ const TournamentHeader = ({
     ) + 1;
 
   const currentRound = matchRound || tournament.rounds.length;
-  const totalRounds = tournament.totalRounds;
+  const totalRounds = tournament.config.totalRounds;
 
   return (
     <>

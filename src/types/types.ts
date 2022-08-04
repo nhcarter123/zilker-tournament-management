@@ -6,8 +6,9 @@ export type User = {
   phone: string;
   rating: number;
   matchesPlayed: number;
-  token: string;
   role: Role;
+  token?: string;
+  organizationId?: string;
 };
 
 export enum Role {
@@ -91,6 +92,12 @@ export type Tournament = {
   config: IConfig;
   pairingAlgorithm: PairingAlgorithm;
   location?: string;
+  organizationId: string;
+};
+
+export type Organization = {
+  _id: string;
+  name: string;
 };
 
 export type MatchUpdatedData = {

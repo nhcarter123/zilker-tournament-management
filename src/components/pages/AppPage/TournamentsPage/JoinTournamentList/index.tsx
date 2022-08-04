@@ -9,7 +9,7 @@ import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/Tourna
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-import { Role, Tournament, TournamentStatus } from 'types/types';
+import { Tournament, TournamentStatus } from 'types/types';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
@@ -27,7 +27,6 @@ const JoinTournamentList = ({
 }: JoinTournamentListProps): JSX.Element => {
   const history = useHistory();
   const me = useContext(UserContext);
-  const isAdmin = me?.role === Role.Admin;
 
   const inNoneOfTheseTournaments = !tournaments.some((tournament) =>
     tournament.players.includes(me?._id || '')
@@ -60,7 +59,7 @@ const JoinTournamentList = ({
         }}
         p={1}
       >
-        {isAdmin && withCreateButton && <AddTournamentButton />}
+        {me?.organizationId && withCreateButton && <AddTournamentButton />}
 
         {tournaments.map((tournament, index) => {
           const amParticipant = tournament.players.includes(me?._id || '');

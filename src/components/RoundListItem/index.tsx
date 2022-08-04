@@ -10,7 +10,7 @@ import RoundStatusDetail from 'components/RoundListItem/RoundStatusDetail';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import { Tournament, RoundPreview, Role, TournamentStatus } from 'types/types';
+import { Tournament, RoundPreview, TournamentStatus } from 'types/types';
 import { DeleteOutlined } from '@ant-design/icons';
 import { UserContext } from 'context/userContext';
 
@@ -56,7 +56,7 @@ const RoundListItem = ({
 
         <Box height={'32px'} display={'flex'} alignItems={'center'}>
           {isLastRound && tournament.status !== TournamentStatus.Completed ? (
-            me?.role === Role.Admin && (
+            me?.organizationId === tournament.organizationId && (
               <Popconfirm
                 title="Are you sure?"
                 placement={'left'}

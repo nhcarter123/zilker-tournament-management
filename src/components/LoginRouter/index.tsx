@@ -31,7 +31,7 @@ const LoginRouter = (): JSX.Element => {
     networkStatus,
     refetch
   } = useQuery<{ me: Nullable<User> }>(GET_ME, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache', // todo test
     notifyOnNetworkStatusChange: true,
     context: {
       headers: {
@@ -64,7 +64,7 @@ const LoginRouter = (): JSX.Element => {
       onError,
       onCompleted: (data) => {
         localStorage.setItem('token', data.verifyCode.token);
-        refetch();
+        void refetch();
       }
     }
   );

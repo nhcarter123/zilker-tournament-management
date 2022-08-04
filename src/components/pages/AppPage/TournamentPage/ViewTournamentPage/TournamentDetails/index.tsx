@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import { useMutation } from '@apollo/client';
 import { debounce } from 'lodash';
 
-import { Box, FormGroup, Slider, TextField, Typography } from '@mui/material/';
+import {
+  Box,
+  Divider,
+  FormGroup,
+  Slider,
+  TextField,
+  Typography
+} from '@mui/material/';
 import { LocalizationProvider, MobileDatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
@@ -10,7 +17,7 @@ import { UPDATE_TOURNAMENT } from 'graphql/definitions/mutations';
 import { PairingAlgorithm, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import Input from 'antd/lib/input';
-import { Button, Radio } from 'antd';
+import { Radio } from 'antd';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails/styles';
 
 interface TournamentDetailsProps {
@@ -74,13 +81,19 @@ const TournamentDetails = ({
   tournament
 }: TournamentDetailsProps): JSX.Element => {
   const classes = useStyles();
-  const [tournamentName, setTournamentName] = useState<string>(tournament.name);
-
   const [updateTournament] = useMutation(UPDATE_TOURNAMENT, {
     onError
   });
 
   // todo maybe rewrite this as form?
+
+  const handleTournamentNameChange = (e: ChangeEvent<HTMLInputElement>) =>
+    updateTournament({
+      variables: {
+        tournamentId: tournament._id,
+        payload: { name: e.target.value }
+      }
+    });
 
   const handlePerformanceWeightSliderChange = (
     _: Event,
@@ -119,49 +132,12 @@ const TournamentDetails = ({
         Details
       </Typography>
 
-      <Box mt={1}>
-        <Radio.Group
-          disabled={tournament.status === TournamentStatus.Completed}
-          className={classes.root}
-          onChange={(e) =>
-            updateTournament({
-              variables: {
-                tournamentId: tournament._id,
-                payload: { status: e.target.value }
-              }
-            })
-          }
-          options={statusOptions}
-          value={tournament.status}
-          optionType="button"
-          buttonStyle="solid"
-        />
-      </Box>
-
       <FormGroup>
-        <Box mt={2}>
-          <Input.Group>
-            <Input
-              style={{ width: 'calc(100% - 80px)' }}
-              defaultValue={tournament.name}
-              onChange={(e) => setTournamentName(e.target.value)}
-            />
-
-            <Button
-              type="primary"
-              style={{ width: '80px' }}
-              onClick={() =>
-                updateTournament({
-                  variables: {
-                    tournamentId: tournament._id,
-                    payload: { name: tournamentName }
-                  }
-                })
-              }
-            >
-              Update
-            </Button>
-          </Input.Group>
+        <Box mt={1}>
+          <Input
+            defaultValue={tournament.name}
+            onChange={debounce(handleTournamentNameChange, 1000)}
+          />
         </Box>
 
         <Box mt={2} sx={{ maxWidth: '120px' }}>
@@ -181,6 +157,25 @@ const TournamentDetails = ({
               }
             />
           </LocalizationProvider>
+        </Box>
+
+        <Box mt={2}>
+          <Radio.Group
+            disabled={tournament.status === TournamentStatus.Completed}
+            className={classes.root}
+            onChange={(e) =>
+              updateTournament({
+                variables: {
+                  tournamentId: tournament._id,
+                  payload: { status: e.target.value }
+                }
+              })
+            }
+            options={statusOptions}
+            value={tournament.status}
+            optionType="button"
+            buttonStyle="solid"
+          />
         </Box>
 
         <Box mt={2}>
@@ -252,6 +247,8 @@ const TournamentDetails = ({
           </Box>
         )}
       </FormGroup>
+
+      <Divider />
     </>
   );
 };

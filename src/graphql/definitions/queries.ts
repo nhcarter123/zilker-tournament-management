@@ -11,6 +11,7 @@ export const GET_ME = gql`
       rating
       matchesPlayed
       role
+      organizationId
     }
   }
 `;
@@ -56,6 +57,7 @@ export const GET_TOURNAMENT = gql`
       status
       pairingAlgorithm
       players
+      organizationId
       rounds {
         _id
         matches
@@ -162,6 +164,15 @@ export const GET_ROUND = gql`
         boardNumber
         result
       }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION = gql`
+  query GetOrganization($organizationId: ID!) {
+    getOrganization(organizationId: $organizationId) {
+      _id
+      name
     }
   }
 `;

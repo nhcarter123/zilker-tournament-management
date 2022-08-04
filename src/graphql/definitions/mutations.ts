@@ -94,3 +94,12 @@ export const AUTO_JOIN_TOURNAMENT = gql`
     }
   }
 `;
+
+export const CREATE_ORGANIZATION = gql`
+  mutation CreateOrganization {
+    createOrganization {
+      _id
+      name
+    }
+  }
+`;

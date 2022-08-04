@@ -22,7 +22,7 @@ const DeleteTournamentButton = ({
     <Popconfirm
       title="Are you sure?"
       onConfirm={(): void => {
-        updateTournament({
+        void updateTournament({
           variables: {
             tournamentId: tournamentId,
             payload: { isDeleted: true }

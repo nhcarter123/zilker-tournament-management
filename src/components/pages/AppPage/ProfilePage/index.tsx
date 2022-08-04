@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material/';
 import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
 import PictureEditor from 'components/PictureEditor';
+import OrganizationEditor from 'components/OrganizationEditor';
 
 const ProfilePage = (): JSX.Element => {
   const me = useContext(UserContext);
@@ -23,12 +24,14 @@ const ProfilePage = (): JSX.Element => {
         </Typography>
       </Box>
 
-      <Typography variant={'h5'} align={'center'} mt={3}>
-        Tournament History
-      </Typography>
-      <Typography variant={'body1'} align={'center'} mt={2}>
-        TODO
-      </Typography>
+      <OrganizationEditor />
+
+      {/*<Typography variant={'h5'} align={'center'} mt={3}>*/}
+      {/*  Tournament History*/}
+      {/*</Typography>*/}
+      {/*<Typography variant={'body1'} align={'center'} mt={2}>*/}
+      {/*  TODO*/}
+      {/*</Typography>*/}
     </Box>
   ) : (
     <></>

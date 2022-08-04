@@ -32,6 +32,10 @@ input UpdateMatchPayload {
   rating: Int!
 }
 
+input UpdateOrganizationPayload {
+  name: String!
+}
+
 type TournamentUpdateResult {
   tournament: Tournament!
   newRound: Boolean!
@@ -49,8 +53,9 @@ type User {
   photo: String
   rating: Int
   matchesPlayed: Int
-  token: String
   role: Role!
+  token: String
+  organizationId: String
 }
 
 enum Role {
@@ -134,6 +139,12 @@ type Tournament {
   config: Config!
   pairingAlgorithm: PairingAlgorithm!
   location: String
+  organizationId: String!
+}
+
+type Organization {
+  _id: String!
+  name: String!
 }
 
 type Query {
@@ -148,10 +159,13 @@ type Query {
   getMatch(matchId: ID!): MatchWithUserInfo
   getMyMatch(tournamentId: ID!): MatchWithUserInfo
   getRound(tournamentId: ID!, roundId: ID!): Round
+
+  getOrganization(organizationId: ID!): Organization
+  getOrganizations: [Organization!]!
 }
 
 type Mutation {
-  #   Tournament
+  # Tournament
   completeRound(tournamentId: ID!, newRound: Boolean!, textAlert: Boolean!): Boolean!
   deleteRound(tournamentId: ID!, roundId: ID!): Boolean!
   joinTournament(tournamentId: ID!, userId: ID!): JoinTournamentResult!
@@ -160,16 +174,23 @@ type Mutation {
   createTournament(name: String!): Boolean!
   updateTournament(tournamentId: ID!, payload: UpdateTournamentPayload!): Boolean!
 
-  #   User
+  # User
   verifyCode(code: String!): User
   uploadPhoto(photo: Upload!): Boolean!
   deletePhoto: Boolean!
   sendVerificationCode(phone: String!): Boolean!
   updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
 
-  #   Matches
+  # Match
   updateMatch(matchId: ID!, payload: UpdateMatchPayload!): Boolean!
   deleteMatch(tournamentId: ID!, roundId: ID!, matchId: ID!): Boolean!
+
+  # Organization
+  createOrganization: Organization!
+  updateOrganization(
+    organizationId: ID!
+    payload: UpdateOrganizationPayload!
+  ): Boolean!
 }
 
 type Subscription {

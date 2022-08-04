@@ -5,7 +5,7 @@ import { onError } from 'graphql/errorHandler';
 
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography } from '@mui/material';
-import { Role, Standing, User } from 'types/types';
+import { Standing, Tournament, User } from 'types/types';
 import { KICK_PLAYER } from 'graphql/definitions/mutations';
 import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
@@ -14,15 +14,15 @@ interface PlayerListItemProps {
   user: User;
   index: number;
   isInTournament: boolean;
+  tournament: Tournament;
   standing?: Standing;
-  tournamentId: string;
 }
 
 const PlayerListItem = ({
   user,
   index,
   standing,
-  tournamentId,
+  tournament,
   isInTournament
 }: PlayerListItemProps): JSX.Element => {
   const me = useContext(UserContext);
@@ -65,14 +65,14 @@ const PlayerListItem = ({
           )}
         </Box>
 
-        {me?.role === Role.Admin && isInTournament && (
+        {me?.organizationId === tournament.organizationId && isInTournament && (
           <Popconfirm
             title="Are you sure?"
             placement={'left'}
             onConfirm={(): void => {
-              kickUser({
+              void kickUser({
                 variables: {
-                  tournamentId,
+                  tournamentId: tournament._id,
                   userId: user._id
                 }
               });

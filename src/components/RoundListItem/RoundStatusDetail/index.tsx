@@ -9,7 +9,6 @@ import {
   MatchUpdatedData,
   MatchUpdatedVariables,
   MatchWithUserInfo,
-  Role,
   Round,
   RoundPreview,
   Tournament
@@ -100,7 +99,7 @@ const RoundStatusDetail = ({
           />
         </Box>
 
-        {!isByeRound && me?.role === Role.Admin ? (
+        {!isByeRound && me?.organizationId === tournament.organizationId ? (
           <IconButton
             aria-label="view"
             color={'info'}

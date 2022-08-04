@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Checkbox, Divider, Typography } from '@mui/material/';
+import { Box, Checkbox, Typography } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
 import { NEXT_ROUND } from 'graphql/definitions/mutations';
-import { Role, Tournament, TournamentStatus } from 'types/types';
+import { Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';
 
@@ -23,7 +23,6 @@ const TournamentRounds = ({
 }: TournamentRoundsProps): JSX.Element => {
   const [sendAlert, setSendAlert] = useState(false);
   const me = useContext(UserContext);
-  // don't remember the purpose of this but it is a weird pattern :s
   const [isMutationNewRound, setIsMutationNewRound] = useState<boolean>(true);
 
   const [completeRound, { loading: nextRoundLoading }] = useMutation(
@@ -59,7 +58,7 @@ const TournamentRounds = ({
         ))}
       </Box>
 
-      {me?.role === Role.Admin && (
+      {me?.organizationId === tournament.organizationId && (
         <>
           <Box
             mt={1}
@@ -80,7 +79,7 @@ const TournamentRounds = ({
               placement={'top'}
               onConfirm={(): void => {
                 setIsMutationNewRound(true);
-                completeRound({
+                void completeRound({
                   variables: {
                     tournamentId: tournament._id,
                     newRound: true,
@@ -107,7 +106,7 @@ const TournamentRounds = ({
               placement={'top'}
               onConfirm={(): void => {
                 setIsMutationNewRound(false);
-                completeRound({
+                void completeRound({
                   variables: {
                     tournamentId: tournament._id,
                     newRound: false,
@@ -127,8 +126,6 @@ const TournamentRounds = ({
               </Button>
             </Popconfirm>
           </Box>
-
-          <Divider />
         </>
       )}
     </>

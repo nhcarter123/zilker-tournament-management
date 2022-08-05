@@ -4,7 +4,7 @@ import { Button } from 'antd';
 
 const RulesPage = (): JSX.Element => {
   return (
-    <Box mt={2}>
+    <Box m={2}>
       <Typography variant={'body2'}>
         Help out with drinks, prizes, and our expensive development team
       </Typography>

@@ -44,6 +44,10 @@ export const GET_TOURNAMENTS = gql`
       date
       status
       players
+      organization {
+        _id
+        name
+      }
     }
   }
 `;

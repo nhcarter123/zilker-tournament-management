@@ -19,7 +19,7 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
   const hasBackButton = page.includes('/view');
 
   return (
-    <Box display={'flex'} alignItems={'center'}>
+    <Box display={'flex'} alignItems={'center'} pl={1}>
       <Box>
         <IconButton
           aria-label={'menu'}

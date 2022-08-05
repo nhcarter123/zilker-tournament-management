@@ -38,7 +38,7 @@ const RulesPage = (): JSX.Element => {
     index: number
   ): JSX.Element => {
     return (
-      <Box mb={2} key={index}>
+      <Box mt={1} mb={2} mx={2} key={index}>
         <Typography variant={'h6'}>{title}</Typography>
         <Typography variant={'body1'}>{description}</Typography>
       </Box>

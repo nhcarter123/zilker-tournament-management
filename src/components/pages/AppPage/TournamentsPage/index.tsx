@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 import { Box } from '@mui/material';
 import JoinTournamentList from 'components/pages/AppPage/TournamentsPage/JoinTournamentList';
@@ -14,10 +15,9 @@ import { useMutation, useSubscription } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
 
 import {
-  Tournament,
-  TournamentStatus,
   TournamentUpdatedData,
-  TournamentUpdatedVariables
+  TournamentUpdatedVariables,
+  TournamentWithOrganization
 } from 'types/types';
 import { Page } from 'types/page';
 
@@ -62,7 +62,7 @@ const TournamentsPage = (): JSX.Element => {
   }, [queryParams, autoJoinTournament, history]);
 
   const { data, loading } = useQueryWithReconnect<{
-    getTournaments: Tournament[];
+    getTournaments: TournamentWithOrganization[];
   }>(GET_TOURNAMENTS, {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first'
@@ -83,41 +83,31 @@ const TournamentsPage = (): JSX.Element => {
     }
   );
 
-  const tournaments = data?.getTournaments || [];
+  const tournaments = [...(data?.getTournaments || [])].sort(
+    (a, b) => moment(b.date).valueOf() - moment(a.date).valueOf()
+  );
 
-  const activeTournaments = tournaments.filter(
-    (tournament) => tournament.status === TournamentStatus.Active
-  );
-  const scheduledTournaments = tournaments.filter(
-    (tournament) => tournament.status === TournamentStatus.Created
-  );
-  const completedTournaments = tournaments.filter(
-    (tournament) => tournament.status === TournamentStatus.Completed
-  );
+  // const activeTournaments = tournaments.filter(
+  //   (tournament) => tournament.status === TournamentStatus.Active
+  // );
+  // const scheduledTournaments = tournaments.filter(
+  //   (tournament) => tournament.status === TournamentStatus.Created
+  // );
+  // const completedTournaments = tournaments.filter(
+  //   (tournament) => tournament.status === TournamentStatus.Completed
+  // );
 
   return autoJoinLoading || (loading && !data) ? (
     <Spinner />
   ) : (
-    <Box display={'flex'} justifyContent={'center'}>
+    <Box display={'flex'} justifyContent={'center'} height={'100%'}>
       <Box
         sx={{
           width: '100%',
           maxWidth: '600px'
         }}
       >
-        <JoinTournamentList
-          label={'Active Tournaments'}
-          tournaments={activeTournaments}
-        />
-        <JoinTournamentList
-          label={'Scheduled Tournaments'}
-          tournaments={scheduledTournaments}
-          withCreateButton
-        />
-        <JoinTournamentList
-          label={'Completed Tournaments'}
-          tournaments={completedTournaments}
-        />
+        <JoinTournamentList tournaments={tournaments} />
       </Box>
     </Box>
   );

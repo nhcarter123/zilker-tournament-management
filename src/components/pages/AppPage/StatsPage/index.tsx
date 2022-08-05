@@ -25,7 +25,7 @@ const graphStyle = {
 
 const StatsPage = (): JSX.Element => {
   return (
-    <Box display={'flex'} justifyContent={'center'}>
+    <Box display={'flex'} justifyContent={'center'} mt={1} mx={2}>
       <Box
         width={'100%'}
         sx={{

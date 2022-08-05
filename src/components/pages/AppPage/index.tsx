@@ -27,7 +27,7 @@ const AppPage = (): JSX.Element => {
       <SideMenu open={open} setOpen={setOpen} />
       <MainHeader setOpen={setOpen} />
 
-      <Box py={1}>
+      <Box pt={1}>
         <Divider />
       </Box>
 

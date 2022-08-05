@@ -103,3 +103,12 @@ export const CREATE_ORGANIZATION = gql`
     }
   }
 `;
+
+export const UPDATE_ORGANIZATION = gql`
+  mutation UpdateOrganization(
+    $organizationId: ID!
+    $payload: UpdateOrganizationPayload!
+  ) {
+    updateOrganization(organizationId: $organizationId, payload: $payload)
+  }
+`;

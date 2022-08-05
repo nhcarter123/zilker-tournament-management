@@ -47,28 +47,42 @@ const ViewTournamentPage = ({
   // todo
   // footer?
   return (
-    <Box sx={{ height: '100%', maxWidth: '360px', width: '100%' }} mx={'auto'}>
-      {loading && !users ? (
-        <Spinner />
-      ) : (
-        tournament &&
-        users && (
-          <>
-            {me?.organizationId === tournament.organizationId && (
-              <TournamentDetails tournament={tournament} />
-            )}
-            <TournamentRounds
-              tournament={tournament}
-              selectedRound={selectedRound}
-              setSelectedRound={setSelectedRound}
-            />
-            {tournament.players.length > 0 && (
-              <TournamentPlayers users={users} tournament={tournament} />
-            )}
-            <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
-          </>
-        )
-      )}
+    <Box sx={{ position: 'relative', height: '100%', width: '100%' }} mx={1}>
+      <Box
+        sx={{
+          overflow: 'auto',
+          borderColor: '#e5e5e5',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0
+        }}
+      >
+        <Box sx={{ height: '100%', maxWidth: '400px', width: '100%' }} px={1}>
+          {loading && !users ? (
+            <Spinner />
+          ) : (
+            tournament &&
+            users && (
+              <>
+                {me?.organizationId === tournament.organizationId && (
+                  <TournamentDetails tournament={tournament} />
+                )}
+                <TournamentRounds
+                  tournament={tournament}
+                  selectedRound={selectedRound}
+                  setSelectedRound={setSelectedRound}
+                />
+                {tournament.players.length > 0 && (
+                  <TournamentPlayers users={users} tournament={tournament} />
+                )}
+                <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
+              </>
+            )
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 };

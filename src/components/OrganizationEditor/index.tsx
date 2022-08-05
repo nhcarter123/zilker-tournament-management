@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { ChangeEvent, useContext } from 'react';
 import { UserContext } from 'context/userContext';
 import { Box, Typography } from '@mui/material';
 import { Button } from 'antd';
@@ -6,7 +6,10 @@ import Input from 'antd/lib/input';
 import { debounce } from 'lodash';
 import { useMutation } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
-import { CREATE_ORGANIZATION } from 'graphql/definitions/mutations';
+import {
+  CREATE_ORGANIZATION,
+  UPDATE_ORGANIZATION
+} from 'graphql/definitions/mutations';
 import { GET_ME, GET_ORGANIZATION } from 'graphql/definitions/queries';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 import { Organization } from 'types/types';
@@ -22,6 +25,20 @@ const OrganizationEditor = (): JSX.Element => {
     },
     skip: !me?.organizationId
   });
+
+  const [updateTournament] = useMutation(UPDATE_ORGANIZATION, {
+    onError
+  });
+
+  const handleOrganizationNameChange = (e: ChangeEvent<HTMLInputElement>) =>
+    updateTournament({
+      variables: {
+        organizationId: me?.organizationId,
+        payload: { name: e.target.value }
+      },
+      refetchQueries: [GET_ORGANIZATION],
+      awaitRefetchQueries: true
+    });
 
   const [createOrganization, { loading: createOrganizationLoading }] =
     useMutation(CREATE_ORGANIZATION, {
@@ -56,7 +73,7 @@ const OrganizationEditor = (): JSX.Element => {
         <Box mt={2}>
           <Input
             defaultValue={data?.getOrganization?.name}
-            // onChange={debounce(handleTournamentNameChange, 1000)}
+            onChange={debounce(handleOrganizationNameChange, 1000)}
           />
         </Box>
       )}

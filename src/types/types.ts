@@ -84,7 +84,7 @@ export interface IConfig {
 export type Tournament = {
   _id: string;
   name: string;
-  date: Date;
+  date: string;
   status: TournamentStatus;
   players: string[];
   rounds: RoundPreview[];
@@ -94,6 +94,10 @@ export type Tournament = {
   location?: string;
   organizationId: string;
 };
+
+export interface TournamentWithOrganization extends Tournament {
+  organization?: Organization;
+}
 
 export type Organization = {
   _id: string;

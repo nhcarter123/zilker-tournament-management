@@ -142,6 +142,21 @@ type Tournament {
   organizationId: String!
 }
 
+type TournamentWithOrganization {
+  _id: String!
+  name: String!
+  date: Date!
+  status: TournamentStatus!
+  players: [String!]!
+  rounds: [RoundPreview!]!
+  standings: [Standing!]!
+  config: Config!
+  pairingAlgorithm: PairingAlgorithm!
+  location: String
+  organizationId: String!
+  organization: Organization
+}
+
 type Organization {
   _id: String!
   name: String!
@@ -153,7 +168,7 @@ type Query {
   getUsers(userIds: [ID!]!, filterTerm: String): [User!]!
 
   getMyTournament: Tournament
-  getTournaments: [Tournament!]!
+  getTournaments: [TournamentWithOrganization!]!
   getTournament(tournamentId: ID!): Tournament
 
   getMatch(matchId: ID!): MatchWithUserInfo

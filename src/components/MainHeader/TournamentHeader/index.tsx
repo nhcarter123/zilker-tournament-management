@@ -47,13 +47,19 @@ const TournamentHeader = ({
   return (
     <>
       {amParticipant && (
-        <Box mt={-0.5}>
+        <Box mt={0.5}>
           <Box
             display={'flex'}
             alignItems={'center'}
             justifyContent={'space-between'}
           >
-            <TournamentStatusChip status={tournament.status} />
+            <TournamentStatusChip
+              label={`${
+                tournament.status === TournamentStatus.Active
+                  ? 'Playing'
+                  : 'Played'
+              }`}
+            />
             {tournament.status === TournamentStatus.Active && (
               <>
                 <SwapViewButton

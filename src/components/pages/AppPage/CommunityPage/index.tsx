@@ -21,7 +21,7 @@ const CommunityPage = (): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <Box mt={1}>
+    <Box m={2}>
       <Typography variant={'h5'}>Are you a developer? 👨‍💻</Typography>
       <Typography variant={'body2'}>
         View and contribute to the project here:

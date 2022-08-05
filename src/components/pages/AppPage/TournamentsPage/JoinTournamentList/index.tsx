@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import moment from 'moment';
 
-import { Box, Card, IconButton, Typography } from '@mui/material/';
+import { Box, capitalize, Card, IconButton, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
@@ -9,72 +9,63 @@ import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/Tourna
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-import { Tournament, TournamentStatus } from 'types/types';
+import { TournamentStatus, TournamentWithOrganization } from 'types/types';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
+import { getColorFromName } from 'helpers/helpers';
 
 interface JoinTournamentListProps {
-  label: string;
-  tournaments: Tournament[];
-  withCreateButton?: boolean;
+  tournaments: TournamentWithOrganization[];
 }
 
 const JoinTournamentList = ({
-  label,
-  tournaments,
-  withCreateButton
+  tournaments
 }: JoinTournamentListProps): JSX.Element => {
   const history = useHistory();
   const me = useContext(UserContext);
 
-  const inNoneOfTheseTournaments = !tournaments.some((tournament) =>
-    tournament.players.includes(me?._id || '')
+  const inNoneOfTheseTournaments = !tournaments.some(
+    (tournament) =>
+      tournament.players.includes(me?._id || '') &&
+      tournament.status === TournamentStatus.Active
   );
 
   return (
-    <Box mb={3}>
-      <Typography variant={'h6'}>{label}</Typography>
-      <Box sx={{ position: 'relative' }}>
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '8px',
-            height: '30vh',
-            background: '#fafafa',
-            right: '0px',
-            border: '1px solid',
-            borderColor: '#eaeaea'
-          }}
-        />
-      </Box>
+    <Box sx={{ position: 'relative', height: '100%' }} mx={1}>
       <Box
         sx={{
-          background: '#f7f7f7',
-          height: '30vh',
           overflow: 'auto',
-          borderTop: '2px solid',
-          borderBottom: '2px solid',
-          borderColor: '#e5e5e5'
+          borderColor: '#e5e5e5',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0
         }}
         p={1}
       >
-        {me?.organizationId && withCreateButton && <AddTournamentButton />}
+        {me?.organizationId && <AddTournamentButton />}
 
         {tournaments.map((tournament, index) => {
           const amParticipant = tournament.players.includes(me?._id || '');
+          const backgroundColor = getColorFromName(
+            tournament.organization?._id || ''
+          );
+          const darkerBackgroundColor = getColorFromName(
+            tournament.organization?._id || '',
+            50,
+            40
+          );
 
           return (
             <Card
               key={index}
               sx={{
-                color: 'white',
-                background: amParticipant ? '#7a37e9' : '#1890ff',
-                padding: '4px 8px',
                 marginBottom: `${
-                  index !== tournaments.length - 1 ? '8px' : ''
+                  index !== tournaments.length - 1 ? '16px' : '32px'
                 }`,
-                marginRight: '8px'
+                boxShadow: 'rgb(149 149 149) 0px 2px 4px 0px'
               }}
               onClick={(): void =>
                 history.push(
@@ -84,16 +75,53 @@ const JoinTournamentList = ({
               }
             >
               <Box
+                sx={{
+                  background: backgroundColor,
+                  boxShadow: 'rgb(99 99 99) 0px 2px 2px 0px',
+                  backgroundImage: 'url(/event-image.jpg)',
+                  backgroundSize: 'cover',
+                  height: '100px'
+                }}
+              >
+                <Box sx={{ position: 'absolute', right: 0 }} px={2} py={1}>
+                  {amParticipant && (
+                    <TournamentStatusChip
+                      label={`${
+                        tournament.status === TournamentStatus.Active
+                          ? 'Playing'
+                          : 'Played'
+                      }`}
+                      background={darkerBackgroundColor}
+                    />
+                  )}
+                  {tournament.status !== TournamentStatus.Created && (
+                    <TournamentStatusChip
+                      label={capitalize(tournament.status)}
+                      background={'#1890ff'}
+                    />
+                  )}
+                </Box>
+              </Box>
+              <Box
                 display={'flex'}
                 alignItems={'center'}
                 justifyContent={'space-between'}
+                px={0.5}
+                py={1}
+                sx={{
+                  background: '#d4fbcd',
+                  padding: '4px 8px'
+                }}
               >
                 <Box>
                   <Typography variant={'body1'} component={'span'}>
                     <Bold>{tournament.name}</Bold>
                   </Typography>
+
                   <Typography variant={'body2'}>
-                    {moment(tournament.date).format('ll')}
+                    {`${moment(tournament.date).format('ll')} - ${
+                      tournament.organization?.name
+                    }`}
                   </Typography>
                 </Box>
 
@@ -105,10 +133,6 @@ const JoinTournamentList = ({
                   >
                     <LocationOnIcon />
                   </IconButton>
-                )}
-
-                {amParticipant && (
-                  <TournamentStatusChip status={tournament.status} />
                 )}
 
                 {inNoneOfTheseTournaments &&

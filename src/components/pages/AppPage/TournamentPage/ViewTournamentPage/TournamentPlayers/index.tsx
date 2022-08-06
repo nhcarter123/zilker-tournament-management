@@ -49,9 +49,13 @@ const TournamentPlayers = ({
 }: TournamentRoundsProps): JSX.Element => {
   // todo move this mess to helper
 
-  const standingsByRating = [...tournament.standings].sort(
-    (a, b) => b.initialRating - a.initialRating
-  );
+  const standingsByRating = [...tournament.standings].sort((a, b) => {
+    // legacy support
+    const ratingA = users.find((user) => user._id === a.userId)?.rating || 0;
+    const ratingB = users.find((user) => user._id === b.userId)?.rating || 0;
+
+    return b.initialRating - a.initialRating || ratingB - ratingA;
+  });
   const skillGroups = splitToGroups(
     standingsByRating,
     tournament.config.skillGroupCount

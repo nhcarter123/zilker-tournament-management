@@ -87,6 +87,7 @@ export const GET_TOURNAMENT = gql`
         loss
         draw
         bye
+        initialRating
       }
     }
   }

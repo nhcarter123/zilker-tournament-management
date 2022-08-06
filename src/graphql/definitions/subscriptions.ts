@@ -44,6 +44,7 @@ export const TOURNAMENT_UPDATED = gql`
           loss
           draw
           bye
+          initialRating
         }
         pairingAlgorithm
       }

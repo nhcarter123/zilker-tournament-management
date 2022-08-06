@@ -71,6 +71,7 @@ const OrganizationEditor = (): JSX.Element => {
       )}
       {data?.getOrganization?.name && (
         <Box mt={2}>
+          <Typography variant={'subtitle2'}>Name</Typography>
           <Input
             defaultValue={data?.getOrganization?.name}
             onChange={debounce(handleOrganizationNameChange, 1000)}

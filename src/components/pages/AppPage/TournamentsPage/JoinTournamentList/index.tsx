@@ -6,6 +6,7 @@ import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
+import ImageWithBackup from 'components/ImageWithBackup';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
@@ -13,7 +14,6 @@ import { TournamentStatus, TournamentWithOrganization } from 'types/types';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
-import { getColorFromName } from 'helpers/helpers';
 
 interface JoinTournamentListProps {
   tournaments: TournamentWithOrganization[];
@@ -49,14 +49,6 @@ const JoinTournamentList = ({
 
         {tournaments.map((tournament, index) => {
           const amParticipant = tournament.players.includes(me?._id || '');
-          const backgroundColor = getColorFromName(
-            tournament.organization?._id || ''
-          );
-          const darkerBackgroundColor = getColorFromName(
-            tournament.organization?._id || '',
-            50,
-            40
-          );
 
           return (
             <Card
@@ -65,7 +57,8 @@ const JoinTournamentList = ({
                 marginBottom: `${
                   index !== tournaments.length - 1 ? '16px' : '32px'
                 }`,
-                boxShadow: 'rgb(149 149 149) 0px 2px 4px 0px'
+                boxShadow: 'rgb(149 149 149) 0px 2px 4px 0px',
+                position: 'relative'
               }}
               onClick={(): void =>
                 history.push(
@@ -74,16 +67,8 @@ const JoinTournamentList = ({
                 )
               }
             >
-              <Box
-                sx={{
-                  background: backgroundColor,
-                  boxShadow: 'rgb(99 99 99) 0px 2px 2px 0px',
-                  backgroundImage: 'url(/event-image.jpg)',
-                  backgroundSize: 'cover',
-                  height: '100px'
-                }}
-              >
-                <Box sx={{ position: 'absolute', right: 0 }} px={2} py={1}>
+              <ImageWithBackup image={tournament.photo}>
+                <Box sx={{ position: 'absolute', right: 0, top: 0 }} p={1}>
                   {amParticipant && (
                     <TournamentStatusChip
                       label={`${
@@ -91,7 +76,6 @@ const JoinTournamentList = ({
                           ? 'Playing'
                           : 'Played'
                       }`}
-                      background={darkerBackgroundColor}
                     />
                   )}
                   {tournament.status !== TournamentStatus.Created && (
@@ -101,7 +85,7 @@ const JoinTournamentList = ({
                     />
                   )}
                 </Box>
-              </Box>
+              </ImageWithBackup>
               <Box
                 display={'flex'}
                 alignItems={'center'}
@@ -123,6 +107,13 @@ const JoinTournamentList = ({
                       tournament.organization?.name
                     }`}
                   </Typography>
+
+                  <Box>
+                    <Typography variant={'subtitle2'}>
+                      {tournament.standings.length} player
+                      {tournament.standings.length === 1 ? '' : 's'}
+                    </Typography>
+                  </Box>
                 </Box>
 
                 {tournament.location && (

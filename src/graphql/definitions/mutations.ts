@@ -95,6 +95,18 @@ export const AUTO_JOIN_TOURNAMENT = gql`
   }
 `;
 
+export const UPLOAD_TOURNAMENT_PHOTO = gql`
+  mutation UploadTournamentPhoto($tournamentId: ID!, $photo: Upload!) {
+    uploadTournamentPhoto(tournamentId: $tournamentId, photo: $photo)
+  }
+`;
+
+export const DELETE_TOURNAMENT_PHOTO = gql`
+  mutation DeleteTournamentPhoto($tournamentId: ID!) {
+    deleteTournamentPhoto(tournamentId: $tournamentId)
+  }
+`;
+
 export const CREATE_ORGANIZATION = gql`
   mutation CreateOrganization {
     createOrganization {

@@ -9,10 +9,10 @@ const ProfilePage = (): JSX.Element => {
   const me = useContext(UserContext);
 
   return me ? (
-    <Box mt={4}>
+    <Box mt={4} mx={2}>
       <PictureEditor />
 
-      <Box mt={2} mb={1} mx={2}>
+      <Box mt={2} mb={1}>
         <Typography align={'center'} variant={'body1'} component={'span'}>
           <Bold>{`${me.firstName} ${me.lastName}`}</Bold>
         </Typography>

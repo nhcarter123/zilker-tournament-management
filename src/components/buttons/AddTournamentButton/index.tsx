@@ -14,7 +14,7 @@ const AddTournamentButton = (): JSX.Element => {
   });
 
   return (
-    <Box display={'flex'} justifyContent={'center'} mr={1} mb={1}>
+    <Box display={'flex'} justifyContent={'center'} mb={1}>
       <Button
         type={'primary'}
         onClick={(): void =>

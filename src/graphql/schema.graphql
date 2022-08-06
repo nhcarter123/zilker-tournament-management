@@ -140,6 +140,7 @@ type Tournament {
   pairingAlgorithm: PairingAlgorithm!
   location: String
   organizationId: String!
+  photo: String
 }
 
 type TournamentWithOrganization {
@@ -155,6 +156,7 @@ type TournamentWithOrganization {
   location: String
   organizationId: String!
   organization: Organization
+  photo: String
 }
 
 type Organization {
@@ -188,6 +190,8 @@ type Mutation {
   kickPlayer(tournamentId: ID!, userId: ID!): Boolean!
   createTournament(name: String!): Boolean!
   updateTournament(tournamentId: ID!, payload: UpdateTournamentPayload!): Boolean!
+  uploadTournamentPhoto(tournamentId: ID!,photo: Upload!): Boolean!
+  deleteTournamentPhoto(tournamentId: ID!): Boolean!
 
   # User
   verifyCode(code: String!): User

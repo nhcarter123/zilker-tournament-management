@@ -92,8 +92,8 @@ const TournamentHeader = ({
 
           <Box display={'flex'} className={classes.noWrap}>
             <Typography variant={'subtitle2'} className={classes.noWrap}>
-              {`${tournament.players.length} player${
-                tournament.players.length !== 1 ? 's' : ''
+              {`${tournament.standings.length} player${
+                tournament.standings.length !== 1 ? 's' : ''
               } ${totalRounds} rounds`}
             </Typography>
           </Box>

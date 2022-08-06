@@ -44,6 +44,10 @@ export const GET_TOURNAMENTS = gql`
       date
       status
       players
+      standings {
+        _id
+      }
+      photo
       organization {
         _id
         name
@@ -62,6 +66,7 @@ export const GET_TOURNAMENT = gql`
       pairingAlgorithm
       players
       organizationId
+      photo
       rounds {
         _id
         matches

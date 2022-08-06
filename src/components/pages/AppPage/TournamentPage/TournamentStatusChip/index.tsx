@@ -16,7 +16,8 @@ const TournamentStatusChip = ({
       sx={{
         background,
         color: 'white',
-        marginLeft: '8px'
+        marginLeft: '8px',
+        border: '2px solid white'
       }}
       label={label}
     />

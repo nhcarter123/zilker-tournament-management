@@ -2,14 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useMutation } from '@apollo/client';
 import { debounce } from 'lodash';
 
-import {
-  Box,
-  Divider,
-  FormGroup,
-  Slider,
-  TextField,
-  Typography
-} from '@mui/material/';
+import { Box, Divider, Slider, TextField, Typography } from '@mui/material/';
 import { LocalizationProvider, MobileDatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
@@ -19,6 +12,7 @@ import { onError } from 'graphql/errorHandler';
 import Input from 'antd/lib/input';
 import { Radio } from 'antd';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails/styles';
+import TournamentPictureEditor from 'components/TournamentPictureEditor';
 
 interface TournamentDetailsProps {
   tournament: Tournament;
@@ -132,121 +126,121 @@ const TournamentDetails = ({
         Details
       </Typography>
 
-      <FormGroup>
-        <Box mt={1}>
-          <Input
-            defaultValue={tournament.name}
-            onChange={debounce(handleTournamentNameChange, 1000)}
-          />
-        </Box>
+      <TournamentPictureEditor tournament={tournament} />
 
-        <Box mt={2} sx={{ maxWidth: '120px' }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDatePicker
-              label="Date"
-              inputFormat="MM/dd/yyyy"
-              value={tournament.date}
-              renderInput={(params) => <TextField {...params} />}
-              onChange={(date) =>
-                updateTournament({
-                  variables: {
-                    tournamentId: tournament._id,
-                    payload: { date }
-                  }
-                })
+      <Box mt={1}>
+        <Input
+          defaultValue={tournament.name}
+          onChange={debounce(handleTournamentNameChange, 1000)}
+        />
+      </Box>
+
+      <Box mt={2} sx={{ maxWidth: '120px' }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <MobileDatePicker
+            label="Date"
+            inputFormat="MM/dd/yyyy"
+            value={tournament.date}
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(date) =>
+              updateTournament({
+                variables: {
+                  tournamentId: tournament._id,
+                  payload: { date }
+                }
+              })
+            }
+          />
+        </LocalizationProvider>
+      </Box>
+
+      <Box mt={2}>
+        <Radio.Group
+          disabled={tournament.status === TournamentStatus.Completed}
+          className={classes.root}
+          onChange={(e) =>
+            updateTournament({
+              variables: {
+                tournamentId: tournament._id,
+                payload: { status: e.target.value }
               }
+            })
+          }
+          options={statusOptions}
+          value={tournament.status}
+          optionType="button"
+          buttonStyle="solid"
+        />
+      </Box>
+
+      <Box mt={2}>
+        <Radio.Group
+          className={classes.root}
+          onChange={(e) =>
+            updateTournament({
+              variables: {
+                tournamentId: tournament._id,
+                payload: { pairingAlgorithm: e.target.value }
+              }
+            })
+          }
+          options={pairingAlgorithmOptions}
+          value={tournament.pairingAlgorithm}
+          optionType="button"
+          buttonStyle="solid"
+        />
+      </Box>
+
+      {tournament.pairingAlgorithm === PairingAlgorithm.Rating && (
+        <Box>
+          <Typography variant={'body2'} mt={2} mb={-1}>
+            Performance weight
+          </Typography>
+          <Box px={3}>
+            <Slider
+              key={`performanceWeight-${tournament.config.performanceWeight}`}
+              defaultValue={tournament.config.performanceWeight}
+              valueLabelDisplay="off"
+              onChange={debounce(handlePerformanceWeightSliderChange, 500)}
+              marks={performanceWeightMarks}
+              min={0}
+              max={3}
+              step={1}
             />
-          </LocalizationProvider>
-        </Box>
-
-        <Box mt={2}>
-          <Radio.Group
-            disabled={tournament.status === TournamentStatus.Completed}
-            className={classes.root}
-            onChange={(e) =>
-              updateTournament({
-                variables: {
-                  tournamentId: tournament._id,
-                  payload: { status: e.target.value }
-                }
-              })
-            }
-            options={statusOptions}
-            value={tournament.status}
-            optionType="button"
-            buttonStyle="solid"
-          />
-        </Box>
-
-        <Box mt={2}>
-          <Radio.Group
-            className={classes.root}
-            onChange={(e) =>
-              updateTournament({
-                variables: {
-                  tournamentId: tournament._id,
-                  payload: { pairingAlgorithm: e.target.value }
-                }
-              })
-            }
-            options={pairingAlgorithmOptions}
-            value={tournament.pairingAlgorithm}
-            optionType="button"
-            buttonStyle="solid"
-          />
-        </Box>
-
-        {tournament.pairingAlgorithm === PairingAlgorithm.Rating && (
-          <Box>
-            <Typography variant={'body2'} mt={2} mb={-1}>
-              Performance weight
-            </Typography>
-            <Box px={1}>
-              <Slider
-                key={`performanceWeight-${tournament.config.performanceWeight}`}
-                defaultValue={tournament.config.performanceWeight}
-                valueLabelDisplay="off"
-                onChange={debounce(handlePerformanceWeightSliderChange, 500)}
-                marks={performanceWeightMarks}
-                min={0}
-                max={3}
-                step={1}
-              />
-            </Box>
-
-            <Typography variant={'body2'} mt={1} mb={2}>
-              The performance weight setting controls in impact ofmatch
-              performance on future tournament pairings.
-            </Typography>
           </Box>
-        )}
 
-        {tournament.pairingAlgorithm === PairingAlgorithm.Swiss && (
-          <Box>
-            <Typography variant={'body2'} mt={2} mb={-1}>
-              Max punch-down
-            </Typography>
-            <Box px={1}>
-              <Slider
-                key={`maxPunchDown-${tournament.config.maxPunchDown}`}
-                defaultValue={tournament.config.maxPunchDown}
-                valueLabelDisplay="off"
-                onChange={debounce(handleMaxPunchDownSliderChange, 500)}
-                marks={maxPunchDownMarks}
-                min={0}
-                max={4}
-                step={1}
-              />
-            </Box>
+          <Typography variant={'body2'} mt={1} mb={2}>
+            The performance weight setting controls in impact ofmatch
+            performance on future tournament pairings.
+          </Typography>
+        </Box>
+      )}
 
-            <Typography variant={'body2'} mt={1} mb={2}>
-              The max punch-down setting subdivides swiss pools into small
-              sections. A value of 8 means that the 1st seed will play the 8th
-              seed in the first round for example.
-            </Typography>
+      {tournament.pairingAlgorithm === PairingAlgorithm.Swiss && (
+        <Box>
+          <Typography variant={'body2'} mt={2} mb={-1}>
+            Max punch-down
+          </Typography>
+          <Box px={1}>
+            <Slider
+              key={`maxPunchDown-${tournament.config.maxPunchDown}`}
+              defaultValue={tournament.config.maxPunchDown}
+              valueLabelDisplay="off"
+              onChange={debounce(handleMaxPunchDownSliderChange, 500)}
+              marks={maxPunchDownMarks}
+              min={0}
+              max={4}
+              step={1}
+            />
           </Box>
-        )}
-      </FormGroup>
+
+          <Typography variant={'body2'} mt={1} mb={2}>
+            The max punch-down setting subdivides swiss pools into small
+            sections. A value of 8 means that the 1st seed will play the 8th
+            seed in the first round for example.
+          </Typography>
+        </Box>
+      )}
 
       <Divider />
     </>

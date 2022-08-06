@@ -93,6 +93,7 @@ export type Tournament = {
   pairingAlgorithm: PairingAlgorithm;
   location?: string;
   organizationId: string;
+  photo?: string;
 };
 
 export interface TournamentWithOrganization extends Tournament {

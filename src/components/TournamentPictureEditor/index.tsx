@@ -1,37 +1,50 @@
-import React, { useContext, useRef, useState } from 'react';
-import { UserContext } from 'context/userContext';
+import React, { useRef, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 import AvatarEditor from 'react-avatar-editor';
 import { Button } from 'antd';
-import PlayerAvatar from 'components/PlayerAvatar';
 import { useMutation } from '@apollo/client';
-import { DELETE_PHOTO, UPLOAD_PHOTO } from 'graphql/definitions/mutations';
-import { GET_ME } from 'graphql/definitions/queries';
+import {
+  DELETE_TOURNAMENT_PHOTO,
+  UPLOAD_TOURNAMENT_PHOTO
+} from 'graphql/definitions/mutations';
+import { GET_TOURNAMENT } from 'graphql/definitions/queries';
 import { onError } from 'graphql/errorHandler';
 import Spinner from 'components/Spinner';
+import ImageWithBackup from 'components/ImageWithBackup';
+import { Tournament } from 'types/types';
 
-const PictureEditor = (): JSX.Element => {
+interface ITournamentPictureEditorProps {
+  tournament: Tournament;
+}
+
+const TournamentPictureEditor = ({
+  tournament
+}: ITournamentPictureEditorProps): JSX.Element => {
   const [localFile, setLocalFile] = useState<Nullable<File>>(null);
   const [scale, setScale] = useState<number>(15);
-  const me = useContext(UserContext);
   const inputFile = useRef<HTMLInputElement>(null);
   const editor = useRef<AvatarEditor>(null);
 
-  const [uploadPhoto, { loading: uploadLoading }] = useMutation(UPLOAD_PHOTO, {
-    refetchQueries: [GET_ME],
-    onError
-  });
+  const [uploadTournamentPhoto, { loading: uploadLoading }] = useMutation(
+    UPLOAD_TOURNAMENT_PHOTO,
+    {
+      refetchQueries: [GET_TOURNAMENT],
+      onError
+    }
+  );
 
-  const [deletePhoto, { loading: deleteLoading }] = useMutation(DELETE_PHOTO, {
-    refetchQueries: [GET_ME],
-    onError
-  });
+  const [deleteTournamentPhoto, { loading: deleteLoading }] = useMutation(
+    DELETE_TOURNAMENT_PHOTO,
+    {
+      refetchQueries: [GET_TOURNAMENT],
+      onError
+    }
+  );
 
-  if (!me) {
-    return <></>;
-  }
+  const ref = useRef<HTMLInputElement>(null);
 
-  const photo = me.photo;
+  const width = ref.current?.offsetWidth || 0;
+  const height = width / 2.2;
 
   return (
     <Box
@@ -40,30 +53,30 @@ const PictureEditor = (): JSX.Element => {
       className={'dashed'}
       sx={{
         maxHeight: '364px',
-        minWidth: '268px',
+        minWidth: '100%',
         padding: '16px',
         width: 'min-content',
-        margin: 'auto'
+        margin: '8px auto 16px'
       }}
+      ref={ref}
     >
       {uploadLoading || deleteLoading ? (
         <Spinner />
       ) : (
-        <Box>
+        <Box width={'100%'}>
           <Box display={'flex'} justifyContent={'center'} mb={2}>
             {localFile ? (
               <AvatarEditor
                 ref={editor}
                 image={localFile}
-                width={180}
-                height={180}
+                width={width * 0.75}
+                height={height * 0.75}
                 border={20}
                 color={[0, 0, 0, 0.5]}
                 scale={0.9 + scale / 50}
-                borderRadius={10000}
               />
             ) : (
-              <PlayerAvatar player={me} size={180} />
+              <ImageWithBackup image={tournament.photo} />
             )}
           </Box>
 
@@ -86,8 +99,9 @@ const PictureEditor = (): JSX.Element => {
                 type="primary"
                 onClick={(): void => {
                   editor.current?.getImage().toBlob((blob) => {
-                    void uploadPhoto({
+                    void uploadTournamentPhoto({
                       variables: {
+                        tournamentId: tournament._id,
                         photo: blob
                       }
                     });
@@ -124,12 +138,18 @@ const PictureEditor = (): JSX.Element => {
                 </Button>
               </Box>
             )}
-            {!localFile && photo && (
+            {!localFile && tournament.photo && (
               <Box ml={2}>
                 <Button
                   size={'middle'}
                   type="primary"
-                  onClick={(): void => void deletePhoto()}
+                  onClick={(): void =>
+                    void deleteTournamentPhoto({
+                      variables: {
+                        tournamentId: tournament._id
+                      }
+                    })
+                  }
                 >
                   Remove
                 </Button>
@@ -155,4 +175,4 @@ const PictureEditor = (): JSX.Element => {
   );
 };
 
-export default PictureEditor;
+export default TournamentPictureEditor;

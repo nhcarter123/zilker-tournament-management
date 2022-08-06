@@ -33,6 +33,7 @@ export const TOURNAMENT_UPDATED = gql`
           totalRounds
           maxPunchDown
           performanceWeight
+          skillGroupCount
         }
         standings {
           _id

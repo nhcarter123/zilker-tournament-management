@@ -11,6 +11,11 @@ export type User = {
   organizationId?: string;
 };
 
+export interface IUserWithResult extends User {
+  isWinner: boolean;
+  groupIndex: number;
+}
+
 export enum Role {
   Admin = 'admin',
   Player = 'player'
@@ -61,6 +66,7 @@ export type Standing = {
   loss: number;
   draw: number;
   bye: number;
+  initialRating: number;
 };
 
 export type Round = {
@@ -79,6 +85,7 @@ export interface IConfig {
   totalRounds: number;
   maxPunchDown: number;
   performanceWeight: number;
+  skillGroupCount: number;
 }
 
 export type Tournament = {

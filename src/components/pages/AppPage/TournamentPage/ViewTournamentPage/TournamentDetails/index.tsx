@@ -29,6 +29,21 @@ const pairingAlgorithmOptions = [
   { label: 'Rating', value: PairingAlgorithm.Rating }
 ];
 
+const skillGroupCountMarks = [
+  {
+    value: 1,
+    label: '1'
+  },
+  {
+    value: 2,
+    label: '2'
+  },
+  {
+    value: 3,
+    label: '3'
+  }
+];
+
 const performanceWeightMarks = [
   {
     value: 0,
@@ -89,6 +104,7 @@ const TournamentDetails = ({
       }
     });
 
+  // TODO: rethink this
   const handlePerformanceWeightSliderChange = (
     _: Event,
     value: number | number[]
@@ -100,6 +116,7 @@ const TournamentDetails = ({
           config: {
             totalRounds: tournament.config.totalRounds,
             maxPunchDown: tournament.config.maxPunchDown,
+            skillGroupCount: tournament.config.skillGroupCount,
             performanceWeight: Array.isArray(value) ? value[0] || 0 : value
           }
         }
@@ -114,7 +131,26 @@ const TournamentDetails = ({
           config: {
             totalRounds: tournament.config.totalRounds,
             performanceWeight: tournament.config.performanceWeight,
+            skillGroupCount: tournament.config.skillGroupCount,
             maxPunchDown: Array.isArray(value) ? value[0] || 0 : value
+          }
+        }
+      }
+    });
+
+  const handleSkillGroupCountSliderChange = (
+    _: Event,
+    value: number | number[]
+  ) =>
+    updateTournament({
+      variables: {
+        tournamentId: tournament._id,
+        payload: {
+          config: {
+            totalRounds: tournament.config.totalRounds,
+            performanceWeight: tournament.config.performanceWeight,
+            maxPunchDown: tournament.config.maxPunchDown,
+            skillGroupCount: Array.isArray(value) ? value[0] || 0 : value
           }
         }
       }
@@ -122,6 +158,10 @@ const TournamentDetails = ({
 
   return (
     <>
+      <Box mt={3}>
+        <Divider />
+      </Box>
+
       <Typography variant={'h5'} align={'center'} mt={2}>
         Details
       </Typography>
@@ -196,7 +236,7 @@ const TournamentDetails = ({
           <Typography variant={'body2'} mt={2} mb={-1}>
             Performance weight
           </Typography>
-          <Box px={3}>
+          <Box px={2}>
             <Slider
               key={`performanceWeight-${tournament.config.performanceWeight}`}
               defaultValue={tournament.config.performanceWeight}
@@ -221,7 +261,7 @@ const TournamentDetails = ({
           <Typography variant={'body2'} mt={2} mb={-1}>
             Max punch-down
           </Typography>
-          <Box px={1}>
+          <Box px={2}>
             <Slider
               key={`maxPunchDown-${tournament.config.maxPunchDown}`}
               defaultValue={tournament.config.maxPunchDown}
@@ -242,7 +282,22 @@ const TournamentDetails = ({
         </Box>
       )}
 
-      <Divider />
+      <Box>
+        <Typography variant={'body2'} mt={2} mb={-1}>
+          Skill group count
+        </Typography>
+        <Box px={2}>
+          <Slider
+            key={`skillGroupCount-${tournament.config.skillGroupCount}`}
+            defaultValue={tournament.config.skillGroupCount}
+            onChange={debounce(handleSkillGroupCountSliderChange, 500)}
+            marks={skillGroupCountMarks}
+            min={1}
+            max={3}
+            step={1}
+          />
+        </Box>
+      </Box>
     </>
   );
 };

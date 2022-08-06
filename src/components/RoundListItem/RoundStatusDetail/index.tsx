@@ -71,6 +71,7 @@ const RoundStatusDetail = ({
       <Box key={index} display={'flex'} justifyContent={'space-between'} pt={1}>
         <Box display={'flex'} alignItems={'center'}>
           <WinnerText
+            variant={'body2'}
             won={match.result === MatchResult.WhiteWon}
             name={`${match.white?.firstName} ${(
               match.white?.lastName || ''
@@ -88,6 +89,7 @@ const RoundStatusDetail = ({
           )}
 
           <WinnerText
+            variant={'body2'}
             won={match.result === MatchResult.BlackWon}
             name={
               match.black

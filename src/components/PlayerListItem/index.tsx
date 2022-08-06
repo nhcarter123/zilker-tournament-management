@@ -5,18 +5,32 @@ import { onError } from 'graphql/errorHandler';
 
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography } from '@mui/material';
-import { Standing, Tournament, User } from 'types/types';
+import { IUserWithResult, Standing, Tournament } from 'types/types';
 import { KICK_PLAYER } from 'graphql/definitions/mutations';
 import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
+import WinnerText from 'components/WinnerText';
 
 interface PlayerListItemProps {
-  user: User;
+  user: IUserWithResult;
   index: number;
   isInTournament: boolean;
   tournament: Tournament;
   standing?: Standing;
 }
+
+const getSkillGroupLabelByIndex = (index: number): string => {
+  switch (index) {
+    case 0:
+      return 'Advanced';
+    case 1:
+      return 'Intermediate';
+    case 2:
+      return 'Beginner';
+    default:
+      return `Beginner ${index}`;
+  }
+};
 
 const PlayerListItem = ({
   user,
@@ -43,9 +57,11 @@ const PlayerListItem = ({
         </Typography>
         <Box sx={{ width: '100%' }}>
           <Box display={'flex'} alignItems={'center'}>
-            <Typography
+            <WinnerText
+              name={`${user.firstName} ${user.lastName}`}
               variant={'h6'}
-            >{`${user.firstName} ${user.lastName}`}</Typography>
+              won={user.isWinner}
+            />
             <Typography
               ml={1}
               mr={0.5}
@@ -63,6 +79,13 @@ const PlayerListItem = ({
               </Typography>
             </Box>
           )}
+          <Box>
+            <Typography
+              sx={{ fontStyle: 'italic', fontSize: '12px', color: '#919191' }}
+            >
+              {getSkillGroupLabelByIndex(user.groupIndex)}
+            </Typography>
+          </Box>
         </Box>
 
         {me?.organizationId === tournament.organizationId && isInTournament && (
@@ -84,8 +107,6 @@ const PlayerListItem = ({
           </Popconfirm>
         )}
       </Box>
-
-      {/*<Divider />*/}
     </>
   );
 };

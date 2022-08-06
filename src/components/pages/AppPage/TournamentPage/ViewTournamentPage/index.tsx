@@ -66,9 +66,6 @@ const ViewTournamentPage = ({
             tournament &&
             users && (
               <>
-                {me?.organizationId === tournament.organizationId && (
-                  <TournamentDetails tournament={tournament} />
-                )}
                 <TournamentRounds
                   tournament={tournament}
                   selectedRound={selectedRound}
@@ -76,6 +73,9 @@ const ViewTournamentPage = ({
                 />
                 {tournament.players.length > 0 && (
                   <TournamentPlayers users={users} tournament={tournament} />
+                )}
+                {me?.organizationId === tournament.organizationId && (
+                  <TournamentDetails tournament={tournament} />
                 )}
                 <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
               </>

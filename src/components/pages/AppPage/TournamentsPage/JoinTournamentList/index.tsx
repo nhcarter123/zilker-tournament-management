@@ -50,6 +50,11 @@ const JoinTournamentList = ({
         {tournaments.map((tournament, index) => {
           const amParticipant = tournament.players.includes(me?._id || '');
 
+          const playerCount =
+            tournament.standings.length > tournament.players.length
+              ? tournament.standings.length
+              : tournament.players.length;
+
           return (
             <Card
               key={index}
@@ -110,8 +115,8 @@ const JoinTournamentList = ({
 
                   <Box>
                     <Typography variant={'subtitle2'}>
-                      {tournament.standings.length} player
-                      {tournament.standings.length === 1 ? '' : 's'}
+                      {playerCount} player
+                      {playerCount === 1 ? '' : 's'}
                     </Typography>
                   </Box>
                 </Box>

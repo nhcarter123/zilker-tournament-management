@@ -44,6 +44,11 @@ const TournamentHeader = ({
   const currentRound = matchRound || tournament.rounds.length;
   const totalRounds = tournament.config.totalRounds;
 
+  const playerCount =
+    tournament.standings.length > tournament.players.length
+      ? tournament.standings.length
+      : tournament.players.length;
+
   return (
     <>
       {amParticipant && (
@@ -92,8 +97,8 @@ const TournamentHeader = ({
 
           <Box display={'flex'} className={classes.noWrap}>
             <Typography variant={'subtitle2'} className={classes.noWrap}>
-              {`${tournament.standings.length} player${
-                tournament.standings.length !== 1 ? 's' : ''
+              {`${playerCount} player${
+                playerCount !== 1 ? 's' : ''
               } ${totalRounds} rounds`}
             </Typography>
           </Box>

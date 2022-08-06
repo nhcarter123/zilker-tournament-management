@@ -17,6 +17,7 @@
     "@types/seedrandom": "^3.0.2",
     "antd": "^4.16.13",
     "apollo-upload-client": "^17.0.0",
+    "caniuse-lite": "^1.0.30001374",
     "clsx": "^1.1.1",
     "cra-template-typescript": "1.1.2",
     "formik": "^2.2.9",

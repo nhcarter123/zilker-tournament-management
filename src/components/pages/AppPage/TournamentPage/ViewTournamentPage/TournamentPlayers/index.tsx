@@ -21,7 +21,7 @@ const splitToGroups = (array: Standing[], groupCount: number) => {
 
 const isUserAWinner = (user: User, groupedStandings: Standing[][]) => {
   let isWinner = false;
-  const groupIndex = groupedStandings.findIndex((group) =>
+  let groupIndex = groupedStandings.findIndex((group) =>
     group.find((standing) => standing.userId === user._id)
   );
 
@@ -36,6 +36,8 @@ const isUserAWinner = (user: User, groupedStandings: Standing[][]) => {
         isWinner = true;
       }
     }
+  } else {
+    groupIndex = 0;
   }
 
   return { groupIndex, isWinner };

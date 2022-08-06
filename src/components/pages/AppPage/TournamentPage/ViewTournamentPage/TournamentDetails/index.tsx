@@ -181,8 +181,8 @@ const TournamentDetails = ({
             label="Date"
             inputFormat="MM/dd/yyyy"
             value={tournament.date}
-            renderInput={(params) => <TextField {...params} />}
-            onChange={(date) =>
+            renderInput={(params: object) => <TextField {...params} />}
+            onChange={(date: string) =>
               updateTournament({
                 variables: {
                   tournamentId: tournament._id,

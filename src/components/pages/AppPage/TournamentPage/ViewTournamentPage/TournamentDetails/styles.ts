@@ -7,5 +7,11 @@ export const useStyles = makeStyles({
       width: '33.3333%',
       textAlign: 'center'
     }
+  },
+  disableSliderBackground: {
+    pointerEvents: 'none',
+    '& .MuiSlider-thumb': {
+      pointerEvents: 'all'
+    }
   }
 });

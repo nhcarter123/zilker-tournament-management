@@ -59,7 +59,11 @@ const ViewTournamentPage = ({
           right: 0
         }}
       >
-        <Box sx={{ height: '100%', maxWidth: '400px', width: '100%' }} px={1}>
+        <Box
+          sx={{ height: '100%', maxWidth: '400px', width: '100%' }}
+          px={1}
+          mx={'auto'}
+        >
           {loading && !users ? (
             <Spinner />
           ) : (

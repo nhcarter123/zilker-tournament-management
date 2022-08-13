@@ -3,8 +3,9 @@ import { useMutation } from '@apollo/client';
 import { debounce } from 'lodash';
 
 import { Box, Divider, Slider, TextField, Typography } from '@mui/material/';
-import { LocalizationProvider, MobileDatePicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { UPDATE_TOURNAMENT } from 'graphql/definitions/mutations';
 import { PairingAlgorithm, Tournament, TournamentStatus } from 'types/types';
@@ -181,8 +182,8 @@ const TournamentDetails = ({
             label="Date"
             inputFormat="MM/dd/yyyy"
             value={tournament.date}
-            renderInput={(params: object) => <TextField {...params} />}
-            onChange={(date: string) =>
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(date) =>
               updateTournament({
                 variables: {
                   tournamentId: tournament._id,
@@ -239,6 +240,7 @@ const TournamentDetails = ({
           <Box px={2}>
             <Slider
               key={`performanceWeight-${tournament.config.performanceWeight}`}
+              className={classes.disableSliderBackground}
               defaultValue={tournament.config.performanceWeight}
               valueLabelDisplay="off"
               onChange={debounce(handlePerformanceWeightSliderChange, 500)}
@@ -264,6 +266,7 @@ const TournamentDetails = ({
           <Box px={2}>
             <Slider
               key={`maxPunchDown-${tournament.config.maxPunchDown}`}
+              className={classes.disableSliderBackground}
               defaultValue={tournament.config.maxPunchDown}
               valueLabelDisplay="off"
               onChange={debounce(handleMaxPunchDownSliderChange, 500)}
@@ -289,6 +292,7 @@ const TournamentDetails = ({
         <Box px={2}>
           <Slider
             key={`skillGroupCount-${tournament.config.skillGroupCount}`}
+            className={classes.disableSliderBackground}
             defaultValue={tournament.config.skillGroupCount}
             onChange={debounce(handleSkillGroupCountSliderChange, 500)}
             marks={skillGroupCountMarks}

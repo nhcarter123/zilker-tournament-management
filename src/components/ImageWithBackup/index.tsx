@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Box } from '@mui/material/';
 
 interface IImageWithBackupProps {
   image?: string;
+  children?: ReactNode;
 }
 
 const ImageWithBackup: React.FC<IImageWithBackupProps> = ({

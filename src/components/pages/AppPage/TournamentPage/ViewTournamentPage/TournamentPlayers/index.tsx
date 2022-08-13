@@ -19,7 +19,11 @@ const splitToGroups = (array: Standing[], groupCount: number) => {
   return result;
 };
 
-const isUserAWinner = (user: User, groupedStandings: Standing[][]) => {
+const isUserAWinner = (
+  user: User,
+  groupedStandings: Standing[][],
+  canBeAWinner: boolean
+) => {
   let isWinner = false;
   let groupIndex = groupedStandings.findIndex((group) =>
     group.find((standing) => standing.userId === user._id)
@@ -27,7 +31,7 @@ const isUserAWinner = (user: User, groupedStandings: Standing[][]) => {
 
   if (groupIndex > -1) {
     const myGroup = groupedStandings[groupIndex];
-    if (myGroup) {
+    if (myGroup && canBeAWinner) {
       const myStanding = myGroup.find(
         (standing) => standing.userId === user._id
       );
@@ -49,7 +53,22 @@ const TournamentPlayers = ({
 }: TournamentRoundsProps): JSX.Element => {
   // todo move this mess to helper
 
-  const standingsByRating = [...tournament.standings].sort((a, b) => {
+  // If the first round has not completed, generate pseudo-standings base off of users list
+  const tournamentStandings = tournament.standings.length
+    ? [...tournament.standings]
+    : [...users].map((user, index) => ({
+        _id: user._id,
+        userId: user._id,
+        position: index,
+        score: 0,
+        win: 0,
+        loss: 0,
+        draw: 0,
+        bye: 0,
+        initialRating: user.rating
+      }));
+
+  const standingsByRating = tournamentStandings.sort((a, b) => {
     // legacy support
     const ratingA = users.find((user) => user._id === a.userId)?.rating || 0;
     const ratingB = users.find((user) => user._id === b.userId)?.rating || 0;
@@ -77,7 +96,7 @@ const TournamentPlayers = ({
     })
     .map((user) => ({
       ...user,
-      ...isUserAWinner(user, skillGroups)
+      ...isUserAWinner(user, skillGroups, tournament.rounds.length > 0)
     }));
 
   return (

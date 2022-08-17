@@ -50,7 +50,7 @@ const JoinTournamentButton = ({
           event.stopPropagation();
           if (me) {
             void joinTournament({
-              variables: { tournamentId, userId: me._id }
+              variables: { organizationId, tournamentId, userId: me._id }
             });
           } else {
             history.push(

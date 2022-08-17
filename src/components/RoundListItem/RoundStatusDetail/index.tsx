@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { useSubscription } from '@apollo/client';
 import { GET_ROUND } from 'graphql/definitions/queries';
@@ -9,7 +9,6 @@ import {
   MatchUpdatedData,
   MatchUpdatedVariables,
   MatchWithUserInfo,
-  Role,
   Round,
   RoundPreview,
   Tournament
@@ -19,7 +18,6 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
 import WinnerText from 'components/WinnerText';
-import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
 import { MATCH_UPDATED } from 'graphql/definitions/subscriptions';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
@@ -41,7 +39,6 @@ const RoundStatusDetail = ({
   tournament,
   roundPreview
 }: RoundProps): JSX.Element => {
-  const me = useContext(UserContext);
   const history = useHistory();
 
   const { data, loading } = useQueryWithReconnect<
@@ -102,9 +99,7 @@ const RoundStatusDetail = ({
           />
         </Box>
 
-        {!isByeRound &&
-        (me?.organizationId === tournament.organizationId ||
-          me?.role === Role.Admin) ? (
+        {!isByeRound && (
           <IconButton
             aria-label="view"
             color={'info'}
@@ -119,8 +114,6 @@ const RoundStatusDetail = ({
           >
             <LaunchIcon />
           </IconButton>
-        ) : (
-          <div />
         )}
       </Box>
     );

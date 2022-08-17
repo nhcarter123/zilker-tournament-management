@@ -26,15 +26,15 @@ const TournamentPage = ({
 }: TournamentPageProps): JSX.Element => {
   const { pathname, search } = useLocation();
   const contentRouter = () => {
-    if (pathname.includes('view')) {
-      if (pathname.includes('match')) {
-        return <ViewMatchPage />;
+    if (tournament) {
+      if (pathname.includes('view')) {
+        if (pathname.includes('match')) {
+          return <ViewMatchPage organizationId={tournament.organizationId} />;
+        }
+
+        return <ViewTournamentPage tournament={tournament} />;
       }
 
-      return <ViewTournamentPage tournament={tournament} />;
-    }
-
-    if (tournament) {
       return (
         <PlayPage
           tournament={tournament}

@@ -13,7 +13,7 @@ import { UserContext } from 'context/userContext';
 import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
 
 interface ViewTournamentPageProps {
-  tournament: Nullable<Tournament>;
+  tournament: Tournament;
 }
 
 const ViewTournamentPage = ({
@@ -22,7 +22,7 @@ const ViewTournamentPage = ({
   const [selectedRound, setSelectedRound] = useState<Nullable<string>>(null);
   const me = useContext(UserContext);
 
-  const userIds = tournament ? getUserAllUserIdsFromTournament(tournament) : [];
+  const userIds = getUserAllUserIdsFromTournament(tournament);
 
   useEffect(() => {
     if (tournament?.rounds.length) {
@@ -46,7 +46,6 @@ const ViewTournamentPage = ({
       {loading && !users ? (
         <Spinner />
       ) : (
-        tournament &&
         users && (
           <Box
             sx={{

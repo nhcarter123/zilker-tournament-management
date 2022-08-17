@@ -9,7 +9,13 @@ import { GET_MATCH } from 'graphql/definitions/queries';
 import { MatchWithUserInfo } from 'types/types';
 import { Page } from 'types/page';
 
-const ViewMatchPage = (): JSX.Element => {
+interface IViewMatchPageProps {
+  organizationId: string;
+}
+
+const ViewMatchPage = ({
+  organizationId
+}: IViewMatchPageProps): JSX.Element => {
   // todo maybe grab match from props?
   const page = useLocation().pathname;
   const pathMatch = matchPath<{ matchId?: string }>(page, {
@@ -37,7 +43,7 @@ const ViewMatchPage = (): JSX.Element => {
   return loading && !match ? (
     <Spinner />
   ) : match ? (
-    <MatchPage match={match} />
+    <MatchPage match={match} organizationId={organizationId} />
   ) : (
     <div>Match not found</div>
   );

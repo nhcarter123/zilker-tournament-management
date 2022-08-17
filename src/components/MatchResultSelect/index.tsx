@@ -15,15 +15,21 @@ import { UPDATE_MATCH } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/MatchResultSelect/styles';
-import { MatchResult, MatchWithUserInfo } from 'types/types';
+import { MatchResult, MatchWithUserInfo, Role } from 'types/types';
 import { WebsocketContext } from 'context/websocketContext';
+import { UserContext } from 'context/userContext';
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
+  organizationId: string;
 }
 
-const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
+const MatchResultSelect = ({
+  match,
+  organizationId
+}: MatchResultSelectProps): JSX.Element => {
   const { isOnline } = useContext(WebsocketContext);
+  const me = useContext(UserContext);
   const classes = useStyles();
 
   const [updateMatch, { loading }] = useMutation(UPDATE_MATCH, {
@@ -35,6 +41,14 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
       variables: { matchId: match._id, payload: { result: e.target.value } }
     });
   };
+
+  const canEdit =
+    me?.organizationId === organizationId ||
+    me?.role === Role.Admin ||
+    me?._id === match.white?._id ||
+    me?._id === match.black?._id;
+
+  const disabled = !isOnline || !canEdit;
 
   return (
     <Box mt={0.5}>
@@ -62,7 +76,7 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
               >
                 <Box className={classes.container}>
                   <FormControlLabel
-                    disabled={!isOnline}
+                    disabled={disabled}
                     control={<Radio />}
                     label={`${match.white?.firstName} won`}
                     value={MatchResult.WhiteWon}
@@ -71,7 +85,7 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
                 </Box>
                 <Box className={classes.container}>
                   <FormControlLabel
-                    disabled={!isOnline}
+                    disabled={disabled}
                     control={<Radio />}
                     label={`${match.black?.firstName} won`}
                     value={MatchResult.BlackWon}
@@ -86,13 +100,13 @@ const MatchResultSelect = ({ match }: MatchResultSelectProps): JSX.Element => {
                 row
               >
                 <FormControlLabel
-                  disabled={!isOnline}
+                  disabled={disabled}
                   control={<Radio />}
                   label="Draw"
                   value={MatchResult.Draw}
                 />
                 <FormControlLabel
-                  disabled={!isOnline}
+                  disabled={disabled}
                   control={<Radio />}
                   label="Did not start"
                   value={MatchResult.DidNotStart}

@@ -19,9 +19,10 @@ import clsx from 'clsx';
 
 interface MatchPageProps {
   match: MatchWithUserInfo;
+  organizationId: string;
 }
 
-const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
+const MatchPage = ({ match, organizationId }: MatchPageProps): JSX.Element => {
   const shortWindow = useMediaQuery({ query: '(max-height: 590px)' });
   const classes = useStyles();
 
@@ -101,7 +102,7 @@ const MatchPage = ({ match }: MatchPageProps): JSX.Element => {
 
             <Divider />
 
-            <MatchResultSelect match={match} />
+            <MatchResultSelect match={match} organizationId={organizationId} />
           </Box>
         )}
       </Box>

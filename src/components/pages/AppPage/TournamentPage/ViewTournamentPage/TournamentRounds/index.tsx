@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Checkbox, Typography } from '@mui/material/';
+import { Box, Checkbox, Divider, Typography } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
 import { NEXT_ROUND } from 'graphql/definitions/mutations';
-import { Tournament, TournamentStatus } from 'types/types';
+import { Role, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import { UserContext } from 'context/userContext';
 
@@ -34,6 +34,10 @@ const TournamentRounds = ({
 
   return (
     <>
+      <Box mt={3}>
+        <Divider />
+      </Box>
+
       <Typography variant={'h5'} align={'center'} mb={1} mt={2}>
         {`Rounds (${tournament.rounds.length})`}
       </Typography>
@@ -58,7 +62,8 @@ const TournamentRounds = ({
         ))}
       </Box>
 
-      {me?.organizationId === tournament.organizationId && (
+      {(me?.organizationId === tournament.organizationId ||
+        me?.role === Role.Admin) && (
         <>
           <Box
             mt={1}
@@ -77,6 +82,7 @@ const TournamentRounds = ({
             <Popconfirm
               title="Are you sure?"
               placement={'top'}
+              disabled={tournament.status === TournamentStatus.Completed}
               onConfirm={(): void => {
                 setIsMutationNewRound(true);
                 void completeRound({
@@ -104,6 +110,7 @@ const TournamentRounds = ({
             <Popconfirm
               title="Are you sure?"
               placement={'top'}
+              disabled={tournament.status === TournamentStatus.Completed}
               onConfirm={(): void => {
                 setIsMutationNewRound(false);
                 void completeRound({

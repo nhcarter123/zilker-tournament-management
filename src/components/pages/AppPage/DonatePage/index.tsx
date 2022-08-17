@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material/';
 import { Button } from 'antd';
 
-const RulesPage = (): JSX.Element => {
+const DonatePage = (): JSX.Element => {
   return (
     <Box m={2}>
       <Typography variant={'body2'}>
@@ -28,4 +28,4 @@ const RulesPage = (): JSX.Element => {
   );
 };
 
-export default RulesPage;
+export default DonatePage;

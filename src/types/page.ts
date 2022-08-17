@@ -1,15 +1,14 @@
 export enum Page {
   Login = '/login',
   MoreInfo = '/moreInfo',
-  App = '/app',
-  Profile = '/app/profile',
-  Community = '/app/Community',
-  Rules = '/app/rules',
-  Donate = '/app/donate',
-  Stats = '/app/stats',
-  Tournaments = '/app/tournaments',
-  Tournament = '/app/tournament/:tournamentId',
-  Search = '/app/search',
-  ViewMatch = '/app/tournament/:tournamentId/view/match/:matchId',
-  ViewTournament = '/app/tournament/:tournamentId/view'
+  Profile = '/profile',
+  Community = '/Community',
+  Rules = '/rules',
+  Donate = '/donate',
+  Stats = '/stats',
+  About = '/about',
+  Tournaments = '/tournaments',
+  Tournament = '/tournament/:tournamentId',
+  ViewMatch = '/tournament/:tournamentId/view/match/:matchId',
+  ViewTournament = '/tournament/:tournamentId/view'
 }

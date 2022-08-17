@@ -169,7 +169,6 @@ type Organization {
 
 type Query {
   me: User
-  getUser(userId: ID!): User
   getUsers(userIds: [ID!]!, filterTerm: String): [User!]!
 
   getMyTournament: Tournament

@@ -10,6 +10,7 @@ import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import CommunityPage from 'components/pages/AppPage/CommunityPage';
 import StatsPage from 'components/pages/AppPage/StatsPage';
 import DonatePage from 'components/pages/AppPage/DonatePage';
+import AboutPage from 'components/pages/AppPage/AboutPage';
 
 import {
   GET_MY_MATCH,
@@ -26,8 +27,10 @@ import { Page } from 'types/page';
 import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
 import { MyTournamentContext } from 'context/myTournamentContext';
 import { useSubscription } from '@apollo/client';
+import { UserContext } from 'context/userContext';
 
 const MainContent = (): JSX.Element => {
+  const me = useContext(UserContext);
   const history = useHistory();
   const { myTournamentId, setMyTournamentId } = useContext(MyTournamentContext);
   const page = useLocation().pathname;
@@ -103,6 +106,7 @@ const MainContent = (): JSX.Element => {
   }>(GET_MY_TOURNAMENT, {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
+    skip: !me,
     onCompleted: (data) => {
       const newTournamentId = data.getMyTournament?._id;
       if (newTournamentId && newTournamentId !== myTournamentId) {
@@ -151,6 +155,7 @@ const MainContent = (): JSX.Element => {
       <Route path={Page.Community} component={CommunityPage} />
       <Route path={Page.Rules} component={RulesPage} />
       <Route path={Page.Donate} component={DonatePage} />
+      <Route path={Page.About} component={AboutPage} />
       <Route path={Page.Stats} component={StatsPage} />
       <Route path={Page.Tournaments} component={TournamentsPage} />
       <Route

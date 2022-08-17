@@ -5,7 +5,7 @@ import { onError } from 'graphql/errorHandler';
 
 import { Button, Popconfirm } from 'antd';
 import { Box, Typography } from '@mui/material';
-import { IUserWithResult, Standing, Tournament } from 'types/types';
+import { IUserWithResult, Role, Standing, Tournament } from 'types/types';
 import { KICK_PLAYER } from 'graphql/definitions/mutations';
 import { UserContext } from 'context/userContext';
 import Bold from 'components/Bold';
@@ -88,24 +88,26 @@ const PlayerListItem = ({
           </Box>
         </Box>
 
-        {me?.organizationId === tournament.organizationId && isInTournament && (
-          <Popconfirm
-            title="Are you sure?"
-            placement={'left'}
-            onConfirm={(): void => {
-              void kickUser({
-                variables: {
-                  tournamentId: tournament._id,
-                  userId: user._id
-                }
-              });
-            }}
-          >
-            <Button size={'middle'} type="primary" loading={loading}>
-              Kick
-            </Button>
-          </Popconfirm>
-        )}
+        {(me?.organizationId === tournament.organizationId ||
+          me?.role === Role.Admin) &&
+          isInTournament && (
+            <Popconfirm
+              title="Are you sure?"
+              placement={'left'}
+              onConfirm={(): void => {
+                void kickUser({
+                  variables: {
+                    tournamentId: tournament._id,
+                    userId: user._id
+                  }
+                });
+              }}
+            >
+              <Button size={'middle'} type="primary" loading={loading}>
+                Kick
+              </Button>
+            </Popconfirm>
+          )}
       </Box>
     </>
   );

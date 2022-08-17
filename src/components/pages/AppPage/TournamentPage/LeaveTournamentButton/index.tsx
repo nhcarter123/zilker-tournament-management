@@ -7,6 +7,7 @@ import { onError } from 'graphql/errorHandler';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
 import { MyTournamentContext } from 'context/myTournamentContext';
+import { Box } from '@mui/material';
 
 interface LeaveTournamentButtonProps {
   tournamentId: string;
@@ -39,11 +40,13 @@ const LeaveTournamentButton = ({
         });
       }}
     >
-      <Button loading={loading} type="default" size={'small'}>
-        <div style={{ color: 'red', width: '40px' }}>
-          {loading ? '' : 'Leave'}
-        </div>
-      </Button>
+      <Box mr={1}>
+        <Button loading={loading} type="default" size={'small'}>
+          <div style={{ color: 'red', width: '40px' }}>
+            {loading ? '' : 'Leave'}
+          </div>
+        </Button>
+      </Box>
     </Popconfirm>
   );
 };

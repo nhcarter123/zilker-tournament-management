@@ -9,7 +9,7 @@ import TournamentPlayers from 'components/pages/AppPage/TournamentPage/ViewTourn
 import TournamentDetails from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails';
 
 import { GET_USERS } from 'graphql/definitions/queries';
-import { Tournament, User } from 'types/types';
+import { Role, Tournament, User } from 'types/types';
 import { UserContext } from 'context/userContext';
 
 interface ViewTournamentPageProps {
@@ -70,6 +70,10 @@ const ViewTournamentPage = ({
             tournament &&
             users && (
               <>
+                {(me?.organizationId === tournament.organizationId ||
+                  me?.role === Role.Admin) && (
+                  <TournamentDetails tournament={tournament} />
+                )}
                 <TournamentRounds
                   tournament={tournament}
                   selectedRound={selectedRound}
@@ -77,9 +81,6 @@ const ViewTournamentPage = ({
                 />
                 {tournament.players.length > 0 && (
                   <TournamentPlayers users={users} tournament={tournament} />
-                )}
-                {me?.organizationId === tournament.organizationId && (
-                  <TournamentDetails tournament={tournament} />
                 )}
                 <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
               </>

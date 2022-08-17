@@ -83,7 +83,7 @@ const TournamentHeader = ({
         </Box>
       )}
 
-      <Box className={classes.root}>
+      <Box className={classes.root} mr={2}>
         <Typography className={classes.noWrap} variant={'h5'}>
           {tournament.name}
         </Typography>

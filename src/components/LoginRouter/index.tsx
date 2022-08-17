@@ -18,6 +18,7 @@ import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/LoginRouter/styles';
 import { UserContext } from 'context/userContext';
+import { Redirect } from 'react-router';
 
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
@@ -39,10 +40,6 @@ const LoginRouter = (): JSX.Element => {
       }
     },
     onCompleted: () => {
-      if (history.location.pathname !== Page.Login && !data?.me) {
-        return history.push(Page.Login + history.location.search);
-      }
-
       if (
         (history.location.pathname === '/' ||
           history.location.pathname === Page.Login ||
@@ -85,6 +82,13 @@ const LoginRouter = (): JSX.Element => {
         <Spinner />
       ) : (
         <UserContext.Provider value={me}>
+          <Route exact path="/">
+            <Redirect to={Page.Tournaments} />
+          </Route>
+          {/*Legacy Support*/}
+          <Route path="/app">
+            <Redirect to={Page.Tournaments} />
+          </Route>
           <Route
             path={Page.Login}
             render={(): JSX.Element => <LoginPage verifyCode={verifyCode} />}
@@ -98,7 +102,19 @@ const LoginRouter = (): JSX.Element => {
               />
             )}
           />
-          <Route path={Page.App} component={AppPage} />
+          <Route
+            path={[
+              Page.Profile,
+              Page.Community,
+              Page.Rules,
+              Page.Donate,
+              Page.Stats,
+              Page.About,
+              '/tournament',
+              Page.Tournaments
+            ]}
+            component={AppPage}
+          />
         </UserContext.Provider>
       )}
     </div>

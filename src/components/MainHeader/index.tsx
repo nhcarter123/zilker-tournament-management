@@ -50,6 +50,10 @@ const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
         render={() => <SimpleHeader title={'Donate'} />}
       />
       <Route
+        path={Page.About}
+        render={() => <SimpleHeader title={'About'} />}
+      />
+      <Route
         path={Page.Stats}
         render={() => <SimpleHeader title={'Stats'} />}
       />

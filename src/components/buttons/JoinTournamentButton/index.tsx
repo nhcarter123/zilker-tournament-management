@@ -42,10 +42,17 @@ const JoinTournamentButton = ({
     <Box ml={1}>
       <Button
         size={'large'}
-        type="default"
+        type="primary"
         loading={loading}
-        onClick={(): void => {
-          me && joinTournament({ variables: { tournamentId, userId: me._id } });
+        onClick={(event): void => {
+          event.stopPropagation();
+          if (me) {
+            void joinTournament({
+              variables: { tournamentId, userId: me._id }
+            });
+          } else {
+            history.push(Page.Login + history.location.search);
+          }
         }}
       >
         Join

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -16,18 +16,23 @@ import ArticleIcon from '@mui/icons-material/Article';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PaidIcon from '@mui/icons-material/Paid';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { Page } from 'types/page';
 import { useStyles } from 'components/SideMenu/styles';
+import { UserContext } from 'context/userContext';
+import { compact } from 'lodash';
 
 enum MenuItem {
   Play = 'Play',
   Profile = 'Profile',
+  SignIn = 'Sign in',
   Tournaments = 'Tournaments',
   Rules = 'Rules',
   Community = 'Community',
   Stats = 'Stats',
-  Donate = 'Donate'
+  Donate = 'Donate',
+  About = 'About'
 }
 
 interface SideMenuProps {
@@ -36,23 +41,28 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
+  const me = useContext(UserContext);
   const classes = useStyles();
   const history = useHistory();
 
-  const menuItems = [
-    MenuItem.Play,
+  const menuItems = compact([
+    me && MenuItem.Profile,
+    !me && MenuItem.SignIn,
+    // MenuItem.Play,
     MenuItem.Tournaments,
-    MenuItem.Profile,
     MenuItem.Community,
     MenuItem.Rules,
     MenuItem.Stats,
-    MenuItem.Donate
-  ];
+    MenuItem.Donate,
+    MenuItem.About
+  ]);
 
   const generateMenuList = (list: string[]): JSX.Element => {
     const getIcon = (text: string): JSX.Element => {
       switch (text) {
         case MenuItem.Profile:
+          return <FaceIcon />;
+        case MenuItem.SignIn:
           return <FaceIcon />;
         case MenuItem.Tournaments:
           return <ArticleIcon />;
@@ -64,6 +74,8 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return <PaidIcon />;
         case MenuItem.Stats:
           return <TrendingUpIcon />;
+        case MenuItem.About:
+          return <InfoIcon />;
         case MenuItem.Play:
         default:
           return <SportsEsportsIcon />;
@@ -82,6 +94,10 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return Page.Donate;
         case MenuItem.Stats:
           return Page.Stats;
+        case MenuItem.SignIn:
+          return Page.Login;
+        case MenuItem.About:
+          return Page.About;
         case MenuItem.Play:
           return Page.Tournament.replace(':tournamentId', '');
         case MenuItem.Profile:

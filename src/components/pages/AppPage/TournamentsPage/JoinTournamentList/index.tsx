@@ -10,10 +10,11 @@ import ImageWithBackup from 'components/ImageWithBackup';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
+import { useHistory } from 'react-router-dom';
 import { TournamentStatus, TournamentWithOrganization } from 'types/types';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
-import { useHistory } from 'react-router-dom';
+import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
 
 interface JoinTournamentListProps {
   tournaments: TournamentWithOrganization[];
@@ -51,9 +52,7 @@ const JoinTournamentList = ({
           const amParticipant = tournament.players.includes(me?._id || '');
 
           const playerCount =
-            tournament.standings.length > tournament.players.length
-              ? tournament.standings.length
-              : tournament.players.length;
+            getUserAllUserIdsFromTournament(tournament).length;
 
           return (
             <Card
@@ -133,7 +132,10 @@ const JoinTournamentList = ({
 
                 {inNoneOfTheseTournaments &&
                   tournament.status === TournamentStatus.Active && (
-                    <JoinTournamentButton tournamentId={tournament._id} />
+                    <JoinTournamentButton
+                      tournamentId={tournament._id}
+                      organizationId={tournament.organizationId}
+                    />
                   )}
               </Box>
             </Card>

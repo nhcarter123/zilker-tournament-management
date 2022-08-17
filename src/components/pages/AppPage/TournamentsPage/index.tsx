@@ -8,7 +8,6 @@ import Spinner from 'components/Spinner';
 
 import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
 import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
-import { AUTO_JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
 
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 import { useMutation, useSubscription } from '@apollo/client';
@@ -20,6 +19,7 @@ import {
   TournamentWithOrganization
 } from 'types/types';
 import { Page } from 'types/page';
+import { JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
 
 const TournamentsPage = (): JSX.Element => {
   const history = useHistory();
@@ -28,12 +28,12 @@ const TournamentsPage = (): JSX.Element => {
     []
   );
 
-  const [autoJoinTournament, { loading: autoJoinLoading }] = useMutation<{
-    autoJoinTournament?: { tournamentId: string };
-  }>(AUTO_JOIN_TOURNAMENT, {
+  const [joinTournament, { loading: joinLoading }] = useMutation<{
+    joinTournament?: { tournamentId: string };
+  }>(JOIN_TOURNAMENT, {
     onError,
     onCompleted: (data) => {
-      const tournamentId = data.autoJoinTournament?.tournamentId;
+      const tournamentId = data.joinTournament?.tournamentId;
 
       if (tournamentId) {
         history.push(
@@ -46,20 +46,23 @@ const TournamentsPage = (): JSX.Element => {
 
   useEffect(() => {
     const organizationId = queryParams.get('join');
+    const tournamentId = queryParams.get('tournamentId');
 
     if (organizationId) {
       queryParams.delete('join');
+      queryParams.delete('tournamentId');
       history.replace({
         search: queryParams.toString()
       });
 
-      void autoJoinTournament({
+      void joinTournament({
         variables: {
-          organizationId
+          organizationId,
+          tournamentId
         }
       });
     }
-  }, [queryParams, autoJoinTournament, history]);
+  }, [queryParams, joinLoading, history, joinTournament]);
 
   const { data, loading } = useQueryWithReconnect<{
     getTournaments: TournamentWithOrganization[];
@@ -97,7 +100,7 @@ const TournamentsPage = (): JSX.Element => {
   //   (tournament) => tournament.status === TournamentStatus.Completed
   // );
 
-  return autoJoinLoading || (loading && !data) ? (
+  return joinLoading || (loading && !data) ? (
     <Spinner />
   ) : (
     <Box display={'flex'} justifyContent={'center'} height={'100%'}>

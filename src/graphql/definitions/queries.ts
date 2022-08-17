@@ -48,6 +48,7 @@ export const GET_TOURNAMENTS = gql`
         _id
       }
       photo
+      organizationId
       organization {
         _id
         name

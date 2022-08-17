@@ -12,10 +12,12 @@ import { MyTournamentContext } from 'context/myTournamentContext';
 
 interface JoinTournamentButtonProps {
   tournamentId: string;
+  organizationId: string;
 }
 
 const JoinTournamentButton = ({
-  tournamentId
+  tournamentId,
+  organizationId
 }: JoinTournamentButtonProps): JSX.Element => {
   const me = useContext(UserContext);
   const { setMyTournamentId } = useContext(MyTournamentContext);
@@ -51,7 +53,9 @@ const JoinTournamentButton = ({
               variables: { tournamentId, userId: me._id }
             });
           } else {
-            history.push(Page.Login + history.location.search);
+            history.push(
+              `${Page.Login}?join=${organizationId}&tournamentId=${tournamentId}`
+            );
           }
         }}
       >

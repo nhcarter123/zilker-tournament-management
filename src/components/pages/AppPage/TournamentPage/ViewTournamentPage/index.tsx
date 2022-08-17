@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { uniq } from 'lodash';
 import { useQuery } from '@apollo/client';
 
 import { Box } from '@mui/material/';
@@ -11,6 +10,7 @@ import TournamentDetails from 'components/pages/AppPage/TournamentPage/ViewTourn
 import { GET_USERS } from 'graphql/definitions/queries';
 import { Role, Tournament, User } from 'types/types';
 import { UserContext } from 'context/userContext';
+import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
 
 interface ViewTournamentPageProps {
   tournament: Nullable<Tournament>;
@@ -22,12 +22,7 @@ const ViewTournamentPage = ({
   const [selectedRound, setSelectedRound] = useState<Nullable<string>>(null);
   const me = useContext(UserContext);
 
-  const standings = tournament?.standings || [];
-  const players = tournament?.players || [];
-  const userIds = uniq([
-    ...standings.map((standing) => standing.userId),
-    ...players
-  ]);
+  const userIds = tournament ? getUserAllUserIdsFromTournament(tournament) : [];
 
   useEffect(() => {
     if (tournament?.rounds.length) {

@@ -48,8 +48,11 @@ export const UPDATE_TOURNAMENT = gql`
 `;
 
 export const JOIN_TOURNAMENT = gql`
-  mutation JoinTournament($tournamentId: ID!, $userId: ID!) {
-    joinTournament(tournamentId: $tournamentId, userId: $userId) {
+  mutation JoinTournament($organizationId: ID!, $tournamentId: ID) {
+    joinTournament(
+      organizationId: $organizationId
+      tournamentId: $tournamentId
+    ) {
       tournamentId
     }
   }
@@ -84,14 +87,6 @@ export const DELETE_ROUND = gql`
 export const UPDATE_MATCH = gql`
   mutation UpdateMatch($matchId: ID!, $payload: UpdateMatchPayload!) {
     updateMatch(matchId: $matchId, payload: $payload)
-  }
-`;
-
-export const AUTO_JOIN_TOURNAMENT = gql`
-  mutation AutoJoinTournament($organizationId: ID!) {
-    autoJoinTournament(organizationId: $organizationId) {
-      tournamentId
-    }
   }
 `;
 

@@ -11,6 +11,7 @@ import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { Tournament, TournamentStatus } from 'types/types';
+import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
 
 interface TournamentHeaderProps {
   tournament: Nullable<Tournament>;
@@ -44,10 +45,7 @@ const TournamentHeader = ({
   const currentRound = matchRound || tournament.rounds.length;
   const totalRounds = tournament.config.totalRounds;
 
-  const playerCount =
-    tournament.standings.length > tournament.players.length
-      ? tournament.standings.length
-      : tournament.players.length;
+  const playerCount = getUserAllUserIdsFromTournament(tournament).length;
 
   return (
     <>

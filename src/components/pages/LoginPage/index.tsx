@@ -21,7 +21,14 @@ const LoginPage = ({ verifyCode }: LoginPageProps): JSX.Element => {
   return (
     <div>
       <Typography variant={'h4'} align={'center'}>
-        Welcome
+        Welcome 👋
+      </Typography>
+      <Typography
+        variant={'body2'}
+        align={'center'}
+        sx={{ marginBottom: '-12px', color: 'gray' }}
+      >
+        new or existing user sign in
       </Typography>
       <SendCodeForm
         hasSentCode={hasSentCode}

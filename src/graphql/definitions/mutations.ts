@@ -20,9 +20,17 @@ export const DELETE_PHOTO = gql`
   }
 `;
 
-export const SEND_VERIFICATION_CODE = gql`
-  mutation SendVerificationCode($phone: String!) {
-    sendVerificationCode(phone: $phone)
+export const LOGIN_PHONE = gql`
+  mutation LoginPhone($phone: String!) {
+    loginPhone(phone: $phone)
+  }
+`;
+
+export const LOGIN_EMAIL = gql`
+  mutation LoginPhone($email: String!, $password: String!) {
+    loginEmail(email: $email, password: $password) {
+      token
+    }
   }
 `;
 

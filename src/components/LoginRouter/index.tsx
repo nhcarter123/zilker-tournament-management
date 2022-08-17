@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 
@@ -11,6 +11,8 @@ import { GET_ME } from 'graphql/definitions/queries';
 import { Page } from 'types/page';
 import { User } from 'types/types';
 import {
+  LOGIN_EMAIL,
+  LOGIN_PHONE,
   UPDATE_USER_DETAILS,
   VERIFY_CODE
 } from 'graphql/definitions/mutations';
@@ -23,6 +25,7 @@ import { Redirect } from 'react-router';
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
   const classes = useStyles();
+  const [tooManyCodesError, setTooManyCodesError] = useState(false);
 
   const token = localStorage.getItem('token');
 
@@ -54,6 +57,30 @@ const LoginRouter = (): JSX.Element => {
       }
     }
   });
+
+  const [loginEmail, { loading: loginEmailLoading }] = useMutation(
+    LOGIN_EMAIL,
+    {
+      onError: (error) => {
+        setTooManyCodesError(error.message.includes('Rate limit exceeded'));
+        onError(error);
+      },
+      onCompleted: (data) => {
+        localStorage.setItem('token', data.loginEmail.token);
+        void refetch();
+      }
+    }
+  );
+
+  const [loginPhone, { loading: loginPhoneLoading }] = useMutation(
+    LOGIN_PHONE,
+    {
+      onError: (error) => {
+        setTooManyCodesError(error.message.includes('Rate limit exceeded'));
+        onError(error);
+      }
+    }
+  );
 
   const [verifyCode, { loading: verifyCodeLoading }] = useMutation(
     VERIFY_CODE,
@@ -91,7 +118,15 @@ const LoginRouter = (): JSX.Element => {
           </Route>
           <Route
             path={Page.Login}
-            render={(): JSX.Element => <LoginPage verifyCode={verifyCode} />}
+            render={(): JSX.Element => (
+              <LoginPage
+                verifyCode={verifyCode}
+                loginEmail={loginEmail}
+                loginPhone={loginPhone}
+                tooManyCodesError={tooManyCodesError}
+                loading={loginPhoneLoading || loginEmailLoading}
+              />
+            )}
           />
           <Route
             path={Page.MoreInfo}

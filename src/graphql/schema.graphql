@@ -50,7 +50,8 @@ type User {
   _id: String!
   firstName: String
   lastName: String
-  phone: String!
+  phone: String
+  email: String
   photo: String
   rating: Int
   matchesPlayed: Int
@@ -198,7 +199,8 @@ type Mutation {
   verifyCode(code: String!): User
   uploadPhoto(photo: Upload!): Boolean!
   deletePhoto: Boolean!
-  sendVerificationCode(phone: String!): Boolean!
+  loginPhone(phone: String!): Boolean!
+  loginEmail(email: String!, password: String!): User
   updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
 
   # Match

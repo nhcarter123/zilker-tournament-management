@@ -5,6 +5,7 @@ export const GET_ME = gql`
     me {
       _id
       phone
+      email
       photo
       firstName
       lastName

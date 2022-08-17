@@ -11,20 +11,21 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 import FaceIcon from '@mui/icons-material/Face';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import ArticleIcon from '@mui/icons-material/Article';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PaidIcon from '@mui/icons-material/Paid';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoIcon from '@mui/icons-material/Info';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 import { Page } from 'types/page';
 import { useStyles } from 'components/SideMenu/styles';
 import { UserContext } from 'context/userContext';
 import { compact } from 'lodash';
+import { MyTournamentContext } from 'context/myTournamentContext';
 
 enum MenuItem {
-  Play = 'Play',
+  Play = 'My tournament',
   Profile = 'Profile',
   SignIn = 'Sign in',
   Tournaments = 'Tournaments',
@@ -41,14 +42,15 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
+  const { myTournamentId } = useContext(MyTournamentContext);
   const me = useContext(UserContext);
   const classes = useStyles();
   const history = useHistory();
 
   const menuItems = compact([
+    myTournamentId && MenuItem.Play,
     me && MenuItem.Profile,
     !me && MenuItem.SignIn,
-    // MenuItem.Play,
     MenuItem.Tournaments,
     MenuItem.Community,
     MenuItem.Rules,
@@ -78,7 +80,7 @@ const SideMenu = ({ open, setOpen }: SideMenuProps): JSX.Element => {
           return <InfoIcon />;
         case MenuItem.Play:
         default:
-          return <SportsEsportsIcon />;
+          return <SettingsBackupRestoreIcon />;
       }
     };
 

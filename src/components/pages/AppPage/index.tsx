@@ -14,14 +14,14 @@ const AppPage = (): JSX.Element => {
 
   return (
     <div className={classes.root}>
-      <SideMenu open={open} setOpen={setOpen} />
-      <MainHeader setOpen={setOpen} />
-
-      <Box pt={1}>
-        <Divider />
-      </Box>
-
       <MyTournamentContextProvider>
+        <SideMenu open={open} setOpen={setOpen} />
+        <MainHeader setOpen={setOpen} />
+
+        <Box pt={1}>
+          <Divider />
+        </Box>
+
         <MainContent />
       </MyTournamentContextProvider>
     </div>

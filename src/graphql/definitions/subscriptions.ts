@@ -24,6 +24,7 @@ export const TOURNAMENT_UPDATED = gql`
         date
         status
         players
+        organizationId
         rounds {
           _id
           matches

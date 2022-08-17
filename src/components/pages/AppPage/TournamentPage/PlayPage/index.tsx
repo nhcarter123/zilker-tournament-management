@@ -44,7 +44,9 @@ const PlayPage = ({
     }
 
     if (myMatch) {
-      return <MatchPage match={myMatch} />;
+      return (
+        <MatchPage match={myMatch} organizationId={tournament.organizationId} />
+      );
     }
 
     return (

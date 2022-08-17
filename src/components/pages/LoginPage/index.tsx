@@ -4,12 +4,17 @@ import SendCodeForm from 'components/forms/SendCodeForm';
 import CodeInput from 'components/CodeInput';
 
 import { Typography, Box } from '@mui/material';
-import { Button } from 'antd';
+import { Button, Radio } from 'antd';
 
 export enum EVerificationMethod {
   Phone = 'Phone',
   Email = 'Email'
 }
+
+const signInOptions = [
+  { label: 'Register', value: true },
+  { label: 'Login', value: false }
+];
 
 interface LoginPageProps {
   verifyCode: Function;
@@ -30,6 +35,7 @@ const LoginPage = ({
   const [verificationMethod, setVerificationMethod] = useState(
     EVerificationMethod.Email
   );
+  const [isNewUser, setIsNewUser] = useState<boolean>(true);
 
   return (
     <>
@@ -51,21 +57,10 @@ const LoginPage = ({
           <div />
 
           <div>
-            <Box display={'flex'}>
+            <Box display={'flex'} justifyContent={'center'} mb={2}>
               <Box mr={1}>
                 <Typography variant={'h4'} align={'center'}>
                   Welcome
-                </Typography>
-                <Typography
-                  variant={'body2'}
-                  align={'center'}
-                  sx={{
-                    marginBottom: '-12px',
-                    marginTop: '-4px',
-                    color: 'gray'
-                  }}
-                >
-                  New or existing user
                 </Typography>
               </Box>
 
@@ -81,8 +76,25 @@ const LoginPage = ({
               loginEmail={loginEmail}
               loginPhone={loginPhone}
               loading={loading}
+              isNewUser={isNewUser}
             />
             {hasSentCode && !loading && <CodeInput verifyCode={verifyCode} />}
+
+            {verificationMethod === EVerificationMethod.Email && (
+              <Box mt={2} display={'flex'} justifyContent={'center'}>
+                <Box>
+                  <Radio.Group
+                    style={{ width: '100%' }}
+                    // className={classes.root}
+                    onChange={(e) => setIsNewUser(e.target.value)}
+                    options={signInOptions}
+                    value={isNewUser}
+                    optionType="button"
+                    buttonStyle="solid"
+                  />
+                </Box>
+              </Box>
+            )}
           </div>
 
           <Box

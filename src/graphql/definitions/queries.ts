@@ -33,6 +33,10 @@ export const GET_MY_TOURNAMENT = gql`
     getMyTournament {
       _id
       players
+      standings {
+        _id
+        userId
+      }
     }
   }
 `;

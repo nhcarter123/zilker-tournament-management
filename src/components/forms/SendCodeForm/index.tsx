@@ -13,6 +13,7 @@ interface SignupValues {
   phoneNumber: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 interface SendCodeFormProps {
@@ -22,6 +23,7 @@ interface SendCodeFormProps {
   loginEmail: Function;
   loginPhone: Function;
   verificationMethod: EVerificationMethod;
+  isNewUser: boolean;
 }
 
 const getPasswordErrors = (password: string): Maybe<string> => {
@@ -34,12 +36,22 @@ const getPasswordErrors = (password: string): Maybe<string> => {
   }
 };
 
+const getConfirmPasswordErrors = (
+  password: string,
+  confirmPassword: string
+): Maybe<string> => {
+  if (password !== confirmPassword) {
+    return 'Passwords do no match';
+  }
+};
+
 const SendCodeForm = ({
   loading,
   hasSentCode,
   setHasSentCode,
   loginEmail,
   loginPhone,
+  isNewUser,
   verificationMethod
 }: SendCodeFormProps): JSX.Element => {
   const classes = useStyles();
@@ -47,7 +59,8 @@ const SendCodeForm = ({
   const initialValues: SignupValues = {
     phoneNumber: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   };
 
   const { setFieldValue, setFieldError, values, errors, submitForm } =
@@ -80,7 +93,7 @@ const SendCodeForm = ({
         return submitForm();
       }}
     >
-      <Box mt={4}>
+      <>
         <Box mb={2}>
           {verificationMethod === EVerificationMethod.Phone ? (
             <PhoneInput
@@ -136,6 +149,32 @@ const SendCodeForm = ({
                   {errors.password}
                 </Typography>
               </Box>
+
+              {isNewUser && (
+                <Box mt={1}>
+                  <Input
+                    placeholder="Confirm password"
+                    size={'large'}
+                    type={'password'}
+                    status={errors.confirmPassword ? 'error' : undefined}
+                    onChange={(e): void => {
+                      setFieldValue('confirmPassword', e.target.value);
+                    }}
+                    onBlur={() =>
+                      setFieldError(
+                        'confirmPassword',
+                        getConfirmPasswordErrors(
+                          values.password,
+                          values.confirmPassword
+                        )
+                      )
+                    }
+                  />
+                  <Typography variant={'body2'} color={'#ff5a5a'}>
+                    {errors.confirmPassword}
+                  </Typography>
+                </Box>
+              )}
             </Box>
           )}
         </Box>
@@ -150,7 +189,12 @@ const SendCodeForm = ({
             !(
               values.phoneNumber.length ||
               (EmailValidator.validate(values.email) &&
-                !getPasswordErrors(values.password))
+                !getPasswordErrors(values.password) &&
+                (!getConfirmPasswordErrors(
+                  values.password,
+                  values.confirmPassword
+                ) ||
+                  !isNewUser))
             )
           }
           onSubmit={(e): Promise<void> => {
@@ -163,7 +207,7 @@ const SendCodeForm = ({
             ? 'Resend code'
             : 'Login'}
         </Button>
-      </Box>
+      </>
     </form>
   );
 };

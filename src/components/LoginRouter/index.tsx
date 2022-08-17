@@ -18,11 +18,12 @@ import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/LoginRouter/styles';
 import { UserContext } from 'context/userContext';
-import { Redirect } from 'react-router';
+import { Redirect, useLocation } from 'react-router';
 
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
   const classes = useStyles();
+  const { pathname } = useLocation();
 
   const token = localStorage.getItem('token');
 
@@ -40,6 +41,7 @@ const LoginRouter = (): JSX.Element => {
       }
     },
     onCompleted: () => {
+      console.log(data);
       if (
         (history.location.pathname === '/' ||
           history.location.pathname === Page.Login ||
@@ -73,6 +75,8 @@ const LoginRouter = (): JSX.Element => {
     });
 
   const me = data?.me || null;
+
+  console.log(pathname);
 
   return (
     <div className={classes.root}>

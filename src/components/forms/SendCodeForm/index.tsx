@@ -68,7 +68,7 @@ const SendCodeForm = (props: SendCodeFormProps): JSX.Element => {
           size={'large'}
           type="primary"
           htmlType={'submit'}
-          disabled={!isValid || props.loading}
+          disabled={!isValid || props.loading || !values.phoneNumber.length}
           onSubmit={(e): Promise<void> => {
             e.preventDefault();
             return submitForm();

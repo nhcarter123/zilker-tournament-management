@@ -1,5 +1,6 @@
 import React from 'react';
-import { CircularProgress, LinearProgress, Box } from '@mui/material';
+import { LinearProgress, Box } from '@mui/material';
+import { Spin } from 'antd';
 import { useStyles } from 'components/Spinner/styles';
 
 interface SpinnerProps {
@@ -17,7 +18,7 @@ const Spinner = ({ linear }: SpinnerProps): JSX.Element => {
     <div className={classes.spinner}>
       <div />
       <Box display={'flex'} alignItems={'center'}>
-        <CircularProgress size={120} color={'inherit'} />
+        <Spin size="large" />
       </Box>
       <div />
     </div>

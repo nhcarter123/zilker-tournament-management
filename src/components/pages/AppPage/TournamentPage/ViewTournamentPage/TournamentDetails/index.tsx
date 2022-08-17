@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useMutation } from '@apollo/client';
 import { debounce } from 'lodash';
 
-import { Box, Slider, TextField, Typography } from '@mui/material/';
+import { Box, Divider, Slider, TextField, Typography } from '@mui/material/';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -297,6 +297,10 @@ const TournamentDetails = ({
             step={1}
           />
         </Box>
+      </Box>
+
+      <Box mb={3}>
+        <Divider />
       </Box>
     </>
   );

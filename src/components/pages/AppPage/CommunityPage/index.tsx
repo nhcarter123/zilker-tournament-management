@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, IconButton, Typography } from '@mui/material/';
 
-import { ReactComponent as FacebookIcon } from 'svg/facebook.svg';
-import { ReactComponent as MeetupIcon } from 'svg/meetup.svg';
+import { ReactComponent as FacebookIcon } from 'image/facebook.svg';
+import { ReactComponent as MeetupIcon } from 'image/meetup.svg';
 import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({

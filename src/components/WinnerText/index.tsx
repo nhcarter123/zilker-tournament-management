@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { useStyles } from 'components/WinnerText/styles';
 
-import { ReactComponent as CrownIcon } from 'svg/crown.svg';
+import { ReactComponent as CrownIcon } from 'image/crown.svg';
 import { Variant } from '@mui/material/styles/createTypography';
 
 interface MatchResultSelectProps {

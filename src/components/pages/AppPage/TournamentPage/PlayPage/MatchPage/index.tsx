@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import Player from 'components/Player';
 import MatchResultSelect from 'components/MatchResultSelect';
 
-import ChessBoard from 'svg/chessBoard.svg';
+import ChessBoard from 'image/chessBoard.svg';
 
 import { MATCH_UPDATED } from 'graphql/definitions/subscriptions';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/MatchPage/styles';

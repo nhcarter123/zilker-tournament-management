@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material/';
-import Hand from 'svg/phone_hand.jpg';
+import Hand from 'image/phone_hand.jpg';
 
 const AboutPage = (): JSX.Element => {
   return (

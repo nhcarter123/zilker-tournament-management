@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Divider, Typography } from '@mui/material/';
+import { Box, Typography } from '@mui/material/';
 
 import { IUserWithResult, Standing, Tournament, User } from 'types/types';
 import PlayerListItem from 'components/PlayerListItem';

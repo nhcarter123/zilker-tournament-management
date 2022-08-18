@@ -101,16 +101,28 @@ const SendCodeForm = ({
       <>
         <Box mb={2}>
           {verificationMethod === EVerificationMethod.Phone ? (
-            <PhoneInput
-              className={classes.phoneInput}
-              defaultCountry="US"
-              placeholder="Phone number"
-              name="phoneNumber"
-              value={values.phoneNumber}
-              onChange={(e): void => {
-                setFieldValue('phoneNumber', e);
-              }}
-            />
+            <>
+              <PhoneInput
+                className={classes.phoneInput}
+                defaultCountry="US"
+                placeholder="Phone number"
+                name="phoneNumber"
+                value={values.phoneNumber}
+                onChange={(e): void => {
+                  setFieldValue('phoneNumber', e);
+                }}
+              />
+              <Typography
+                variant={'body2'}
+                style={{
+                  marginTop: '8px',
+                  color: '#838383',
+                  fontSize: '12px'
+                }}
+              >
+                ⚠️ Phone login experiencing outages due to attacks
+              </Typography>
+            </>
           ) : (
             <Box>
               <Input

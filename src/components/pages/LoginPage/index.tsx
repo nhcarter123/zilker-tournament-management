@@ -29,7 +29,7 @@ const signInOptions = [
 const LoginPage = (): JSX.Element => {
   const [hasSentCode, setHasSentCode] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState(
-    EVerificationMethod.Phone
+    EVerificationMethod.Email
   );
   const [isNewUser, setIsNewUser] = useState<boolean>(true);
 

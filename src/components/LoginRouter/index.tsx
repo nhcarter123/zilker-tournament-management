@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 
@@ -10,12 +10,7 @@ import Spinner from 'components/Spinner';
 import { GET_ME } from 'graphql/definitions/queries';
 import { Page } from 'types/page';
 import { User } from 'types/types';
-import {
-  LOGIN_EMAIL,
-  LOGIN_PHONE,
-  UPDATE_USER_DETAILS,
-  VERIFY_CODE
-} from 'graphql/definitions/mutations';
+import { UPDATE_USER_DETAILS } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 
 import { useStyles } from 'components/LoginRouter/styles';
@@ -25,15 +20,13 @@ import { Redirect } from 'react-router';
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
   const classes = useStyles();
-  const [tooManyCodesError, setTooManyCodesError] = useState(false);
 
   const token = localStorage.getItem('token');
 
   const {
     data,
     loading: meLoading,
-    networkStatus,
-    refetch
+    networkStatus
   } = useQuery<{ me: Nullable<User> }>(GET_ME, {
     fetchPolicy: 'no-cache', // todo test
     notifyOnNetworkStatusChange: true,
@@ -58,54 +51,18 @@ const LoginRouter = (): JSX.Element => {
     }
   });
 
-  const [loginEmail, { loading: loginEmailLoading }] = useMutation(
-    LOGIN_EMAIL,
-    {
-      onError: (error) => {
-        setTooManyCodesError(error.message.includes('Rate limit exceeded'));
-        onError(error);
-      },
-      onCompleted: (data) => {
-        localStorage.setItem('token', data.loginEmail.token);
-        void refetch();
-      }
-    }
-  );
-
-  const [loginPhone, { loading: loginPhoneLoading }] = useMutation(
-    LOGIN_PHONE,
-    {
-      onError: (error) => {
-        setTooManyCodesError(error.message.includes('Rate limit exceeded'));
-        onError(error);
-      }
-    }
-  );
-
-  const [verifyCode, { loading: verifyCodeLoading }] = useMutation(
-    VERIFY_CODE,
-    {
-      onError,
-      onCompleted: (data) => {
-        localStorage.setItem('token', data.verifyCode.token);
-        void refetch();
-      }
-    }
-  );
-
   const [updateUserDetails, { loading: updateUserDetailsLoading }] =
     useMutation(UPDATE_USER_DETAILS, {
       onError,
-      onCompleted: refetch
+      refetchQueries: [GET_ME]
     });
 
   const me = data?.me || null;
 
   return (
     <div className={classes.root}>
-      {(meLoading &&
-        (!me?.firstName || networkStatus !== NetworkStatus.refetch)) ||
-      verifyCodeLoading ? (
+      {meLoading &&
+      (!me?.firstName || networkStatus !== NetworkStatus.refetch) ? (
         <Spinner />
       ) : (
         <UserContext.Provider value={me}>
@@ -116,18 +73,7 @@ const LoginRouter = (): JSX.Element => {
           <Route path="/app">
             <Redirect to={Page.Tournaments} />
           </Route>
-          <Route
-            path={Page.Login}
-            render={(): JSX.Element => (
-              <LoginPage
-                verifyCode={verifyCode}
-                loginEmail={loginEmail}
-                loginPhone={loginPhone}
-                tooManyCodesError={tooManyCodesError}
-                loading={loginPhoneLoading || loginEmailLoading}
-              />
-            )}
-          />
+          <Route path={Page.Login} component={LoginPage} />
           <Route
             path={Page.MoreInfo}
             render={(): JSX.Element => (

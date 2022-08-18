@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { Button, Input } from 'antd';
 import * as EmailValidator from 'email-validator';
@@ -14,16 +14,6 @@ interface SignupValues {
   email: string;
   password: string;
   confirmPassword: string;
-}
-
-interface SendCodeFormProps {
-  loading: boolean;
-  hasSentCode: boolean;
-  setHasSentCode: Dispatch<SetStateAction<boolean>>;
-  loginEmail: Function;
-  loginPhone: Function;
-  verificationMethod: EVerificationMethod;
-  isNewUser: boolean;
 }
 
 const getPasswordErrors = (password: string): Maybe<string> => {
@@ -45,12 +35,22 @@ const getConfirmPasswordErrors = (
   }
 };
 
+interface SendCodeFormProps {
+  loading: boolean;
+  hasSentCode: boolean;
+  verifyPhone: Function;
+  verifyEmail: Function;
+  loginEmail: Function;
+  verificationMethod: EVerificationMethod;
+  isNewUser: boolean;
+}
+
 const SendCodeForm = ({
   loading,
   hasSentCode,
-  setHasSentCode,
+  verifyPhone,
+  verifyEmail,
   loginEmail,
-  loginPhone,
   isNewUser,
   verificationMethod
 }: SendCodeFormProps): JSX.Element => {
@@ -68,9 +68,16 @@ const SendCodeForm = ({
       initialValues,
       onSubmit: (values) => {
         if (values.phoneNumber) {
-          loginPhone({
+          verifyPhone({
             variables: {
               phone: values.phoneNumber
+            }
+          });
+        } else if (isNewUser) {
+          verifyEmail({
+            variables: {
+              email: values.email,
+              password: values.password
             }
           });
         } else {
@@ -81,8 +88,6 @@ const SendCodeForm = ({
             }
           });
         }
-
-        setHasSentCode(true);
       }
     });
 
@@ -205,6 +210,8 @@ const SendCodeForm = ({
         >
           {verificationMethod === EVerificationMethod.Phone && hasSentCode
             ? 'Resend code'
+            : isNewUser
+            ? 'Register'
             : 'Login'}
         </Button>
       </>

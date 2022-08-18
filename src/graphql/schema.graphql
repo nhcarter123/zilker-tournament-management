@@ -199,7 +199,9 @@ type Mutation {
   verifyCode(code: String!): User
   uploadPhoto(photo: Upload!): Boolean!
   deletePhoto: Boolean!
-  loginPhone(phone: String!): Boolean!
+  verifyCode(code: String!): User
+  verifyPhone(phone: String!): Boolean!
+  verifyEmail(email: String!, password: String!): Boolean!
   loginEmail(email: String!, password: String!): User
   updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
 

@@ -125,7 +125,7 @@ const SendCodeForm = ({
                   )
                 }
               />
-              <Typography variant={'body2'} color={'#ff5a5a'}>
+              <Typography variant={'body2'} color={'#ff5454'}>
                 {errors.email}
               </Typography>
 
@@ -145,7 +145,7 @@ const SendCodeForm = ({
                     )
                   }
                 />
-                <Typography variant={'body2'} color={'#ff5a5a'}>
+                <Typography variant={'body2'} color={'#ff5454'}>
                   {errors.password}
                 </Typography>
               </Box>

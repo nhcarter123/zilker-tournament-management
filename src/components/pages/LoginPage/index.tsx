@@ -33,7 +33,7 @@ const LoginPage = ({
 }: LoginPageProps): JSX.Element => {
   const [hasSentCode, setHasSentCode] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState(
-    EVerificationMethod.Email
+    EVerificationMethod.Phone
   );
   const [isNewUser, setIsNewUser] = useState<boolean>(true);
 
@@ -105,7 +105,6 @@ const LoginPage = ({
           >
             <Button
               type={'link'}
-              disabled
               onClick={() =>
                 setVerificationMethod(
                   verificationMethod === EVerificationMethod.Phone
@@ -119,9 +118,6 @@ const LoginPage = ({
                 ? ' email'
                 : ' phone number'}
             </Button>
-            <Typography variant={'body2'} sx={{ color: 'gray' }}>
-              Phone sign-in is experiencing a temporary outage
-            </Typography>
           </Box>
         </Box>
       )}

@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { Button, Popconfirm } from 'antd';
-import { Box, Checkbox, Typography } from '@mui/material/';
+import { Box, Checkbox, Divider, Typography } from '@mui/material/';
 import RoundListItem from 'components/RoundListItem';
 
 import { NEXT_ROUND } from 'graphql/definitions/mutations';
@@ -135,6 +135,10 @@ const TournamentRounds = ({
           </Box>
         </>
       )}
+
+      <Box mb={3}>
+        <Divider />
+      </Box>
     </>
   );
 };

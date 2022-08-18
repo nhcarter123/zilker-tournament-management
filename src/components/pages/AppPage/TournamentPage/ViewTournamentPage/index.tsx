@@ -77,7 +77,6 @@ const ViewTournamentPage = ({
               {tournament.players.length > 0 ? (
                 <Box>
                   <TournamentPlayers users={users} tournament={tournament} />
-                  <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
                 </Box>
               ) : (
                 <Box mt={2}>
@@ -87,6 +86,7 @@ const ViewTournamentPage = ({
                   </Typography>
                 </Box>
               )}
+              <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
             </Box>
           </Box>
         )

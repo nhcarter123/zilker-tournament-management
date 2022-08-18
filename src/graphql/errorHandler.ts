@@ -15,7 +15,9 @@ export const onError = (error: ApolloError): void => {
     openNotification('⚠ This email is already in use');
   } else if (error.message.includes('Incorrect email or password')) {
     openNotification('⚠ Incorrect email or password');
+  } else if (error.message.includes('Unable to send text message')) {
+    openNotification('⚠ Unable to send text message');
   }
 
-  console.log(error); // todo add snackbar?
+  console.log(error);
 };

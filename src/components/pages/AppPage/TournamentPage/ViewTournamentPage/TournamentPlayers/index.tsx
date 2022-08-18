@@ -101,9 +101,7 @@ const TournamentPlayers = ({
 
   return (
     <>
-      <Divider />
-
-      <Typography variant={'h5'} align={'center'} mb={1} mt={2}>
+      <Typography variant={'h5'} align={'center'} mb={1}>
         {`Players (${tournament.players.length})`}
       </Typography>
       <Box

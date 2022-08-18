@@ -208,8 +208,10 @@ const SendCodeForm = ({
           }}
           block
         >
-          {verificationMethod === EVerificationMethod.Phone && hasSentCode
-            ? 'Resend code'
+          {verificationMethod === EVerificationMethod.Phone
+            ? hasSentCode
+              ? 'Resend code'
+              : 'Login'
             : isNewUser
             ? 'Register'
             : 'Login'}

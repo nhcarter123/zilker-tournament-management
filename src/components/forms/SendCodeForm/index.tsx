@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Input } from 'antd';
 import * as EmailValidator from 'email-validator';
@@ -8,6 +8,7 @@ import PhoneInput from 'react-phone-number-input';
 import { useStyles } from 'components/forms/SendCodeForm/styles';
 import { Box, Typography } from '@mui/material/';
 import { EVerificationMethod } from 'components/pages/LoginPage';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 interface SignupValues {
   phoneNumber: string;
@@ -55,6 +56,7 @@ const SendCodeForm = ({
   verificationMethod
 }: SendCodeFormProps): JSX.Element => {
   const classes = useStyles();
+  const [token, setToken] = useState('');
 
   const initialValues: SignupValues = {
     phoneNumber: '',
@@ -63,28 +65,49 @@ const SendCodeForm = ({
     confirmPassword: ''
   };
 
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+
+    const token = await executeRecaptcha('yourAction');
+    setToken(token);
+  }, [executeRecaptcha]);
+
+  useEffect(() => {
+    void handleReCaptchaVerify();
+  }, [handleReCaptchaVerify]);
+
   const { setFieldValue, setFieldError, values, errors, submitForm } =
     useFormik({
       initialValues,
       onSubmit: (values) => {
+        void handleReCaptchaVerify();
+
         if (values.phoneNumber) {
           verifyPhone({
             variables: {
-              phone: values.phoneNumber
+              phone: values.phoneNumber,
+              token
             }
           });
         } else if (isNewUser) {
           verifyEmail({
             variables: {
               email: values.email,
-              password: values.password
+              password: values.password,
+              token
             }
           });
         } else {
           loginEmail({
             variables: {
               email: values.email,
-              password: values.password
+              password: values.password,
+              token
             }
           });
         }
@@ -109,7 +132,7 @@ const SendCodeForm = ({
                 name="phoneNumber"
                 value={values.phoneNumber}
                 onChange={(e): void => {
-                  setFieldValue('phoneNumber', e);
+                  setFieldValue('phoneNumber', e || '');
                 }}
               />
               <Typography
@@ -120,7 +143,7 @@ const SendCodeForm = ({
                   fontSize: '12px'
                 }}
               >
-                ⚠️ Phone login experiencing outages due to attacks
+                ⚠️ Phone login may be experiencing outages
               </Typography>
             </>
           ) : (

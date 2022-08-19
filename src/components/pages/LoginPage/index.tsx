@@ -101,7 +101,6 @@ const LoginPage = (): JSX.Element => {
             <Box>
               <Radio.Group
                 style={{ width: '100%' }}
-                // className={classes.root}
                 onChange={(e) => setIsNewUser(e.target.value)}
                 options={signInOptions}
                 value={isNewUser}

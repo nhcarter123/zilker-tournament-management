@@ -21,20 +21,20 @@ export const DELETE_PHOTO = gql`
 `;
 
 export const VERIFY_PHONE = gql`
-  mutation LoginPhone($phone: String!) {
-    verifyPhone(phone: $phone)
+  mutation LoginPhone($phone: String!, $token: String!) {
+    verifyPhone(phone: $phone, token: $token)
   }
 `;
 
 export const VERIFY_EMAIL = gql`
-  mutation LoginPhone($email: String!, $password: String!) {
-    verifyEmail(email: $email, password: $password)
+  mutation LoginPhone($email: String!, $password: String!, $token: String!) {
+    verifyEmail(email: $email, password: $password, token: $token)
   }
 `;
 
 export const LOGIN_EMAIL = gql`
-  mutation LoginPhone($email: String!, $password: String!) {
-    loginEmail(email: $email, password: $password) {
+  mutation LoginPhone($email: String!, $password: String!, $token: String!) {
+    loginEmail(email: $email, password: $password, token: $token) {
       token
     }
   }

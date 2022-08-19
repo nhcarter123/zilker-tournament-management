@@ -31,6 +31,7 @@ const OrganizationEditor = (): JSX.Element => {
   });
 
   const handleOrganizationNameChange = (e: ChangeEvent<HTMLInputElement>) =>
+    e.target.value.length &&
     updateTournament({
       variables: {
         organizationId: me?.organizationId,
@@ -69,7 +70,7 @@ const OrganizationEditor = (): JSX.Element => {
           </Button>
         </Box>
       )}
-      {data?.getOrganization?.name && (
+      {data?.getOrganization && (
         <Box mt={2}>
           <Typography variant={'subtitle2'}>Name</Typography>
           <Input

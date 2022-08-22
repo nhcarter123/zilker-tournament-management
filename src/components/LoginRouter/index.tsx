@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 
@@ -21,7 +21,7 @@ const LoginRouter = (): JSX.Element => {
   const history = useHistory();
   const classes = useStyles();
 
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const {
     data,
@@ -73,7 +73,10 @@ const LoginRouter = (): JSX.Element => {
           <Route path="/app">
             <Redirect to={Page.Tournaments} />
           </Route>
-          <Route path={Page.Login} component={LoginPage} />
+          <Route
+            path={Page.Login}
+            render={(): JSX.Element => <LoginPage setToken={setToken} />}
+          />
           <Route
             path={Page.MoreInfo}
             render={(): JSX.Element => (

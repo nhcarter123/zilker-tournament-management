@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import SendCodeForm from 'components/forms/SendCodeForm';
 import CodeInput from 'components/CodeInput';
@@ -14,7 +14,7 @@ import {
   VERIFY_PHONE
 } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
-import { GET_ME } from 'graphql/definitions/queries';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 export enum EVerificationMethod {
   Phone = 'Phone',
@@ -26,10 +26,14 @@ const signInOptions = [
   { label: 'Login', value: false }
 ];
 
-const LoginPage = (): JSX.Element => {
+interface ILoginPageProps {
+  setToken: Dispatch<SetStateAction<string | null>>;
+}
+
+const LoginPage = ({ setToken }: ILoginPageProps): JSX.Element => {
   const [hasSentCode, setHasSentCode] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState(
-    EVerificationMethod.Email
+    EVerificationMethod.Phone
   );
   const [isNewUser, setIsNewUser] = useState<boolean>(true);
 
@@ -57,9 +61,10 @@ const LoginPage = (): JSX.Element => {
     LOGIN_EMAIL,
     {
       onError,
-      onCompleted: (data) =>
-        localStorage.setItem('token', data.loginEmail.token),
-      refetchQueries: [GET_ME]
+      onCompleted: (data) => {
+        localStorage.setItem('token', data.loginEmail.token);
+        setToken(data.loginEmail.token);
+      }
     }
   );
 
@@ -67,92 +72,98 @@ const LoginPage = (): JSX.Element => {
     VERIFY_CODE,
     {
       onError,
-      onCompleted: (data) =>
-        localStorage.setItem('token', data.verifyCode.token),
-      refetchQueries: [GET_ME]
+      onCompleted: (data) => {
+        localStorage.setItem('token', data.verifyCode.token);
+        setToken(data.verifyCode.token);
+      }
     }
   );
 
   return (
-    <Box
-      display={'flex'}
-      alignItems={'center'}
-      justifyContent={'space-between'}
-      height={'100%'}
-      sx={{ flexDirection: 'column' }}
+    <GoogleReCaptchaProvider
+      reCaptchaKey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
     >
-      <div />
+      <Box
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        height={'100%'}
+        sx={{ flexDirection: 'column' }}
+      >
+        <div />
 
-      <div>
-        <Box display={'flex'} justifyContent={'center'} mb={2}>
-          <Box mr={1}>
+        <div>
+          <Box display={'flex'} justifyContent={'center'} mb={2}>
+            <Box mr={1}>
+              <Typography variant={'h4'} align={'center'}>
+                Welcome
+              </Typography>
+            </Box>
+
             <Typography variant={'h4'} align={'center'}>
-              Welcome
+              👋
             </Typography>
           </Box>
 
-          <Typography variant={'h4'} align={'center'}>
-            👋
-          </Typography>
-        </Box>
-
-        {verificationMethod === EVerificationMethod.Email && (
-          <Box mb={2} display={'flex'} justifyContent={'center'}>
-            <Box>
-              <Radio.Group
-                style={{ width: '100%' }}
-                onChange={(e) => setIsNewUser(e.target.value)}
-                options={signInOptions}
-                value={isNewUser}
-                optionType="button"
-                buttonStyle="solid"
-              />
+          {verificationMethod === EVerificationMethod.Email && (
+            <Box mb={2} display={'flex'} justifyContent={'center'}>
+              <Box>
+                <Radio.Group
+                  style={{ width: '100%' }}
+                  onChange={(e) => setIsNewUser(e.target.value)}
+                  options={signInOptions}
+                  value={isNewUser}
+                  optionType="button"
+                  buttonStyle="solid"
+                />
+              </Box>
             </Box>
-          </Box>
-        )}
+          )}
 
-        <SendCodeForm
-          verificationMethod={verificationMethod}
-          hasSentCode={hasSentCode}
-          verifyPhone={verifyPhone}
-          verifyEmail={verifyEmail}
-          loginEmail={loginEmail}
-          loading={
-            verifyPhoneLoading || verifyEmailLoading || loginEmailLoading
-          }
-          isNewUser={isNewUser}
-        />
-        {hasSentCode &&
-          (verifyCodeLoading ? (
-            <Spinner />
-          ) : (
-            <CodeInput verifyCode={verifyCode} />
-          ))}
-      </div>
+          <SendCodeForm
+            verificationMethod={verificationMethod}
+            hasSentCode={hasSentCode}
+            verifyPhone={verifyPhone}
+            verifyEmail={verifyEmail}
+            loginEmail={loginEmail}
+            loading={
+              verifyPhoneLoading || verifyEmailLoading || loginEmailLoading
+            }
+            isNewUser={isNewUser}
+          />
+          {hasSentCode &&
+            (verifyCodeLoading ? (
+              <Spinner />
+            ) : (
+              <CodeInput verifyCode={verifyCode} />
+            ))}
+        </div>
 
-      <Box
-        mb={2}
-        display={'flex'}
-        justifyContent={'center'}
-        flexDirection="column"
-      >
-        <Button
-          type={'link'}
-          onClick={() =>
-            setVerificationMethod(
-              verificationMethod === EVerificationMethod.Phone
-                ? EVerificationMethod.Email
-                : EVerificationMethod.Phone
-            )
-          }
+        <Box
+          mb={2}
+          display={'flex'}
+          justifyContent={'center'}
+          flexDirection="column"
         >
-          Sign in with
-          {verificationMethod === EVerificationMethod.Phone
-            ? ' email'
-            : ' phone number'}
-        </Button>
+          <Button
+            type={'link'}
+            onClick={() => {
+              setHasSentCode(false);
+              setVerificationMethod(
+                verificationMethod === EVerificationMethod.Phone
+                  ? EVerificationMethod.Email
+                  : EVerificationMethod.Phone
+              );
+            }}
+          >
+            Sign in with
+            {verificationMethod === EVerificationMethod.Phone
+              ? ' email'
+              : ' phone number'}
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </GoogleReCaptchaProvider>
   );
 };
 

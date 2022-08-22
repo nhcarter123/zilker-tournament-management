@@ -51,6 +51,7 @@ export const GET_TOURNAMENTS = gql`
       players
       standings {
         _id
+        userId
       }
       photo
       organizationId

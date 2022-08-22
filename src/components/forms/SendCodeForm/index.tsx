@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Input } from 'antd';
 import * as EmailValidator from 'email-validator';
@@ -68,18 +68,23 @@ const SendCodeForm = ({
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleReCaptchaVerify = useCallback(async () => {
+    let isMounted = true;
+
     if (!executeRecaptcha) {
       console.log('Execute recaptcha not yet available');
       return;
     }
 
-    const token = await executeRecaptcha('yourAction');
-    setToken(token);
-  }, [executeRecaptcha]);
+    executeRecaptcha('yourAction').then((token) => {
+      if (isMounted) {
+        setToken(token);
+      }
+    });
 
-  useEffect(() => {
-    void handleReCaptchaVerify();
-  }, [handleReCaptchaVerify]);
+    return () => {
+      isMounted = false;
+    };
+  }, [executeRecaptcha]);
 
   const { setFieldValue, setFieldError, values, errors, submitForm } =
     useFormik({
@@ -121,137 +126,122 @@ const SendCodeForm = ({
         return submitForm();
       }}
     >
-      <>
-        <Box mb={2}>
-          {verificationMethod === EVerificationMethod.Phone ? (
-            <>
-              <PhoneInput
-                className={classes.phoneInput}
-                defaultCountry="US"
-                placeholder="Phone number"
-                name="phoneNumber"
-                value={values.phoneNumber}
-                onChange={(e): void => {
-                  setFieldValue('phoneNumber', e || '');
-                }}
-              />
-              <Typography
-                variant={'body2'}
-                style={{
-                  marginTop: '8px',
-                  color: '#838383',
-                  fontSize: '12px'
-                }}
-              >
-                ⚠️ Phone login may be experiencing outages
-              </Typography>
-            </>
-          ) : (
-            <Box>
+      <Box mb={2}>
+        {verificationMethod === EVerificationMethod.Phone ? (
+          <PhoneInput
+            className={classes.phoneInput}
+            defaultCountry="US"
+            placeholder="Phone number"
+            name="phoneNumber"
+            value={values.phoneNumber}
+            onChange={(e): void => {
+              setFieldValue('phoneNumber', e || '');
+            }}
+          />
+        ) : (
+          <Box>
+            <Input
+              id={'email'}
+              placeholder="Email"
+              size={'large'}
+              status={errors.email ? 'error' : undefined}
+              onChange={(e): void => {
+                setFieldValue('email', e.target.value);
+              }}
+              onBlur={() =>
+                setFieldError(
+                  'email',
+                  EmailValidator.validate(values.email)
+                    ? undefined
+                    : 'Invalid email'
+                )
+              }
+            />
+            <Typography variant={'body2'} color={'#ff5454'}>
+              {errors.email}
+            </Typography>
+
+            <Box mt={1}>
               <Input
-                id={'email'}
-                placeholder="Email"
+                placeholder="Password"
                 size={'large'}
-                status={errors.email ? 'error' : undefined}
+                type={'password'}
+                status={errors.password ? 'error' : undefined}
                 onChange={(e): void => {
-                  setFieldValue('email', e.target.value);
+                  setFieldValue('password', e.target.value);
                 }}
                 onBlur={() =>
-                  setFieldError(
-                    'email',
-                    EmailValidator.validate(values.email)
-                      ? undefined
-                      : 'Invalid email'
-                  )
+                  setFieldError('password', getPasswordErrors(values.password))
                 }
               />
               <Typography variant={'body2'} color={'#ff5454'}>
-                {errors.email}
+                {errors.password}
               </Typography>
+            </Box>
 
+            {isNewUser && (
               <Box mt={1}>
                 <Input
-                  placeholder="Password"
+                  placeholder="Confirm password"
                   size={'large'}
                   type={'password'}
-                  status={errors.password ? 'error' : undefined}
+                  status={errors.confirmPassword ? 'error' : undefined}
                   onChange={(e): void => {
-                    setFieldValue('password', e.target.value);
+                    setFieldValue('confirmPassword', e.target.value);
                   }}
                   onBlur={() =>
                     setFieldError(
-                      'password',
-                      getPasswordErrors(values.password)
+                      'confirmPassword',
+                      getConfirmPasswordErrors(
+                        values.password,
+                        values.confirmPassword
+                      )
                     )
                   }
                 />
-                <Typography variant={'body2'} color={'#ff5454'}>
-                  {errors.password}
+                <Typography variant={'body2'} color={'#ff5a5a'}>
+                  {errors.confirmPassword}
                 </Typography>
               </Box>
+            )}
+          </Box>
+        )}
+      </Box>
 
-              {isNewUser && (
-                <Box mt={1}>
-                  <Input
-                    placeholder="Confirm password"
-                    size={'large'}
-                    type={'password'}
-                    status={errors.confirmPassword ? 'error' : undefined}
-                    onChange={(e): void => {
-                      setFieldValue('confirmPassword', e.target.value);
-                    }}
-                    onBlur={() =>
-                      setFieldError(
-                        'confirmPassword',
-                        getConfirmPasswordErrors(
-                          values.password,
-                          values.confirmPassword
-                        )
-                      )
-                    }
-                  />
-                  <Typography variant={'body2'} color={'#ff5a5a'}>
-                    {errors.confirmPassword}
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-          )}
-        </Box>
-
-        <Button
-          loading={loading}
-          size={'large'}
-          type="primary"
-          htmlType={'submit'}
-          disabled={
-            loading ||
-            !(
-              values.phoneNumber.length ||
-              (EmailValidator.validate(values.email) &&
-                !getPasswordErrors(values.password) &&
-                (!getConfirmPasswordErrors(
-                  values.password,
-                  values.confirmPassword
-                ) ||
-                  !isNewUser))
-            )
-          }
-          onSubmit={(e): Promise<void> => {
-            e.preventDefault();
-            return submitForm();
-          }}
-          block
-        >
-          {verificationMethod === EVerificationMethod.Phone
-            ? hasSentCode
-              ? 'Resend code'
-              : 'Login'
-            : isNewUser
-            ? 'Register'
-            : 'Login'}
-        </Button>
-      </>
+      <Button
+        loading={loading}
+        size={'large'}
+        type="primary"
+        htmlType={'submit'}
+        disabled={
+          loading ||
+          !(
+            values.phoneNumber.length ||
+            (EmailValidator.validate(values.email) &&
+              !getPasswordErrors(values.password) &&
+              (!getConfirmPasswordErrors(
+                values.password,
+                values.confirmPassword
+              ) ||
+                !isNewUser))
+          )
+        }
+        onSubmit={(e): Promise<void> => {
+          e.preventDefault();
+          return submitForm();
+        }}
+        block
+      >
+        {verificationMethod === EVerificationMethod.Phone
+          ? hasSentCode
+            ? 'Send new code'
+            : 'Login'
+          : isNewUser
+          ? hasSentCode
+            ? 'Send new code'
+            : 'Register'
+          : 'Login'}
+      </Button>
     </form>
   );
 };

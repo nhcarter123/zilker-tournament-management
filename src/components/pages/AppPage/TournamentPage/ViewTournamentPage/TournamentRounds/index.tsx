@@ -38,29 +38,35 @@ const TournamentRounds = ({
 
   return (
     <>
-      <Typography variant={'h5'} align={'center'} mb={1} mt={2}>
-        {`Rounds (${tournament.rounds.length})`}
-      </Typography>
+      {tournament.rounds.length ? (
+        <>
+          <Typography variant={'h5'} align={'center'} mb={1} mt={2}>
+            {`Rounds (${tournament.rounds.length})`}
+          </Typography>
 
-      <Box
-        sx={{
-          '&>:nth-of-type(2n+1)': {
-            background: '#f9f9f9'
-          }
-        }}
-      >
-        {tournament.rounds.map((roundPreview, index) => (
-          <RoundListItem
-            key={index}
-            selectedRound={selectedRound}
-            setSelectedRound={setSelectedRound}
-            index={index}
-            tournament={tournament}
-            roundPreview={roundPreview}
-            isLastRound={index === tournament.rounds.length - 1}
-          />
-        ))}
-      </Box>
+          <Box
+            sx={{
+              '&>:nth-of-type(2n+1)': {
+                background: '#f9f9f9'
+              }
+            }}
+          >
+            {tournament.rounds.map((roundPreview, index) => (
+              <RoundListItem
+                key={index}
+                selectedRound={selectedRound}
+                setSelectedRound={setSelectedRound}
+                index={index}
+                tournament={tournament}
+                roundPreview={roundPreview}
+                isLastRound={index === tournament.rounds.length - 1}
+              />
+            ))}
+          </Box>
+        </>
+      ) : (
+        <></>
+      )}
 
       {(me?.organizationId === tournament.organizationId ||
         me?.role === Role.Admin) && (

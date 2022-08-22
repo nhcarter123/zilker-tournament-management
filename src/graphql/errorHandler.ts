@@ -9,15 +9,17 @@ const openNotification = (message: string, description?: string) => {
 };
 
 export const onError = (error: ApolloError): void => {
-  if (error.message.includes('Rate limit exceeded')) {
-    openNotification('⚠️️ Rate limit exceeded️');
-  } else if (error.message.includes('This email is already in use')) {
-    openNotification('⚠️ This email is already in use');
-  } else if (error.message.includes('Incorrect email or password')) {
-    openNotification('⚠️ Incorrect email or password');
-  } else if (error.message.includes('Unable to send text message')) {
-    openNotification('⚠️ Unable to send text message');
+  const message = `⚠️ ${error.message}`;
+
+  if (
+    error.message.includes('Rate limit exceeded') ||
+    error.message.includes('This email is already in use') ||
+    error.message.includes('Incorrect email or password') ||
+    error.message.includes('Unable to send text message') ||
+    error.message.includes('Phone country not supported')
+  ) {
+    openNotification(message);
   }
 
-  console.log(error);
+  console.log(error.message);
 };

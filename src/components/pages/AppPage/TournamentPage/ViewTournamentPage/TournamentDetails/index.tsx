@@ -14,6 +14,7 @@ import Input from 'antd/lib/input';
 import { Radio } from 'antd';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails/styles';
 import TournamentPictureEditor from 'components/TournamentPictureEditor';
+import DeleteTournamentButton from 'components/buttons/DeleteTournamentButton';
 
 interface TournamentDetailsProps {
   tournament: Tournament;
@@ -298,6 +299,8 @@ const TournamentDetails = ({
           />
         </Box>
       </Box>
+
+      <DeleteTournamentButton tournamentId={tournament._id} />
 
       <Box mb={3}>
         <Divider />

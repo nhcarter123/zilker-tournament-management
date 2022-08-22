@@ -17,7 +17,6 @@ import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
 import WebsocketContextProvider from 'context/websocketContext';
 import { RoundPreview } from 'types/types';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 const typeDefs = loader('./graphql/schema.graphql');
 
@@ -95,30 +94,10 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <GoogleReCaptchaProvider
-    reCaptchaKey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
-    // language={'English'}
-    // useRecaptchaNet="[optional_boolean_value]"
-    // scriptProps={{
-    //   // async: false, // optional, default to false,
-    //   // defer: false, // optional, default to false
-    //   // appendTo: 'head', // optional, default to "head", can be "head" or "body",
-    //   // nonce: undefined // optional, default undefined
-    // }}
-    // container={{
-    //   // optional to render inside custom element
-    //   element: '[required_id_or_htmlelement]',
-    //   parameters: {
-    //     // badge: 'inline', // optional, default undefined
-    //     // theme: 'dark' // optional, default undefined
-    //   }
-    // }}
-  >
-    <ApolloProvider client={client}>
-      <WebsocketContextProvider wsClient={wsClient}>
-        <App />
-      </WebsocketContextProvider>
-    </ApolloProvider>
-  </GoogleReCaptchaProvider>,
+  <ApolloProvider client={client}>
+    <WebsocketContextProvider wsClient={wsClient}>
+      <App />
+    </WebsocketContextProvider>
+  </ApolloProvider>,
   document.getElementById('root')
 );

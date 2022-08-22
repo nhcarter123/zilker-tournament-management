@@ -67,13 +67,11 @@ const ViewTournamentPage = ({
                 me?.role === Role.Admin) && (
                 <TournamentDetails tournament={tournament} />
               )}
-              {tournament.rounds.length > 0 && (
-                <TournamentRounds
-                  tournament={tournament}
-                  selectedRound={selectedRound}
-                  setSelectedRound={setSelectedRound}
-                />
-              )}
+              <TournamentRounds
+                tournament={tournament}
+                selectedRound={selectedRound}
+                setSelectedRound={setSelectedRound}
+              />
               {tournament.players.length > 0 ? (
                 <Box>
                   <TournamentPlayers users={users} tournament={tournament} />

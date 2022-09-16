@@ -86,6 +86,7 @@ export interface IConfig {
   maxPunchDown: number;
   performanceWeight: number;
   skillGroupCount: number;
+  __typename?: string;
 }
 
 export type Tournament = {

@@ -36,6 +36,9 @@ const TournamentRounds = ({
     tournament.status === TournamentStatus.Completed ||
     !tournament.players.length;
 
+  const isLastRound =
+    tournament.config.totalRounds === tournament.rounds.length - 1;
+
   return (
     <>
       {tournament.rounds.length ? (
@@ -88,7 +91,7 @@ const TournamentRounds = ({
             <Popconfirm
               title="Are you sure?"
               placement={'top'}
-              disabled={createRoundButtonDisabled}
+              disabled={createRoundButtonDisabled || isLastRound}
               onConfirm={(): void => {
                 setIsMutationNewRound(true);
                 void completeRound({
@@ -101,22 +104,28 @@ const TournamentRounds = ({
               }}
             >
               <Button
-                disabled={createRoundButtonDisabled}
+                disabled={createRoundButtonDisabled || isLastRound}
                 size={'large'}
                 type="primary"
                 loading={isMutationNewRound && nextRoundLoading}
                 block
               >
-                New round
+                Next round
               </Button>
             </Popconfirm>
+            {isLastRound && (
+              <Typography variant={'body2'} mt={1} mb={1}>
+                Increase the tournament round count in the settings to create a
+                new round
+              </Typography>
+            )}
           </Box>
 
-          <Box mt={2} mb={3}>
+          <Box mt={2}>
             <Popconfirm
               title="Are you sure?"
               placement={'top'}
-              disabled={createRoundButtonDisabled}
+              disabled={createRoundButtonDisabled || !isLastRound}
               onConfirm={(): void => {
                 setIsMutationNewRound(false);
                 void completeRound({
@@ -129,7 +138,7 @@ const TournamentRounds = ({
               }}
             >
               <Button
-                disabled={createRoundButtonDisabled}
+                disabled={createRoundButtonDisabled || !isLastRound}
                 size={'large'}
                 type="primary"
                 loading={!isMutationNewRound && nextRoundLoading}
@@ -139,6 +148,12 @@ const TournamentRounds = ({
               </Button>
             </Popconfirm>
           </Box>
+          {!isLastRound && (
+            <Typography variant={'body2'} mt={1} mb={3}>
+              Decrease the round count in the settings if you would like to
+              finish early
+            </Typography>
+          )}
         </>
       )}
 

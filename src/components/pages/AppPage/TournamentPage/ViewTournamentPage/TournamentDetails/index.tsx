@@ -11,7 +11,7 @@ import { UPDATE_TOURNAMENT } from 'graphql/definitions/mutations';
 import { PairingAlgorithm, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
 import Input from 'antd/lib/input';
-import { Radio } from 'antd';
+import { InputNumber, Radio } from 'antd';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails/styles';
 import TournamentPictureEditor from 'components/TournamentPictureEditor';
 import DeleteTournamentButton from 'components/buttons/DeleteTournamentButton';
@@ -98,6 +98,9 @@ const TournamentDetails = ({
 
   // todo maybe rewrite this as form?
 
+  const config = Object.assign({}, tournament.config);
+  delete config.__typename;
+
   const handleTournamentNameChange = (e: ChangeEvent<HTMLInputElement>) =>
     updateTournament({
       variables: {
@@ -116,9 +119,7 @@ const TournamentDetails = ({
         tournamentId: tournament._id,
         payload: {
           config: {
-            totalRounds: tournament.config.totalRounds,
-            maxPunchDown: tournament.config.maxPunchDown,
-            skillGroupCount: tournament.config.skillGroupCount,
+            ...config,
             performanceWeight: Array.isArray(value) ? value[0] || 0 : value
           }
         }
@@ -131,9 +132,7 @@ const TournamentDetails = ({
         tournamentId: tournament._id,
         payload: {
           config: {
-            totalRounds: tournament.config.totalRounds,
-            performanceWeight: tournament.config.performanceWeight,
-            skillGroupCount: tournament.config.skillGroupCount,
+            ...config,
             maxPunchDown: Array.isArray(value) ? value[0] || 0 : value
           }
         }
@@ -149,10 +148,23 @@ const TournamentDetails = ({
         tournamentId: tournament._id,
         payload: {
           config: {
-            totalRounds: tournament.config.totalRounds,
-            performanceWeight: tournament.config.performanceWeight,
-            maxPunchDown: tournament.config.maxPunchDown,
+            ...config,
             skillGroupCount: Array.isArray(value) ? value[0] || 0 : value
+          }
+        }
+      }
+    });
+
+  const handleTotalRoundsChange = (value: number) =>
+    value &&
+    value !== tournament.config.totalRounds &&
+    updateTournament({
+      variables: {
+        tournamentId: tournament._id,
+        payload: {
+          config: {
+            ...config,
+            totalRounds: value
           }
         }
       }
@@ -300,9 +312,26 @@ const TournamentDetails = ({
         </Box>
       </Box>
 
-      <DeleteTournamentButton tournamentId={tournament._id} />
+      <Box>
+        <Typography variant={'body2'} mt={2} mb={1}>
+          Total rounds
+        </Typography>
+        <InputNumber
+          type="number"
+          pattern="[0-9]*"
+          size={'large'}
+          min={tournament.rounds.length}
+          max={15}
+          defaultValue={tournament.config.totalRounds}
+          onChange={debounce(handleTotalRoundsChange, 500)}
+        />
+      </Box>
 
-      <Box mb={3}>
+      <Box mt={2}>
+        <DeleteTournamentButton tournamentId={tournament._id} />
+      </Box>
+
+      <Box my={3}>
         <Divider />
       </Box>
     </>

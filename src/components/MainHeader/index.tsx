@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Route, useHistory, useLocation } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 
 import { IconButton, Box } from '@mui/material';
 
@@ -14,9 +14,7 @@ interface MainHeaderProps {
 
 const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
   const history = useHistory();
-  const page = useLocation().pathname;
-
-  const hasBackButton = page.includes('/view');
+  const hasBackButton = false;
 
   return (
     <Box display={'flex'} alignItems={'center'} pl={1}>

@@ -32,6 +32,8 @@ const JoinTournamentList = ({
       tournament.status === TournamentStatus.Active
   );
 
+  const now = moment();
+
   return (
     <Box sx={{ position: 'relative', height: '100%' }} mx={1}>
       <Box
@@ -53,6 +55,14 @@ const JoinTournamentList = ({
 
           const playerCount =
             getUserAllUserIdsFromTournament(tournament).length;
+
+          const status =
+            tournament.status === TournamentStatus.Created &&
+            now.diff(moment(tournament.date), 'days') < 0
+              ? 'Upcoming'
+              : tournament.status !== TournamentStatus.Created
+              ? capitalize(tournament.status)
+              : undefined;
 
           return (
             <Card
@@ -82,9 +92,9 @@ const JoinTournamentList = ({
                       }`}
                     />
                   )}
-                  {tournament.status !== TournamentStatus.Created && (
+                  {status && (
                     <TournamentStatusChip
-                      label={capitalize(tournament.status)}
+                      label={status}
                       background={'#1890ff'}
                     />
                   )}

@@ -37,7 +37,7 @@ const TournamentRounds = ({
     !tournament.players.length;
 
   const isLastRound =
-    tournament.config.totalRounds === tournament.rounds.length - 1;
+    tournament.config.totalRounds === tournament.rounds.length;
 
   return (
     <>
@@ -110,13 +110,15 @@ const TournamentRounds = ({
                 loading={isMutationNewRound && nextRoundLoading}
                 block
               >
-                Next round
+                {tournament.rounds.length === 0
+                  ? 'Start first round'
+                  : 'Next round'}
               </Button>
             </Popconfirm>
             {isLastRound && (
               <Typography variant={'body2'} mt={1} mb={1}>
                 Increase the tournament round count in the settings to create a
-                new round
+                new round`
               </Typography>
             )}
           </Box>

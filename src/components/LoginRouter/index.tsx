@@ -42,7 +42,7 @@ const LoginRouter = (): JSX.Element => {
           history.location.pathname === Page.MoreInfo) &&
         data?.me?.firstName
       ) {
-        return history.push(Page.Tournaments + history.location.search);
+        return history.push(Page.Home + history.location.search);
       }
 
       if (data?.me && !data?.me.firstName) {
@@ -67,11 +67,7 @@ const LoginRouter = (): JSX.Element => {
       ) : (
         <UserContext.Provider value={me}>
           <Route exact path="/">
-            <Redirect to={Page.Tournaments} />
-          </Route>
-          {/*Legacy Support*/}
-          <Route path="/app">
-            <Redirect to={Page.Tournaments} />
+            <Redirect to={Page.Home} />
           </Route>
           <Route
             path={Page.Login}
@@ -88,14 +84,11 @@ const LoginRouter = (): JSX.Element => {
           />
           <Route
             path={[
-              Page.Profile,
-              Page.Community,
-              Page.Rules,
-              Page.Donate,
+              Page.Home,
+              Page.History,
               Page.Stats,
-              Page.About,
               '/tournament',
-              Page.Tournaments
+              Page.Profile
             ]}
             component={AppPage}
           />

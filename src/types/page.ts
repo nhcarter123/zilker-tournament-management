@@ -1,14 +1,14 @@
 export enum Page {
+  Home = '/home',
+  History = '/history',
+  Stats = '/stats',
+  Profile = '/profile',
   Login = '/login',
   MoreInfo = '/moreInfo',
-  Profile = '/profile',
-  Community = '/Community',
-  Rules = '/rules',
-  Donate = '/donate',
-  Stats = '/stats',
-  About = '/about',
-  Tournaments = '/tournaments',
-  Tournament = '/tournament/:tournamentId',
-  ViewMatch = '/tournament/:tournamentId/view/match/:matchId',
-  ViewTournament = '/tournament/:tournamentId/view'
+  Tournament = 'home/tournament/:tournamentId',
+  ViewTournament = 'home/tournament/:tournamentId/view',
+  ViewTournamentMatch = 'home/tournament/:tournamentId/view/match/:matchId',
+  ViewSoloMatch = 'home/match/:matchId',
+  ViewHistoryTournament = 'history/tournament/:tournamentId/view',
+  ViewHistoryMatch = 'history/match/:matchId'
 }

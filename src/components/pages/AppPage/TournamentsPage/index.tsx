@@ -1,28 +1,40 @@
-import React, { useEffect, useMemo } from 'react';
+import React, {
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 
-import { Box } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 import JoinTournamentList from 'components/pages/AppPage/TournamentsPage/JoinTournamentList';
 import Spinner from 'components/Spinner';
+import AddTournamentButton from 'components/buttons/AddTournamentButton';
+import CreateGameButton from 'components/buttons/CreateGameButton';
 
 import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
 import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
+import { JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
 
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 import { useMutation, useSubscription } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
 
 import {
+  TournamentStatus,
   TournamentUpdatedData,
   TournamentUpdatedVariables,
   TournamentWithOrganization
 } from 'types/types';
 import { Page } from 'types/page';
-import { JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
+import { UserContext } from 'context/userContext';
 
 const TournamentsPage = (): JSX.Element => {
   const history = useHistory();
+  const me = useContext(UserContext);
+
   const queryParams = useMemo(
     () => new URLSearchParams(window.location.search),
     []
@@ -90,15 +102,19 @@ const TournamentsPage = (): JSX.Element => {
     (a, b) => moment(b.date).valueOf() - moment(a.date).valueOf()
   );
 
-  // const activeTournaments = tournaments.filter(
-  //   (tournament) => tournament.status === TournamentStatus.Active
-  // );
-  // const scheduledTournaments = tournaments.filter(
-  //   (tournament) => tournament.status === TournamentStatus.Created
-  // );
-  // const completedTournaments = tournaments.filter(
-  //   (tournament) => tournament.status === TournamentStatus.Completed
-  // );
+  const activeTournaments = tournaments.filter(
+    (tournament) => tournament.status === TournamentStatus.Active
+  );
+  const scheduledTournaments = tournaments.filter(
+    (tournament) => tournament.status === TournamentStatus.Created
+  );
+  const completedTournaments = tournaments.filter(
+    (tournament) => tournament.status === TournamentStatus.Completed
+  );
+
+  const [currentTab, setCurrentTab] = useState<number>(
+    activeTournaments.length > 0 ? 0 : 1
+  );
 
   return joinLoading || (loading && !data) ? (
     <Spinner />
@@ -110,7 +126,43 @@ const TournamentsPage = (): JSX.Element => {
           maxWidth: '600px'
         }}
       >
-        <JoinTournamentList tournaments={tournaments} />
+        <Box mx={2} mt={2} display={'flex'} justifyContent={'center'}>
+          {me?.organizationId && <AddTournamentButton />}
+          <CreateGameButton />
+          <AddTournamentButton />
+        </Box>
+
+        <Box display={'flex'} justifyContent={'center'} mb={1}>
+          <Tabs
+            value={currentTab}
+            onChange={(event: SyntheticEvent, newValue: number) =>
+              setCurrentTab(newValue)
+            }
+          >
+            <Tab label={'Active'} />
+            <Tab label={'Scheduled'} />
+            <Tab label={'Completed'} />
+          </Tabs>
+        </Box>
+
+        {currentTab === 0 && (
+          <JoinTournamentList
+            tournaments={activeTournaments}
+            status={TournamentStatus.Active}
+          />
+        )}
+        {currentTab === 1 && (
+          <JoinTournamentList
+            tournaments={scheduledTournaments}
+            status={TournamentStatus.Created}
+          />
+        )}
+        {currentTab === 2 && (
+          <JoinTournamentList
+            tournaments={completedTournaments}
+            status={TournamentStatus.Completed}
+          />
+        )}
       </Box>
     </Box>
   );

@@ -6,7 +6,7 @@ import { CREATE_TOURNAMENT } from 'graphql/definitions/mutations';
 import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
 import { onError } from 'graphql/errorHandler';
 
-const AddTournamentButton = (): JSX.Element => {
+const CreateGameButton = (): JSX.Element => {
   const [createTournament, { loading }] = useMutation(CREATE_TOURNAMENT, {
     onError,
     refetchQueries: [GET_TOURNAMENTS],
@@ -25,10 +25,10 @@ const AddTournamentButton = (): JSX.Element => {
         loading={loading}
         block
       >
-        Create event
+        Create game
       </Button>
     </Box>
   );
 };
 
-export default AddTournamentButton;
+export default CreateGameButton;

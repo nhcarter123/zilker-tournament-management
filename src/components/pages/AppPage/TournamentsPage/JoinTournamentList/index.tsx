@@ -4,7 +4,6 @@ import moment from 'moment';
 import { Box, capitalize, Card, IconButton, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
-import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
 import ImageWithBackup from 'components/ImageWithBackup';
 
@@ -17,11 +16,13 @@ import { Page } from 'types/page';
 import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
 
 interface JoinTournamentListProps {
+  status: TournamentStatus;
   tournaments: TournamentWithOrganization[];
 }
 
 const JoinTournamentList = ({
-  tournaments
+  tournaments,
+  status
 }: JoinTournamentListProps): JSX.Element => {
   const history = useHistory();
   const me = useContext(UserContext);
@@ -35,7 +36,7 @@ const JoinTournamentList = ({
   const now = moment();
 
   return (
-    <Box sx={{ position: 'relative', height: '100%' }} mx={1}>
+    <Box sx={{ position: 'relative', height: 'calc(100% - 216px)' }} mx={1}>
       <Box
         sx={{
           overflow: 'auto',
@@ -46,10 +47,8 @@ const JoinTournamentList = ({
           left: 0,
           right: 0
         }}
-        p={1}
+        px={1}
       >
-        {me?.organizationId && <AddTournamentButton />}
-
         {tournaments.map((tournament, index) => {
           const amParticipant = tournament.players.includes(me?._id || '');
 
@@ -151,6 +150,26 @@ const JoinTournamentList = ({
             </Card>
           );
         })}
+
+        {tournaments.length === 0 && (
+          <Box
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            fontStyle={'italic'}
+            height={'100%'}
+          >
+            <Typography variant="body1">
+              There are currently no{' '}
+              {status === TournamentStatus.Active
+                ? 'active'
+                : status === TournamentStatus.Created
+                ? 'scheduled'
+                : 'completed'}{' '}
+              events
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );

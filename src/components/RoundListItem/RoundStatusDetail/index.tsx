@@ -105,10 +105,10 @@ const RoundStatusDetail = ({
             color={'info'}
             onClick={() =>
               history.push(
-                Page.ViewMatch.replace(':tournamentId', tournament._id).replace(
-                  ':matchId',
-                  match._id
-                ) + history.location.search
+                Page.ViewTournamentMatch.replace(
+                  ':tournamentId',
+                  tournament._id
+                ).replace(':matchId', match._id) + history.location.search
               )
             }
           >

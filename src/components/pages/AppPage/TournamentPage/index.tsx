@@ -45,7 +45,7 @@ const TournamentPage = ({
       );
     }
 
-    return <Redirect to={{ pathname: Page.Tournaments, search }} />;
+    return <Redirect to={{ pathname: Page.Home, search }} />;
   };
 
   return (

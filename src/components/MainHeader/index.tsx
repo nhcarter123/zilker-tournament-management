@@ -1,55 +1,18 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import React from 'react';
+import { Route } from 'react-router-dom';
 
-import { IconButton, Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { Page } from 'types/page';
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SimpleHeader from 'components/MainHeader/SimpleHeader';
 
-interface MainHeaderProps {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
-  const history = useHistory();
-  const hasBackButton = false;
-
+const MainHeader = (): JSX.Element => {
   return (
-    <Box display={'flex'} alignItems={'center'} pl={1}>
-      <Box>
-        <IconButton
-          aria-label={'menu'}
-          size={'large'}
-          onClick={() => (hasBackButton ? history.goBack() : setOpen(true))}
-        >
-          {hasBackButton ? <ArrowBackIcon /> : <MenuIcon />}
-        </IconButton>
-      </Box>
-      <Route
-        path={Page.Tournaments}
-        render={() => <SimpleHeader title={'Tournaments'} />}
-      />
+    <Box display={'flex'} alignItems={'center'} pl={2}>
+      <Route path={Page.Home} render={() => <SimpleHeader title={'Home'} />} />
       <Route
         path={Page.Profile}
         render={() => <SimpleHeader title={'Profile'} />}
-      />
-      <Route
-        path={Page.Community}
-        render={() => <SimpleHeader title={'Community'} />}
-      />
-      <Route
-        path={Page.Rules}
-        render={() => <SimpleHeader title={'Rules'} />}
-      />
-      <Route
-        path={Page.Donate}
-        render={() => <SimpleHeader title={'Donate'} />}
-      />
-      <Route
-        path={Page.About}
-        render={() => <SimpleHeader title={'About'} />}
       />
       <Route
         path={Page.Stats}

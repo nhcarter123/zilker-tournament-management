@@ -85,7 +85,7 @@ const MainContent = (): JSX.Element => {
         );
         void refetchMatch();
       } else {
-        history.push(Page.Tournaments + history.location.search);
+        history.push(Page.Home + history.location.search);
       }
     }
   }, [myTournamentId, history, page, refetchMatch]);
@@ -151,13 +151,15 @@ const MainContent = (): JSX.Element => {
 
   return (
     <>
+      <Route path={Page.Home} component={TournamentsPage} />
+      <Route path={Page.History} component={ProfilePage} />
       <Route path={Page.Profile} component={ProfilePage} />
-      <Route path={Page.Community} component={CommunityPage} />
-      <Route path={Page.Rules} component={RulesPage} />
-      <Route path={Page.Donate} component={DonatePage} />
-      <Route path={Page.About} component={AboutPage} />
+      {/*<Route path={Page.Community} component={CommunityPage} />*/}
+      {/*<Route path={Page.Rules} component={RulesPage} />*/}
+      {/*<Route path={Page.Donate} component={DonatePage} />*/}
+      {/*<Route path={Page.About} component={AboutPage} />*/}
       <Route path={Page.Stats} component={StatsPage} />
-      <Route path={Page.Tournaments} component={TournamentsPage} />
+      {/*<Route path={Page.Tournaments} component={TournamentsPage} />*/}
       <Route
         path={Page.Tournament}
         render={(): JSX.Element => (

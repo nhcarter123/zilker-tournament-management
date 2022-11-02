@@ -19,7 +19,7 @@ const ViewMatchPage = ({
   // todo maybe grab match from props?
   const page = useLocation().pathname;
   const pathMatch = matchPath<{ matchId?: string }>(page, {
-    path: Page.ViewMatch,
+    path: Page.ViewTournamentMatch,
     exact: false,
     strict: false
   });

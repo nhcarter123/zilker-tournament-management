@@ -24,7 +24,7 @@ const TournamentHeader = ({
   const page = useLocation().pathname;
   const classes = useStyles();
   const pathMatch = matchPath<{ matchId?: string }>(page, {
-    path: Page.ViewMatch,
+    path: Page.ViewTournamentMatch,
     exact: false,
     strict: false
   });

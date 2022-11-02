@@ -155,7 +155,7 @@ const TournamentDetails = ({
       }
     });
 
-  const handleTotalRoundsChange = (value: number) =>
+  const handleTotalRoundsChange = (value: number | null) =>
     value &&
     value !== tournament.config.totalRounds &&
     updateTournament({

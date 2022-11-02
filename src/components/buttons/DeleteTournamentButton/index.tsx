@@ -22,7 +22,7 @@ const DeleteTournamentButton = ({
     refetchQueries: [GET_MY_TOURNAMENT],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      history.push(Page.Tournaments + history.location.search);
+      history.push(Page.Home + history.location.search);
     },
     onError
   });

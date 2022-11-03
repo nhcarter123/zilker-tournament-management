@@ -13,13 +13,12 @@ import { User } from 'types/types';
 import { UPDATE_USER_DETAILS } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 
-import { useStyles } from 'components/LoginRouter/styles';
 import { UserContext } from 'context/userContext';
 import { Redirect } from 'react-router';
+import { Box } from '@mui/material';
 
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
-  const classes = useStyles();
 
   const [token, setToken] = useState(localStorage.getItem('token'));
 
@@ -60,7 +59,14 @@ const LoginRouter = (): JSX.Element => {
   const me = data?.me || null;
 
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 'var(--app-height)'
+      }}
+    >
       {meLoading &&
       (!me?.firstName || networkStatus !== NetworkStatus.refetch) ? (
         <Spinner />
@@ -94,7 +100,7 @@ const LoginRouter = (): JSX.Element => {
           />
         </UserContext.Provider>
       )}
-    </div>
+    </Box>
   );
 };
 

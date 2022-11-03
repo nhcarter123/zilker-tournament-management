@@ -48,7 +48,16 @@ const TournamentHeader = ({
   const playerCount = getUserAllUserIdsFromTournament(tournament).length;
 
   return (
-    <>
+    <Box
+      pt={2}
+      sx={{
+        position: 'sticky',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        display: 'grid',
+        top: 0
+      }}
+    >
       {amParticipant && (
         <Box mt={0.5}>
           <Box
@@ -81,7 +90,7 @@ const TournamentHeader = ({
         </Box>
       )}
 
-      <Box className={classes.root} mr={2}>
+      <Box px={2} mb={0.5}>
         <Typography className={classes.noWrap} variant={'h5'}>
           {tournament.name}
         </Typography>
@@ -102,7 +111,8 @@ const TournamentHeader = ({
           </Box>
         </Box>
       </Box>
-    </>
+      <Divider />
+    </Box>
   );
 };
 

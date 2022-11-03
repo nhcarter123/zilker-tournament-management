@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useContext, useState } from 'react';
 
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Divider, Tab, Tabs } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
@@ -76,7 +76,7 @@ const MainFooter = (): JSX.Element => {
   const page = useLocation().pathname;
 
   const menuItems = compact([
-    myTournamentId && MenuItem.Play,
+    // myTournamentId && MenuItem.Play,
     MenuItem.Home,
     MenuItem.History,
     MenuItem.Stats,
@@ -88,31 +88,29 @@ const MainFooter = (): JSX.Element => {
   const [currentTab, setCurrentTab] = useState<number>(index > -1 ? index : 0);
 
   return (
-    <Box
-      display={'flex'}
-      justifyContent={'center'}
-      width={'100%'}
-      position={'fixed'}
-      bottom={0}
-      bgcolor={'white'}
-    >
-      <Tabs
-        value={currentTab}
-        onChange={(event: SyntheticEvent, newValue: number) =>
-          setCurrentTab(newValue)
-        }
-      >
-        {menuItems.map((item, index) => (
-          <Tab
-            key={index}
-            icon={getIcon(item)}
-            label={item}
-            onClick={(): void =>
-              history.push(getDestination(item) + history.location.search)
+    <Box width={'100%'} bgcolor={'white'} pb={1} overflow={'hidden'}>
+      <Box width={'100%'}>
+        <Divider />
+        <Box display={'flex'} justifyContent={'center'}>
+          <Tabs
+            value={currentTab}
+            onChange={(event: SyntheticEvent, newValue: number) =>
+              setCurrentTab(newValue)
             }
-          />
-        ))}
-      </Tabs>
+          >
+            {menuItems.map((item, index) => (
+              <Tab
+                key={index}
+                icon={getIcon(item)}
+                label={item}
+                onClick={(): void =>
+                  history.push(getDestination(item) + history.location.search)
+                }
+              />
+            ))}
+          </Tabs>
+        </Box>
+      </Box>
     </Box>
   );
 };

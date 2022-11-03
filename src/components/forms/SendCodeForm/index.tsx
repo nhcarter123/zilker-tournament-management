@@ -68,29 +68,21 @@ const SendCodeForm = ({
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleReCaptchaVerify = useCallback(async () => {
-    let isMounted = true;
-
     if (!executeRecaptcha) {
       console.log('Execute recaptcha not yet available');
       return;
     }
 
-    executeRecaptcha('yourAction').then((token) => {
-      if (isMounted) {
-        setToken(token);
-      }
+    await executeRecaptcha('sendCode').then((token) => {
+      setToken(token);
     });
-
-    return () => {
-      isMounted = false;
-    };
   }, [executeRecaptcha]);
 
   const { setFieldValue, setFieldError, values, errors, submitForm } =
     useFormik({
       initialValues,
-      onSubmit: (values) => {
-        void handleReCaptchaVerify();
+      onSubmit: async (values) => {
+        await handleReCaptchaVerify();
 
         if (values.phoneNumber) {
           verifyPhone({

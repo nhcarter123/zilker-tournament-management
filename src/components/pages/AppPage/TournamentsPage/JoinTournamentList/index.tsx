@@ -36,7 +36,7 @@ const JoinTournamentList = ({
   const now = moment();
 
   return (
-    <Box sx={{ position: 'relative', height: 'calc(100% - 216px)' }} mx={1}>
+    <Box position={'relative'} height={'100%'} mx={1}>
       <Box
         sx={{
           overflow: 'auto',
@@ -67,11 +67,10 @@ const JoinTournamentList = ({
             <Card
               key={index}
               sx={{
-                marginBottom: `${
-                  index !== tournaments.length - 1 ? '16px' : '32px'
-                }`,
+                marginBottom: '16px',
                 boxShadow: 'rgb(149 149 149) 0px 2px 4px 0px',
-                position: 'relative'
+                position: 'relative',
+                marginTop: `${index === 0 ? '8px' : 0}`
               }}
               onClick={(): void =>
                 history.push(

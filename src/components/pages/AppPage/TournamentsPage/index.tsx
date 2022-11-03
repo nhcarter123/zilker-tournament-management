@@ -30,6 +30,7 @@ import {
 } from 'types/types';
 import { Page } from 'types/page';
 import { UserContext } from 'context/userContext';
+import { Divider } from '@mui/material/';
 
 const TournamentsPage = (): JSX.Element => {
   const history = useHistory();
@@ -116,23 +117,35 @@ const TournamentsPage = (): JSX.Element => {
     activeTournaments.length > 0 ? 0 : 1
   );
 
+  useEffect(() => {
+    setCurrentTab(activeTournaments.length > 0 ? 0 : 1);
+  }, [setCurrentTab, activeTournaments.length]);
+
   return joinLoading || (loading && !data) ? (
     <Spinner />
   ) : (
     <Box display={'flex'} justifyContent={'center'} height={'100%'}>
       <Box
+        display={'grid'}
+        gridTemplateRows={'auto auto 1fr'}
         sx={{
           width: '100%',
           maxWidth: '600px'
         }}
       >
-        <Box mx={2} mt={2} display={'flex'} justifyContent={'center'}>
-          {me?.organizationId && <AddTournamentButton />}
-          <CreateGameButton />
-          <AddTournamentButton />
+        <Box mx={2} display={'flex'} justifyContent={'center'}>
+          {/*{me?.organizationId && <AddTournamentButton />}*/}
+          {/*<CreateGameButton />*/}
+          {/*<AddTournamentButton />*/}
         </Box>
 
-        <Box display={'flex'} justifyContent={'center'} mb={1}>
+        <Box
+          display={'flex'}
+          justifyContent={'center'}
+          boxShadow={
+            'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;'
+          }
+        >
           <Tabs
             value={currentTab}
             onChange={(event: SyntheticEvent, newValue: number) =>
@@ -141,28 +154,30 @@ const TournamentsPage = (): JSX.Element => {
           >
             <Tab label={'Active'} />
             <Tab label={'Scheduled'} />
-            <Tab label={'Completed'} />
+            <Tab label={'Past'} />
           </Tabs>
         </Box>
 
-        {currentTab === 0 && (
-          <JoinTournamentList
-            tournaments={activeTournaments}
-            status={TournamentStatus.Active}
-          />
-        )}
-        {currentTab === 1 && (
-          <JoinTournamentList
-            tournaments={scheduledTournaments}
-            status={TournamentStatus.Created}
-          />
-        )}
-        {currentTab === 2 && (
-          <JoinTournamentList
-            tournaments={completedTournaments}
-            status={TournamentStatus.Completed}
-          />
-        )}
+        <Box>
+          {currentTab === 0 && (
+            <JoinTournamentList
+              tournaments={activeTournaments}
+              status={TournamentStatus.Active}
+            />
+          )}
+          {currentTab === 1 && (
+            <JoinTournamentList
+              tournaments={scheduledTournaments}
+              status={TournamentStatus.Created}
+            />
+          )}
+          {currentTab === 2 && (
+            <JoinTournamentList
+              tournaments={completedTournaments}
+              status={TournamentStatus.Completed}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );

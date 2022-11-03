@@ -16,7 +16,8 @@ export const onError = (error: ApolloError): void => {
     error.message.includes('This email is already in use') ||
     error.message.includes('Incorrect email or password') ||
     error.message.includes('Unable to send text message') ||
-    error.message.includes('Phone country not supported')
+    error.message.includes('Phone country not supported') ||
+    error.message.includes('Invalid code')
   ) {
     openNotification(message);
   }

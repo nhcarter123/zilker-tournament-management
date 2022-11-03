@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 interface SimpleHeaderProps {
   title: string;
@@ -7,9 +7,13 @@ interface SimpleHeaderProps {
 
 const SimpleHeader = ({ title }: SimpleHeaderProps): JSX.Element => {
   return (
-    <Typography variant={'h4'} sx={{ lineHeight: 1.5 }} ml={0.5}>
-      {title}
-    </Typography>
+    <Box pt={1} bgcolor={'#ff843b'}>
+      <Box display={'flex'} justifyContent={'center'}>
+        <Typography variant={'h5'} color={'#fff'}>
+          {title}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 

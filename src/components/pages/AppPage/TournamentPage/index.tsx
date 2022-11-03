@@ -25,6 +25,7 @@ const TournamentPage = ({
   myMatchLoading
 }: TournamentPageProps): JSX.Element => {
   const { pathname, search } = useLocation();
+
   const contentRouter = () => {
     if (tournament) {
       if (pathname.includes('view')) {
@@ -54,7 +55,6 @@ const TournamentPage = ({
         <Spinner />
       ) : (
         <>
-          <TournamentHeader tournament={tournament} />
           <Box
             sx={{ height: '100%' }}
             display={'flex'}

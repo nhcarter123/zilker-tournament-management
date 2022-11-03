@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { matchPath, Route, useHistory, useLocation } from 'react-router-dom';
+import { Route, useHistory, useLocation } from 'react-router-dom';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
 import { uniq } from 'lodash';
 
@@ -12,11 +12,7 @@ import StatsPage from 'components/pages/AppPage/StatsPage';
 import DonatePage from 'components/pages/AppPage/DonatePage';
 import AboutPage from 'components/pages/AppPage/AboutPage';
 
-import {
-  GET_MY_MATCH,
-  GET_MY_TOURNAMENT,
-  GET_TOURNAMENT
-} from 'graphql/definitions/queries';
+import { GET_MY_MATCH, GET_MY_TOURNAMENT } from 'graphql/definitions/queries';
 import {
   MatchWithUserInfo,
   Tournament,
@@ -28,19 +24,19 @@ import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
 import { MyTournamentContext } from 'context/myTournamentContext';
 import { useSubscription } from '@apollo/client';
 import { UserContext } from 'context/userContext';
+import { Box } from '@mui/material';
 
 const MainContent = (): JSX.Element => {
   const me = useContext(UserContext);
   const history = useHistory();
-  const { myTournamentId, setMyTournamentId } = useContext(MyTournamentContext);
+  const {
+    tournamentId,
+    myTournamentId,
+    setMyTournamentId,
+    currentTournament,
+    currentTournamentLoading
+  } = useContext(MyTournamentContext);
   const page = useLocation().pathname;
-  const match = matchPath<{ tournamentId?: string }>(page, {
-    path: Page.Tournament,
-    exact: false,
-    strict: false
-  });
-  const idFromRoute = match?.params.tournamentId || null;
-  const tournamentId = idFromRoute || myTournamentId;
 
   const {
     data: myMatchData,
@@ -90,17 +86,6 @@ const MainContent = (): JSX.Element => {
     }
   }, [myTournamentId, history, page, refetchMatch]);
 
-  const { data, loading } = useQueryWithReconnect<
-    {
-      getTournament: Nullable<Tournament>;
-    },
-    { tournamentId: string }
-  >(GET_TOURNAMENT, {
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
-    ...(tournamentId ? { variables: { tournamentId } } : { skip: true })
-  });
-
   useQueryWithReconnect<{
     getMyTournament: Nullable<Tournament>;
   }>(GET_MY_TOURNAMENT, {
@@ -116,7 +101,7 @@ const MainContent = (): JSX.Element => {
   });
 
   const subscribedTournaments = uniq(
-    [idFromRoute, myTournamentId].flatMap((v) => (v ? [v] : []))
+    [tournamentId, myTournamentId].flatMap((v) => (v ? [v] : []))
   );
 
   useSubscription<TournamentUpdatedData, TournamentUpdatedVariables>(
@@ -146,12 +131,11 @@ const MainContent = (): JSX.Element => {
     }
   );
 
-  const tournament = data?.getTournament || null;
   const myMatch = myMatchData?.getMyMatch || null;
 
   return (
-    <>
-      <Route path={Page.Home} component={TournamentsPage} />
+    <Box>
+      <Route path={Page.Home} component={TournamentsPage} exact />
       <Route path={Page.History} component={ProfilePage} />
       <Route path={Page.Profile} component={ProfilePage} />
       {/*<Route path={Page.Community} component={CommunityPage} />*/}
@@ -164,14 +148,14 @@ const MainContent = (): JSX.Element => {
         path={Page.Tournament}
         render={(): JSX.Element => (
           <TournamentPage
-            tournament={tournament}
-            loading={loading}
+            tournament={currentTournament}
+            loading={currentTournamentLoading}
             myMatch={myMatch}
             myMatchLoading={myMatchLoading}
           />
         )}
       />
-    </>
+    </Box>
   );
 };
 

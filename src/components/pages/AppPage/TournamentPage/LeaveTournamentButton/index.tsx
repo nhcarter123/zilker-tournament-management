@@ -23,31 +23,33 @@ const LeaveTournamentButton = ({
     onError,
     onCompleted: () => {
       exitTournament();
-      history.push(Page.Home + history.location.search);
+      history.push(Page.Tournaments + history.location.search);
     }
   });
   const userId = me?._id || '';
 
   return (
-    <Popconfirm
-      title="Leave the tournament?"
-      onConfirm={(): void => {
-        void leaveTournament({
-          variables: {
-            tournamentId,
-            userId
-          }
-        });
-      }}
-    >
-      <Box mr={1}>
-        <Button loading={loading} type="default" size={'small'}>
-          <div style={{ color: 'red', width: '40px' }}>
-            {loading ? '' : 'Leave'}
-          </div>
-        </Button>
-      </Box>
-    </Popconfirm>
+    <Box display={'flex'} justifyContent={'end'}>
+      <Popconfirm
+        title="Leave the tournament?"
+        onConfirm={(): void => {
+          void leaveTournament({
+            variables: {
+              tournamentId,
+              userId
+            }
+          });
+        }}
+      >
+        <Box mr={1}>
+          <Button loading={loading} type="default" size={'small'}>
+            <div style={{ color: 'red', width: '40px' }}>
+              {loading ? '' : 'Leave'}
+            </div>
+          </Button>
+        </Box>
+      </Popconfirm>
+    </Box>
   );
 };
 

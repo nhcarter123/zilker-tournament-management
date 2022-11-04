@@ -45,7 +45,7 @@ const CompletedPage = ({ tournamentId }: CompletedPageProps): JSX.Element => {
             className={classes.root}
             onClick={(): void => {
               exitTournament();
-              history.push(Page.Home + history.location.search);
+              history.push(Page.Tournaments + history.location.search);
             }}
           >
             Back to tournaments

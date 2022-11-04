@@ -1,137 +1,59 @@
-import React from 'react';
-import { Box } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
-
-export const useStyles = makeStyles({
-  icon: {
-    width: '150px',
-    height: '150px',
-    '& > svg': {
-      color: '#1570f5',
-      width: '150px',
-      height: '150px'
-    }
-  }
-});
-
-const maxDataAge = 86400;
-const graphHeight = 300;
-const graphStyle = {
-  background: '#FFFFFF',
-  border: 'none',
-  borderRadius: '2px',
-  boxShadow: '0 2px 10px 0 rgba(70, 76, 79, .2)'
-};
+import React, { SyntheticEvent, useState } from 'react';
+import { Box, Tab, Tabs } from '@mui/material/';
+import SwipeableViews from 'react-swipeable-views';
+import GlobalStats from 'components/pages/AppPage/StatsPage/GlobalStats';
+import PersonalStats from 'components/pages/AppPage/StatsPage/PersonalStats';
 
 const StatsPage = (): JSX.Element => {
+  const [currentTab, setCurrentTab] = useState<number>(0);
+  const handleChangeIndex = (index: number) => setCurrentTab(index);
+
   return (
-    <Box display={'flex'} justifyContent={'center'} mt={1} mx={2}>
+    <Box height={'100%'} gridTemplateRows={'auto 1fr'} display={'grid'}>
       <Box
-        width={'100%'}
-        sx={{
-          maxWidth: '1000px'
-        }}
+        zIndex={2}
+        display={'flex'}
+        justifyContent={'center'}
+        boxShadow={
+          'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 2px 6px 2px;'
+        }
       >
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=8344db29-fb37-486d-9aff-0e75ed2a5002&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
+        <Tabs
+          value={currentTab}
+          onChange={(event: SyntheticEvent, newValue: number) =>
+            setCurrentTab(newValue)
+          }
+        >
+          <Tab label={'Personal'} />
+          <Tab label={'Global'} />
+        </Tabs>
+      </Box>
 
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=7e43236c-0680-4c8b-ab1b-fe40d2c2766f&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=84463e25-4e83-4cc9-bddb-f6e0b2d95825&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <Box display={'flex'} justifyContent={'space-between'}>
-          <Box mr={1} width={'100%'}>
-            <iframe
-              style={graphStyle}
-              width={'100%'}
-              height={graphHeight / 2}
-              src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=ff80b699-141c-448f-9271-52d95217787a&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-            />
-          </Box>
-          <Box width={'100%'}>
-            <iframe
-              style={graphStyle}
-              width={'100%'}
-              height={graphHeight / 2}
-              src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=da2f71d1-7085-468e-baf4-42a165ce57d7&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-            />
-          </Box>
+      <Box position={'relative'} height={'100%'} mx={1} overflow={'hidden'}>
+        <Box
+          sx={{
+            overflow: 'auto',
+            borderColor: '#e5e5e5',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }}
+        >
+          <SwipeableViews
+            index={currentTab}
+            style={{ height: '100%' }}
+            containerStyle={{
+              height: '100%',
+              WebkitOverflowScrolling: 'touch'
+            }}
+            onChangeIndex={handleChangeIndex}
+          >
+            <PersonalStats />
+            <GlobalStats />
+          </SwipeableViews>
         </Box>
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=5d5e1c08-0970-4f97-812e-6fc1040bb70b&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=78ee3e92-7450-4eca-8a7a-eb32ae001a21&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <Box display={'flex'} justifyContent={'space-between'}>
-          <Box mr={1} width={'100%'}>
-            <iframe
-              style={graphStyle}
-              width={'100%'}
-              height={graphHeight / 2}
-              src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=55b3ee0e-213f-482b-8c89-62e3668a93c3&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-            />
-          </Box>
-          <Box width={'100%'}>
-            <iframe
-              style={graphStyle}
-              width={'100%'}
-              height={graphHeight / 2}
-              src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=baeb63ef-0209-4dee-8ebc-0a949eb0252d&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-            />
-          </Box>
-        </Box>
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=28348fe6-e794-4569-9ab0-8d38978dd98a&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=5f4c803f-adb6-4341-bcc4-7e127a871e38&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=2b40212c-a595-4043-bcb6-baa7c3ddd6ae&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
-
-        <iframe
-          style={graphStyle}
-          width={'100%'}
-          height={graphHeight}
-          src={`https://charts.mongodb.com/charts-zilkerdb-dnjqk/embed/charts?id=f620a4d5-1879-4158-995f-c98ea9eccf52&maxDataAge=${maxDataAge}&theme=light&autoRefresh=true`}
-        />
       </Box>
     </Box>
   );

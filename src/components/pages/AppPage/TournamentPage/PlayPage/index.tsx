@@ -43,7 +43,7 @@ const PlayPage = ({
       return <Redirect to={{ pathname: Page.Home, search }} />;
     }
 
-    if (myMatch) {
+    if (myMatch?.tournamentId === tournament._id) {
       return (
         <MatchPage match={myMatch} organizationId={tournament.organizationId} />
       );

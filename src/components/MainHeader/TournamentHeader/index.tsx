@@ -12,6 +12,7 @@ import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { Tournament, TournamentStatus } from 'types/types';
 import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
+import { THEME_PRIMARY } from 'constants/constants';
 
 interface TournamentHeaderProps {
   tournament: Nullable<Tournament>;
@@ -47,23 +48,56 @@ const TournamentHeader = ({
 
   const playerCount = getUserAllUserIdsFromTournament(tournament).length;
 
+  const isTournamentPage = page.includes('view') && !page.includes('match');
+
   return (
     <Box
+      bgcolor={THEME_PRIMARY}
       pt={2}
       sx={{
-        position: 'sticky',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        display: 'grid',
-        top: 0
+        display: 'grid'
       }}
     >
+      <Box px={2}>
+        <Typography color={'#fff'} className={classes.noWrap} variant={'h5'}>
+          {tournament.name}
+        </Typography>
+
+        <Box display={'flex'} alignItems={'center'} className={classes.noWrap}>
+          {currentRound > 0 && (
+            <Box mr={1}>
+              <Typography
+                color={'#fff'}
+                variant={'h6'}
+              >{`Round ${currentRound}`}</Typography>
+            </Box>
+          )}
+
+          <Box display={'flex'} className={classes.noWrap}>
+            <Typography
+              color={'#fff'}
+              variant={'subtitle2'}
+              className={classes.noWrap}
+            >
+              {`${playerCount} player${
+                playerCount !== 1 ? 's' : ''
+              } ${totalRounds} rounds`}
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
       {amParticipant && (
-        <Box mt={0.5}>
+        <Box>
+          <Divider sx={{ background: '#fff' }} />
+
           <Box
-            display={'flex'}
+            my={0.5}
+            display={'grid'}
             alignItems={'center'}
-            justifyContent={'space-between'}
+            gridTemplateColumns={'1fr 1fr 1fr'}
           >
             <TournamentStatusChip
               label={`${
@@ -72,46 +106,25 @@ const TournamentHeader = ({
                   : 'Played'
               }`}
             />
-            {tournament.status === TournamentStatus.Active && (
-              <>
-                <SwapViewButton
-                  tournamentId={tournament._id}
-                  isTournamentPage={
-                    page.includes('view') && !page.includes('match')
-                  }
-                />
-                <LeaveTournamentButton tournamentId={tournament._id} />
-              </>
+
+            {!isTournamentPage ||
+            tournament.status === TournamentStatus.Active ? (
+              <SwapViewButton
+                tournamentId={tournament._id}
+                isTournamentPage={isTournamentPage}
+              />
+            ) : (
+              <Box />
             )}
-          </Box>
-          <Box mt={0.5}>
-            <Divider />
+
+            {tournament.status === TournamentStatus.Active ? (
+              <LeaveTournamentButton tournamentId={tournament._id} />
+            ) : (
+              <Box />
+            )}
           </Box>
         </Box>
       )}
-
-      <Box px={2} mb={0.5}>
-        <Typography className={classes.noWrap} variant={'h5'}>
-          {tournament.name}
-        </Typography>
-
-        <Box display={'flex'} alignItems={'center'} className={classes.noWrap}>
-          {currentRound > 0 && (
-            <Box mr={1}>
-              <Typography variant={'h6'}>{`Round ${currentRound}`}</Typography>
-            </Box>
-          )}
-
-          <Box display={'flex'} className={classes.noWrap}>
-            <Typography variant={'subtitle2'} className={classes.noWrap}>
-              {`${playerCount} player${
-                playerCount !== 1 ? 's' : ''
-              } ${totalRounds} rounds`}
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-      <Divider />
     </Box>
   );
 };

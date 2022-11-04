@@ -41,21 +41,26 @@ export enum PairingAlgorithm {
 
 export type MatchWithUserInfo = {
   _id: string;
-  tournamentId: string;
-  white: User | null;
-  black: User | null;
-  whiteRating: number;
-  blackRating: number;
+  tournamentId: Nullable<string>;
+  white: Nullable<User>;
+  black: Nullable<User>;
+  whiteRating?: number;
+  blackRating?: number;
   newWhiteRating?: number;
   newBlackRating?: number;
   whiteScore: number;
   blackScore: number;
   whiteMatchesPlayed: number;
   blackMatchesPlayed: number;
-  boardNumber: number;
+  boardNumber?: number;
   result: MatchResult;
   completed: boolean;
 };
+
+export interface IHistoryResult {
+  tournaments: Tournament[];
+  matches: MatchWithUserInfo[];
+}
 
 export type Standing = {
   _id: string;

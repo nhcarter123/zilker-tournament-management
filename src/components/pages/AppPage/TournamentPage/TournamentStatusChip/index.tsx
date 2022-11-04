@@ -17,7 +17,8 @@ const TournamentStatusChip = ({
         background,
         color: 'white',
         marginLeft: '8px',
-        border: '2px solid white'
+        border: '2px solid white',
+        width: 'fit-content'
       }}
       label={label}
     />

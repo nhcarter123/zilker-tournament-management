@@ -14,6 +14,8 @@ import Spinner from 'components/Spinner';
 import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import CreateGameButton from 'components/buttons/CreateGameButton';
 
+import SwipeableViews from 'react-swipeable-views';
+
 import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
 import { TOURNAMENT_UPDATED } from 'graphql/definitions/subscriptions';
 import { JOIN_TOURNAMENT } from 'graphql/definitions/mutations';
@@ -23,14 +25,21 @@ import { useMutation, useSubscription } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
 
 import {
+  MatchResult,
+  Role,
   TournamentStatus,
   TournamentUpdatedData,
   TournamentUpdatedVariables,
-  TournamentWithOrganization
+  TournamentWithOrganization,
+  User
 } from 'types/types';
 import { Page } from 'types/page';
 import { UserContext } from 'context/userContext';
-import { Divider } from '@mui/material/';
+import MatchPage from 'components/pages/AppPage/TournamentPage/PlayPage/MatchPage';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { THEME_PRIMARY } from 'constants/constants';
+import { Button } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 const TournamentsPage = (): JSX.Element => {
   const history = useHistory();
@@ -121,62 +130,85 @@ const TournamentsPage = (): JSX.Element => {
     setCurrentTab(activeTournaments.length > 0 ? 0 : 1);
   }, [setCurrentTab, activeTournaments.length]);
 
+  const handleChangeIndex = (index: number) => setCurrentTab(index);
+
   return joinLoading || (loading && !data) ? (
     <Spinner />
   ) : (
     <Box display={'flex'} justifyContent={'center'} height={'100%'}>
       <Box
         display={'grid'}
-        gridTemplateRows={'auto auto 1fr'}
-        sx={{
-          width: '100%',
-          maxWidth: '600px'
-        }}
+        gridTemplateRows={'auto 1fr'}
+        width={'100%'}
+        maxWidth={'600px'}
       >
-        <Box mx={2} display={'flex'} justifyContent={'center'}>
-          {/*{me?.organizationId && <AddTournamentButton />}*/}
-          {/*<CreateGameButton />*/}
-          {/*<AddTournamentButton />*/}
-        </Box>
+        {/*<Box mx={2} display={'flex'} justifyContent={'center'}>*/}
+        {/*{me?.organizationId && <AddTournamentButton />}*/}
+        {/*<CreateGameButton />*/}
+        {/*<AddTournamentButton />*/}
+        {/*</Box>*/}
 
         <Box
           display={'flex'}
           justifyContent={'center'}
           boxShadow={
-            'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;'
+            'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 2px 6px 2px;'
           }
         >
-          <Tabs
-            value={currentTab}
-            onChange={(event: SyntheticEvent, newValue: number) =>
-              setCurrentTab(newValue)
-            }
-          >
-            <Tab label={'Active'} />
-            <Tab label={'Scheduled'} />
-            <Tab label={'Past'} />
-          </Tabs>
+          <Box>
+            <Tabs
+              value={currentTab}
+              onChange={(event: SyntheticEvent, newValue: number) =>
+                setCurrentTab(newValue)
+              }
+            >
+              <Tab label={'Active'} />
+              <Tab label={'Scheduled'} />
+              <Tab label={'Past'} />
+            </Tabs>
+          </Box>
+          {/*<Box*/}
+          {/*  position={'absolute'}*/}
+          {/*  left={15}*/}
+          {/*  top={65}*/}
+          {/*  // color={THEME_PRIMARY}*/}
+          {/*  zIndex={2}*/}
+          {/*>*/}
+          {/*  <Button*/}
+          {/*    type={'primary'}*/}
+          {/*    size={'large'}*/}
+          {/*    shape="circle"*/}
+          {/*    onClick={() => {*/}
+          {/*      console.log('');*/}
+          {/*    }}*/}
+          {/*    icon={<PlusCircleOutlined />}*/}
+          {/*  />*/}
+          {/*</Box>*/}
         </Box>
 
         <Box>
-          {currentTab === 0 && (
+          <SwipeableViews
+            index={currentTab}
+            style={{ height: '100%' }}
+            containerStyle={{
+              height: '100%',
+              WebkitOverflowScrolling: 'touch'
+            }}
+            onChangeIndex={handleChangeIndex}
+          >
             <JoinTournamentList
               tournaments={activeTournaments}
               status={TournamentStatus.Active}
             />
-          )}
-          {currentTab === 1 && (
             <JoinTournamentList
               tournaments={scheduledTournaments}
               status={TournamentStatus.Created}
             />
-          )}
-          {currentTab === 2 && (
             <JoinTournamentList
               tournaments={completedTournaments}
               status={TournamentStatus.Completed}
             />
-          )}
+          </SwipeableViews>
         </Box>
       </Box>
     </Box>

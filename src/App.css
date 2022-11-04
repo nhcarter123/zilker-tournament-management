@@ -23,6 +23,8 @@ body {
 
 :root {
   --captcha-hidden: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .grecaptcha-badge { visibility: var(--captcha-hidden); }

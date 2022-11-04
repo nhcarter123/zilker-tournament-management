@@ -132,6 +132,7 @@ export const GET_MY_MATCH = gql`
   query GetMyMatch($tournamentId: ID!) {
     getMyMatch(tournamentId: $tournamentId) {
       _id
+      tournamentId
       white {
         _id
         firstName
@@ -152,6 +153,40 @@ export const GET_MY_MATCH = gql`
       newBlackRating
       boardNumber
       result
+    }
+  }
+`;
+
+export const GET_MY_MATCH_HISTORY = gql`
+  query getMyMatchHistory {
+    getMyMatchHistory {
+      tournaments {
+        _id
+        name
+        date
+      }
+      matches {
+        _id
+        tournamentId
+        white {
+          _id
+          firstName
+          lastName
+          photo
+        }
+        black {
+          _id
+          firstName
+          lastName
+          photo
+        }
+        whiteRating
+        blackRating
+        newWhiteRating
+        newBlackRating
+        boardNumber
+        result
+      }
     }
   }
 `;

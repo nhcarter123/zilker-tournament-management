@@ -2,6 +2,7 @@ import React, { ChangeEvent, useContext } from 'react';
 
 import {
   Box,
+  Divider,
   FormControl,
   FormControlLabel,
   Radio,
@@ -51,8 +52,10 @@ const MatchResultSelect = ({
   const disabled = !isOnline || !canEdit;
 
   return (
-    <Box mt={0.5}>
-      <Typography variant={'h5'} align={'center'}>
+    <Box>
+      <Divider />
+
+      <Typography mt={0.5} variant={'h5'} align={'center'}>
         Match result
       </Typography>
 

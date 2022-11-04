@@ -14,7 +14,6 @@ import {
   VERIFY_PHONE
 } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 export enum EVerificationMethod {
   Phone = 'Phone',

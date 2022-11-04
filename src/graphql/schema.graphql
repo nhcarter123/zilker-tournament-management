@@ -85,7 +85,7 @@ enum PairingAlgorithm {
 
 type MatchWithUserInfo {
   _id: String!
-  tournamentId: String!
+  tournamentId: String
   white: User
   black: User
   whiteRating: Int!
@@ -99,6 +99,11 @@ type MatchWithUserInfo {
   boardNumber: Int!
   result: MatchResult!
   completed: Boolean!
+}
+
+type HistoryResult {
+  tournaments: [Tournament!]!
+  matches: [MatchWithUserInfo!]!
 }
 
 type Standing {
@@ -178,6 +183,7 @@ type Query {
 
   getMatch(matchId: ID!): MatchWithUserInfo
   getMyMatch(tournamentId: ID!): MatchWithUserInfo
+  getMyMatchHistory: HistoryResult!
   getRound(tournamentId: ID!, roundId: ID!): Round
 
   getOrganization(organizationId: ID!): Organization

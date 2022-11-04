@@ -5,12 +5,14 @@ import { uniq } from 'lodash';
 
 import TournamentPage from 'components/pages/AppPage/TournamentPage';
 import TournamentsPage from 'components/pages/AppPage/TournamentsPage';
-import RulesPage from 'components/pages/AppPage/RulesPage';
+import HistoryPage from 'components/pages/AppPage/HistoryPage';
+import ChallengePage from 'components/pages/AppPage/ChallengePage';
 import ProfilePage from 'components/pages/AppPage/ProfilePage';
 import CommunityPage from 'components/pages/AppPage/CommunityPage';
 import StatsPage from 'components/pages/AppPage/StatsPage';
 import DonatePage from 'components/pages/AppPage/DonatePage';
 import AboutPage from 'components/pages/AppPage/AboutPage';
+import HomePage from 'components/pages/AppPage/HomePage';
 
 import { GET_MY_MATCH, GET_MY_TOURNAMENT } from 'graphql/definitions/queries';
 import {
@@ -81,7 +83,7 @@ const MainContent = (): JSX.Element => {
         );
         void refetchMatch();
       } else {
-        history.push(Page.Home + history.location.search);
+        history.push(Page.Tournaments + history.location.search);
       }
     }
   }, [myTournamentId, history, page, refetchMatch]);
@@ -135,15 +137,16 @@ const MainContent = (): JSX.Element => {
 
   return (
     <Box>
-      <Route path={Page.Home} component={TournamentsPage} exact />
-      <Route path={Page.History} component={ProfilePage} />
+      <Route path={Page.Home} component={HomePage} exact />
+      <Route path={Page.Challenge} component={ChallengePage} exact />
+      <Route path={Page.Tournaments} component={TournamentsPage} exact />
+      <Route path={Page.History} component={HistoryPage} />
       <Route path={Page.Profile} component={ProfilePage} />
-      {/*<Route path={Page.Community} component={CommunityPage} />*/}
-      {/*<Route path={Page.Rules} component={RulesPage} />*/}
-      {/*<Route path={Page.Donate} component={DonatePage} />*/}
-      {/*<Route path={Page.About} component={AboutPage} />*/}
+      <Route path={Page.Community} component={CommunityPage} />
+      <Route path={Page.Donate} component={DonatePage} />
+      <Route path={Page.About} component={AboutPage} />
       <Route path={Page.Stats} component={StatsPage} />
-      {/*<Route path={Page.Tournaments} component={TournamentsPage} />*/}
+      {/*<Route path={Page.Rules} component={RulesPage} />*/}
       <Route
         path={Page.Tournament}
         render={(): JSX.Element => (

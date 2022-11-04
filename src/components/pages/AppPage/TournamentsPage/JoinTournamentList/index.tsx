@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import moment from 'moment';
 
-import { Box, capitalize, Card, IconButton, Typography } from '@mui/material/';
+import { Box, Card, IconButton, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
@@ -49,108 +49,7 @@ const JoinTournamentList = ({
         }}
         px={1}
       >
-        {tournaments.map((tournament, index) => {
-          const amParticipant = tournament.players.includes(me?._id || '');
-
-          const playerCount =
-            getUserAllUserIdsFromTournament(tournament).length;
-
-          const status =
-            tournament.status === TournamentStatus.Created &&
-            now.diff(moment(tournament.date), 'days') < 0
-              ? 'Upcoming'
-              : tournament.status !== TournamentStatus.Created
-              ? capitalize(tournament.status)
-              : undefined;
-
-          return (
-            <Card
-              key={index}
-              sx={{
-                marginBottom: '16px',
-                boxShadow: 'rgb(149 149 149) 0px 2px 4px 0px',
-                position: 'relative',
-                marginTop: `${index === 0 ? '8px' : 0}`
-              }}
-              onClick={(): void =>
-                history.push(
-                  Page.ViewTournament.replace(':tournamentId', tournament._id) +
-                    history.location.search
-                )
-              }
-            >
-              <ImageWithBackup image={tournament.photo}>
-                <Box sx={{ position: 'absolute', right: 0, top: 0 }} p={1}>
-                  {amParticipant && (
-                    <TournamentStatusChip
-                      label={`${
-                        tournament.status === TournamentStatus.Active
-                          ? 'Playing'
-                          : 'Played'
-                      }`}
-                    />
-                  )}
-                  {status && (
-                    <TournamentStatusChip
-                      label={status}
-                      background={'#1890ff'}
-                    />
-                  )}
-                </Box>
-              </ImageWithBackup>
-              <Box
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                px={0.5}
-                py={1}
-                sx={{
-                  background: '#d4fbcd',
-                  padding: '4px 8px'
-                }}
-              >
-                <Box>
-                  <Typography variant={'body1'} component={'span'}>
-                    <Bold>{tournament.name}</Bold>
-                  </Typography>
-
-                  <Typography variant={'body2'}>
-                    {`${moment(tournament.date).format('ll')} - ${
-                      tournament.organization?.name
-                    }`}
-                  </Typography>
-
-                  <Box>
-                    <Typography variant={'subtitle2'}>
-                      {playerCount} player
-                      {playerCount === 1 ? '' : 's'}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                {tournament.location && (
-                  <IconButton
-                    aria-label="view"
-                    color={'info'}
-                    onClick={() => window.open(tournament.location)}
-                  >
-                    <LocationOnIcon />
-                  </IconButton>
-                )}
-
-                {inNoneOfTheseTournaments &&
-                  tournament.status === TournamentStatus.Active && (
-                    <JoinTournamentButton
-                      tournamentId={tournament._id}
-                      organizationId={tournament.organizationId}
-                    />
-                  )}
-              </Box>
-            </Card>
-          );
-        })}
-
-        {tournaments.length === 0 && (
+        {tournaments.length === 0 ? (
           <Box
             display={'flex'}
             justifyContent={'center'}
@@ -167,6 +66,96 @@ const JoinTournamentList = ({
                 : 'completed'}{' '}
               events
             </Typography>
+          </Box>
+        ) : (
+          <Box mt={2}>
+            {tournaments.map((tournament, index) => {
+              const amParticipant = tournament.players.includes(me?._id || '');
+
+              const playerCount =
+                getUserAllUserIdsFromTournament(tournament).length;
+
+              return (
+                <Card
+                  key={index}
+                  sx={{
+                    marginBottom: '16px',
+                    boxShadow: 'rgb(149 149 149) 0px 2px 4px 0px',
+                    position: 'relative'
+                  }}
+                  onClick={(): void =>
+                    history.push(
+                      Page.ViewTournament.replace(
+                        ':tournamentId',
+                        tournament._id
+                      ) + history.location.search
+                    )
+                  }
+                >
+                  <ImageWithBackup image={tournament.photo}>
+                    <Box sx={{ position: 'absolute', right: 0, top: 0 }} p={1}>
+                      {amParticipant && (
+                        <TournamentStatusChip
+                          label={`${
+                            tournament.status === TournamentStatus.Active
+                              ? 'Playing'
+                              : 'Played'
+                          }`}
+                        />
+                      )}
+                    </Box>
+                  </ImageWithBackup>
+                  <Box
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                    px={0.5}
+                    py={1}
+                    sx={{
+                      background: '#d4fbcd',
+                      padding: '4px 8px'
+                    }}
+                  >
+                    <Box>
+                      <Typography variant={'body1'} component={'span'}>
+                        <Bold>{tournament.name}</Bold>
+                      </Typography>
+
+                      <Typography variant={'body2'}>
+                        {`${moment(tournament.date).format('ll')} - ${
+                          tournament.organization?.name
+                        }`}
+                      </Typography>
+
+                      <Box>
+                        <Typography variant={'subtitle2'}>
+                          {playerCount} player
+                          {playerCount === 1 ? '' : 's'}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {tournament.location && (
+                      <IconButton
+                        aria-label="view"
+                        color={'info'}
+                        onClick={() => window.open(tournament.location)}
+                      >
+                        <LocationOnIcon />
+                      </IconButton>
+                    )}
+
+                    {inNoneOfTheseTournaments &&
+                      tournament.status === TournamentStatus.Active && (
+                        <JoinTournamentButton
+                          tournamentId={tournament._id}
+                          organizationId={tournament.organizationId}
+                        />
+                      )}
+                  </Box>
+                </Card>
+              );
+            })}
           </Box>
         )}
       </Box>

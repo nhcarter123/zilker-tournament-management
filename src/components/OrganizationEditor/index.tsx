@@ -84,7 +84,6 @@ const OrganizationEditor = (): JSX.Element => {
           More customization coming soon..
         </Typography>
       </Box>
-      <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
     </Box>
   );
 };

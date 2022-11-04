@@ -14,9 +14,8 @@ const AddTournamentButton = (): JSX.Element => {
   });
 
   return (
-    <Box ml={0.5} mb={1} width={'50%'}>
+    <Box mt={1} mb={1}>
       <Button
-        style={{ height: '80px' }}
         type={'primary'}
         size={'large'}
         onClick={(): void =>

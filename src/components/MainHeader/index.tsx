@@ -8,6 +8,7 @@ import TournamentHeader from 'components/MainHeader/TournamentHeader';
 
 import { Page } from 'types/page';
 import { MyTournamentContext } from 'context/myTournamentContext';
+import { getPageName } from 'helpers/helpers';
 
 const MainHeader = (): JSX.Element => {
   const { currentTournament } = useContext(MyTournamentContext);
@@ -17,16 +18,61 @@ const MainHeader = (): JSX.Element => {
       <Box width={'100%'}>
         <Route
           path={Page.Home}
-          render={() => <SimpleHeader title={'Home'} />}
+          render={() => <SimpleHeader title={getPageName(Page.Home)} />}
+          exact
+        />
+        <Route
+          path={Page.Challenge}
+          render={() => (
+            <SimpleHeader
+              title={getPageName(Page.Challenge)}
+              back={Page.Home}
+            />
+          )}
+          exact
+        />
+        <Route
+          path={Page.Tournaments}
+          render={() => (
+            <SimpleHeader
+              title={getPageName(Page.Tournaments)}
+              back={Page.Home}
+            />
+          )}
           exact
         />
         <Route
           path={Page.Profile}
-          render={() => <SimpleHeader title={'Profile'} />}
+          render={() => <SimpleHeader title={getPageName(Page.Profile)} />}
         />
         <Route
           path={Page.Stats}
-          render={() => <SimpleHeader title={'Stats'} />}
+          render={() => <SimpleHeader title={getPageName(Page.Stats)} />}
+        />
+        <Route
+          path={Page.About}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.About)} back={Page.Home} />
+          )}
+        />
+        <Route
+          path={Page.Donate}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.Donate)} back={Page.Home} />
+          )}
+        />
+        <Route
+          path={Page.History}
+          render={() => <SimpleHeader title={getPageName(Page.History)} />}
+        />
+        <Route
+          path={Page.Community}
+          render={() => (
+            <SimpleHeader
+              title={getPageName(Page.Community)}
+              back={Page.Home}
+            />
+          )}
         />
         <Route
           path={Page.Tournament}

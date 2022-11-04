@@ -70,13 +70,10 @@ const getDestination = (text: MenuItem): string => {
 
 const MainFooter = (): JSX.Element => {
   const history = useHistory();
-  const { myTournamentId } = useContext(MyTournamentContext);
   const me = useContext(UserContext);
-
   const page = useLocation().pathname;
 
   const menuItems = compact([
-    // myTournamentId && MenuItem.Play,
     MenuItem.Home,
     MenuItem.History,
     MenuItem.Stats,
@@ -88,7 +85,7 @@ const MainFooter = (): JSX.Element => {
   const [currentTab, setCurrentTab] = useState<number>(index > -1 ? index : 0);
 
   return (
-    <Box width={'100%'} bgcolor={'white'} pb={1} overflow={'hidden'}>
+    <Box width={'100%'} bgcolor={'white'} overflow={'hidden'}>
       <Box width={'100%'}>
         <Divider />
         <Box display={'flex'} justifyContent={'center'}>

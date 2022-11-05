@@ -48,22 +48,29 @@ const JoinTournamentList = ({
         px={1}
       >
         {tournaments.length === 0 ? (
-          <Box
-            display={'flex'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            fontStyle={'italic'}
-            height={'100%'}
-          >
-            <Typography variant="body1">
-              There are currently no{' '}
-              {status === TournamentStatus.Active
-                ? 'active'
-                : status === TournamentStatus.Created
-                ? 'scheduled'
-                : 'completed'}{' '}
-              events
-            </Typography>
+          <Box height={'100%'} display={'grid'} gridTemplateRows={'auto 1fr'}>
+            <Box mt={2} display={'flex'} justifyContent={'center'}>
+              {me?.organizationId && status === TournamentStatus.Created && (
+                <AddTournamentButton />
+              )}
+            </Box>
+            <Box
+              display={'flex'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              fontStyle={'italic'}
+              height={'100%'}
+            >
+              <Typography variant="body1">
+                There are currently no{' '}
+                {status === TournamentStatus.Active
+                  ? 'active'
+                  : status === TournamentStatus.Created
+                  ? 'scheduled'
+                  : 'completed'}{' '}
+                events
+              </Typography>
+            </Box>
           </Box>
         ) : (
           <Box>
@@ -120,18 +127,25 @@ const JoinTournamentList = ({
                     }}
                   >
                     <Box>
-                      <Typography variant={'body1'} component={'span'}>
-                        <Bold>{tournament.name}</Bold>
-                      </Typography>
+                      <Box display={'flex'} alignItems={'baseline'}>
+                        <Typography variant={'body1'} component={'span'}>
+                          <Bold>{tournament.name}</Bold>
+                        </Typography>
+                        <Typography
+                          fontStyle={'italic'}
+                          ml={1}
+                          variant={'body2'}
+                        >
+                          {tournament.organization?.name}
+                        </Typography>
+                      </Box>
 
                       <Typography variant={'body2'}>
-                        {`${moment(tournament.date).format('ll')} - ${
-                          tournament.organization?.name
-                        }`}
+                        {moment(tournament.date).format('MMMM Do, h:mma')}
                       </Typography>
 
                       <Box>
-                        <Typography variant={'subtitle2'}>
+                        <Typography variant={'body2'}>
                           {playerCount} player
                           {playerCount === 1 ? '' : 's'}
                         </Typography>

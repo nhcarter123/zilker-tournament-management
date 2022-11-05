@@ -187,7 +187,7 @@ const TournamentDetails = ({
           id="datetime-local"
           label="Date"
           type="datetime-local"
-          defaultValue={moment(tournament.date).format('yyyy-MM-DDThh:mm')}
+          defaultValue={moment(tournament.date).format('yyyy-MM-DDTHH:mm')}
           InputLabelProps={{
             shrink: true
           }}

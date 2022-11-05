@@ -5,11 +5,11 @@ import { Button } from 'antd';
 const DonatePage = (): JSX.Element => {
   return (
     <Box m={2}>
-      <Typography variant={'body2'}>
-        Help out with drinks, prizes, and our expensive development team
+      <Typography variant={'body1'}>
+        Help support the vision of open source software
       </Typography>
-      <Typography mt={1} variant={'body1'}>
-        All support is appreciated 🙂
+      <Typography variant={'body1'}>
+        Money goes towards providing free drinks and equipment at tournaments
       </Typography>
 
       <Box mt={3} display={'flex'} justifyContent={'center'}>

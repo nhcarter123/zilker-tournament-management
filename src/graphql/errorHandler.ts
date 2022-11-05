@@ -16,7 +16,11 @@ export const onError = (error: ApolloError): void => {
     error.message.includes('This email is already in use') ||
     error.message.includes('Incorrect email or password') ||
     error.message.includes('Unable to send text message') ||
-    error.message.includes('Phone country not supported')
+    error.message.includes('Phone country not supported') ||
+    error.message.includes('Invalid code') ||
+    error.message.includes('Challenger is in another match') ||
+    error.message.includes('Challenge not found') ||
+    error.message.includes('Match not found')
   ) {
     openNotification(message);
   }

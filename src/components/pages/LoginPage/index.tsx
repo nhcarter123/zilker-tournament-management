@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import SendCodeForm from 'components/forms/SendCodeForm';
 import CodeInput from 'components/CodeInput';
@@ -14,7 +14,6 @@ import {
   VERIFY_PHONE
 } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 export enum EVerificationMethod {
   Phone = 'Phone',
@@ -25,6 +24,11 @@ const signInOptions = [
   { label: 'Register', value: true },
   { label: 'Login', value: false }
 ];
+
+const setHidden = (hidden: boolean): void => {
+  const doc = document.documentElement;
+  doc.style.setProperty('--captcha-hidden', hidden ? 'hidden' : 'visible');
+};
 
 interface ILoginPageProps {
   setToken: Dispatch<SetStateAction<string | null>>;
@@ -79,91 +83,92 @@ const LoginPage = ({ setToken }: ILoginPageProps): JSX.Element => {
     }
   );
 
+  useEffect(() => {
+    setHidden(false);
+    return () => setHidden(true);
+  }, []);
+
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={process.env.REACT_APP_RECAPTCHA_KEY || ''}
+    <Box
+      display={'flex'}
+      alignItems={'center'}
+      justifyContent={'space-between'}
+      height={'100%'}
+      sx={{ flexDirection: 'column' }}
     >
-      <Box
-        display={'flex'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        height={'100%'}
-        sx={{ flexDirection: 'column' }}
-      >
-        <div />
+      <div />
 
-        <div>
-          <Box display={'flex'} justifyContent={'center'} mb={2}>
-            <Box mr={1}>
-              <Typography variant={'h4'} align={'center'}>
-                Welcome
-              </Typography>
-            </Box>
-
+      <div>
+        <Box display={'flex'} justifyContent={'center'} mb={2}>
+          <Box mr={1}>
             <Typography variant={'h4'} align={'center'}>
-              👋
+              Welcome
             </Typography>
           </Box>
 
-          {verificationMethod === EVerificationMethod.Email && (
-            <Box mb={2} display={'flex'} justifyContent={'center'}>
-              <Box>
-                <Radio.Group
-                  style={{ width: '100%' }}
-                  onChange={(e) => setIsNewUser(e.target.value)}
-                  options={signInOptions}
-                  value={isNewUser}
-                  optionType="button"
-                  buttonStyle="solid"
-                />
-              </Box>
-            </Box>
-          )}
-
-          <SendCodeForm
-            verificationMethod={verificationMethod}
-            hasSentCode={hasSentCode}
-            verifyPhone={verifyPhone}
-            verifyEmail={verifyEmail}
-            loginEmail={loginEmail}
-            loading={
-              verifyPhoneLoading || verifyEmailLoading || loginEmailLoading
-            }
-            isNewUser={isNewUser}
-          />
-          {hasSentCode &&
-            (verifyCodeLoading ? (
-              <Spinner />
-            ) : (
-              <CodeInput verifyCode={verifyCode} />
-            ))}
-        </div>
-
-        <Box
-          mb={2}
-          display={'flex'}
-          justifyContent={'center'}
-          flexDirection="column"
-        >
-          <Button
-            type={'link'}
-            onClick={() => {
-              setHasSentCode(false);
-              setVerificationMethod(
-                verificationMethod === EVerificationMethod.Phone
-                  ? EVerificationMethod.Email
-                  : EVerificationMethod.Phone
-              );
-            }}
-          >
-            Sign in with
-            {verificationMethod === EVerificationMethod.Phone
-              ? ' email'
-              : ' phone number'}
-          </Button>
+          <Typography variant={'h4'} align={'center'}>
+            👋
+          </Typography>
         </Box>
+
+        {verificationMethod === EVerificationMethod.Email && (
+          <Box mb={2} display={'flex'} justifyContent={'center'}>
+            <Box>
+              <Radio.Group
+                style={{ width: '100%' }}
+                onChange={(e) => setIsNewUser(e.target.value)}
+                options={signInOptions}
+                value={isNewUser}
+                optionType="button"
+                buttonStyle="solid"
+              />
+            </Box>
+          </Box>
+        )}
+
+        <SendCodeForm
+          verificationMethod={verificationMethod}
+          hasSentCode={hasSentCode}
+          verifyPhone={verifyPhone}
+          verifyEmail={verifyEmail}
+          loginEmail={loginEmail}
+          loading={
+            verifyPhoneLoading || verifyEmailLoading || loginEmailLoading
+          }
+          isNewUser={isNewUser}
+        />
+        {hasSentCode &&
+          (verifyCodeLoading ? (
+            <Spinner />
+          ) : (
+            <CodeInput verifyCode={verifyCode} />
+          ))}
+      </div>
+
+      <Box
+        mb={2}
+        display={'flex'}
+        justifyContent={'center'}
+        flexDirection="column"
+      >
+        <Button
+          type={'link'}
+          onClick={() => {
+            setHasSentCode(false);
+            setVerificationMethod(
+              verificationMethod === EVerificationMethod.Phone
+                ? EVerificationMethod.Email
+                : EVerificationMethod.Phone
+            );
+          }}
+        >
+          Sign in with
+          {verificationMethod === EVerificationMethod.Phone
+            ? ' email'
+            : ' phone number'}
+        </Button>
       </Box>
-    </GoogleReCaptchaProvider>
+    </Box>
   );
 };
 

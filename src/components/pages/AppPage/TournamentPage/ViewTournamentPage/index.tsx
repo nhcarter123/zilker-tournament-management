@@ -39,8 +39,6 @@ const ViewTournamentPage = ({
 
   const users = usersData?.getUsers;
 
-  // todo
-  // footer?
   return (
     <Box sx={{ position: 'relative', height: '100%', width: '100%' }} mx={1}>
       {loading && !users ? (
@@ -84,7 +82,7 @@ const ViewTournamentPage = ({
                   </Typography>
                 </Box>
               )}
-              <Box mt={6}>ㅤ</Box> {/*// give some space at the bottom*/}
+              <Box mt={2} /> {/* give some space at the bottom */}
             </Box>
           </Box>
         )

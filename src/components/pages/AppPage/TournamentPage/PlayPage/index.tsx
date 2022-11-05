@@ -32,7 +32,7 @@ const PlayPage = ({
     const inTournament = Boolean(tournament?.players.includes(me?._id || ''));
 
     if (!inTournament && !loading) {
-      return <Redirect to={{ pathname: Page.Tournaments, search }} />;
+      return <Redirect to={{ pathname: Page.Home, search }} />;
     }
 
     if (tournament.status === TournamentStatus.Completed) {
@@ -40,10 +40,10 @@ const PlayPage = ({
     }
 
     if (tournament.status === TournamentStatus.Created) {
-      return <Redirect to={{ pathname: Page.Tournaments, search }} />;
+      return <Redirect to={{ pathname: Page.Home, search }} />;
     }
 
-    if (myMatch) {
+    if (myMatch?.tournamentId === tournament._id) {
       return (
         <MatchPage match={myMatch} organizationId={tournament.organizationId} />
       );

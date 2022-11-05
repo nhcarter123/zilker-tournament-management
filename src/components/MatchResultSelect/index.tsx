@@ -2,6 +2,7 @@ import React, { ChangeEvent, useContext } from 'react';
 
 import {
   Box,
+  Divider,
   FormControl,
   FormControlLabel,
   Radio,
@@ -21,7 +22,7 @@ import { UserContext } from 'context/userContext';
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
-  organizationId: string;
+  organizationId?: string;
 }
 
 const MatchResultSelect = ({
@@ -43,16 +44,18 @@ const MatchResultSelect = ({
   };
 
   const canEdit =
-    me?.organizationId === organizationId ||
+    (organizationId && me?.organizationId === organizationId) ||
     me?.role === Role.Admin ||
-    me?._id === match.white?._id ||
-    me?._id === match.black?._id;
+    ((me?._id === match.white?._id || me?._id === match.black?._id) &&
+      !match.completed);
 
   const disabled = !isOnline || !canEdit;
 
   return (
-    <Box mt={0.5}>
-      <Typography variant={'h5'} align={'center'}>
+    <Box>
+      <Divider />
+
+      <Typography mt={0.5} variant={'h5'} align={'center'}>
         Match result
       </Typography>
 

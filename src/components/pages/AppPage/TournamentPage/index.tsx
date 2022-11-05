@@ -5,7 +5,6 @@ import { Box } from '@mui/material';
 import Spinner from 'components/Spinner';
 import ViewTournamentPage from 'components/pages/AppPage/TournamentPage/ViewTournamentPage';
 import PlayPage from 'components/pages/AppPage/TournamentPage/PlayPage';
-import TournamentHeader from 'components/MainHeader/TournamentHeader';
 import ViewMatchPage from 'components/pages/AppPage/TournamentPage/ViewMatchPage';
 
 import { MatchWithUserInfo, Tournament } from 'types/types';
@@ -25,6 +24,7 @@ const TournamentPage = ({
   myMatchLoading
 }: TournamentPageProps): JSX.Element => {
   const { pathname, search } = useLocation();
+
   const contentRouter = () => {
     if (tournament) {
       if (pathname.includes('view')) {
@@ -45,7 +45,7 @@ const TournamentPage = ({
       );
     }
 
-    return <Redirect to={{ pathname: Page.Tournaments, search }} />;
+    return <Redirect to={{ pathname: Page.Home, search }} />;
   };
 
   return (
@@ -54,7 +54,6 @@ const TournamentPage = ({
         <Spinner />
       ) : (
         <>
-          <TournamentHeader tournament={tournament} />
           <Box
             sx={{ height: '100%' }}
             display={'flex'}

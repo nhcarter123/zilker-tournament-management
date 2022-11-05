@@ -42,6 +42,11 @@ type TournamentUpdateResult {
   newRound: Boolean!
 }
 
+type ChallengeUpdateResult {
+  hostId: String!
+  completed: Boolean!
+}
+
 type JoinTournamentResult {
   tournamentId: String!
 }
@@ -58,6 +63,12 @@ type User {
   role: Role!
   token: String
   organizationId: String
+  challenge: Challenge
+}
+
+type Challenge {
+  expiresAt: Date!
+  gameCode: String!
 }
 
 enum Role {
@@ -85,7 +96,8 @@ enum PairingAlgorithm {
 
 type MatchWithUserInfo {
   _id: String!
-  tournamentId: String!
+  tournamentId: String
+  hostId: String
   white: User
   black: User
   whiteRating: Int!
@@ -99,6 +111,11 @@ type MatchWithUserInfo {
   boardNumber: Int!
   result: MatchResult!
   completed: Boolean!
+}
+
+type HistoryResult {
+  tournaments: [Tournament!]!
+  matches: [MatchWithUserInfo!]!
 }
 
 type Standing {
@@ -178,6 +195,8 @@ type Query {
 
   getMatch(matchId: ID!): MatchWithUserInfo
   getMyMatch(tournamentId: ID!): MatchWithUserInfo
+  getMyChallengeMatch: MatchWithUserInfo
+  getMyMatchHistory: HistoryResult!
   getRound(tournamentId: ID!, roundId: ID!): Round
 
   getOrganization(organizationId: ID!): Organization
@@ -190,12 +209,14 @@ type Mutation {
   deleteRound(tournamentId: ID!, roundId: ID!): Boolean!
   joinTournament(organizationId: ID!, tournamentId: ID): JoinTournamentResult!
   kickPlayer(tournamentId: ID!, userId: ID!): Boolean!
-  createTournament(name: String!): Boolean!
+  createTournament(name: String!): Tournament
   updateTournament(tournamentId: ID!, payload: UpdateTournamentPayload!): Boolean!
   uploadTournamentPhoto(tournamentId: ID!,photo: Upload!): Boolean!
   deleteTournamentPhoto(tournamentId: ID!): Boolean!
 
   # User
+  logout: Boolean!
+  refreshChallenge: User
   verifyCode(code: String!): User
   uploadPhoto(photo: Upload!): Boolean!
   deletePhoto: Boolean!
@@ -206,8 +227,9 @@ type Mutation {
   updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!
 
   # Match
+  joinChallenge(gameCode: ID!): Boolean!
+  endChallenge(matchId: ID!): Boolean!
   updateMatch(matchId: ID!, payload: UpdateMatchPayload!): Boolean!
-  deleteMatch(tournamentId: ID!, roundId: ID!, matchId: ID!): Boolean!
 
   # Organization
   createOrganization: Organization!
@@ -220,6 +242,7 @@ type Mutation {
 type Subscription {
   matchUpdated(matchIds: [ID!]!): MatchWithUserInfo
   tournamentUpdated(tournamentIds: [ID!]!): TournamentUpdateResult
+  challengeUpdated(hostIds: [ID!]!): ChallengeUpdateResult
 }
 
 schema {

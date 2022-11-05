@@ -17,7 +17,7 @@ const ImageWithBackup: React.FC<IImageWithBackupProps> = ({
         boxShadow: 'rgb(99 99 99) 0px 2px 2px 0px',
         backgroundImage: 'url(/default-placeholder.jpg)',
         backgroundSize: 'cover',
-        height: '110px',
+        height: '100px',
         width: '100%'
       }}
     >

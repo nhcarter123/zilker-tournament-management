@@ -3,10 +3,6 @@ import { useMutation } from '@apollo/client';
 import { debounce } from 'lodash';
 
 import { Box, Divider, Slider, TextField, Typography } from '@mui/material/';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
 import { UPDATE_TOURNAMENT } from 'graphql/definitions/mutations';
 import { PairingAlgorithm, Tournament, TournamentStatus } from 'types/types';
 import { onError } from 'graphql/errorHandler';
@@ -15,6 +11,7 @@ import { InputNumber, Radio } from 'antd';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/ViewTournamentPage/TournamentDetails/styles';
 import TournamentPictureEditor from 'components/TournamentPictureEditor';
 import DeleteTournamentButton from 'components/buttons/DeleteTournamentButton';
+import moment from 'moment';
 
 interface TournamentDetailsProps {
   tournament: Tournament;
@@ -155,7 +152,7 @@ const TournamentDetails = ({
       }
     });
 
-  const handleTotalRoundsChange = (value: number) =>
+  const handleTotalRoundsChange = (value: number | null) =>
     value &&
     value !== tournament.config.totalRounds &&
     updateTournament({
@@ -169,6 +166,8 @@ const TournamentDetails = ({
         }
       }
     });
+
+  console.log(moment(tournament.date).format('yyyy-MM-DDThh:mm'));
 
   return (
     <>
@@ -185,23 +184,24 @@ const TournamentDetails = ({
         />
       </Box>
 
-      <Box mt={2} sx={{ maxWidth: '120px' }}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <MobileDatePicker
-            label="Date"
-            inputFormat="MM/dd/yyyy"
-            value={tournament.date}
-            renderInput={(params) => <TextField {...params} />}
-            onChange={(date) =>
-              updateTournament({
-                variables: {
-                  tournamentId: tournament._id,
-                  payload: { date }
-                }
-              })
-            }
-          />
-        </LocalizationProvider>
+      <Box mt={2}>
+        <TextField
+          id="datetime-local"
+          label="Date"
+          type="datetime-local"
+          defaultValue={moment(tournament.date).format('yyyy-MM-DDThh:mm')}
+          InputLabelProps={{
+            shrink: true
+          }}
+          onChange={(e) =>
+            updateTournament({
+              variables: {
+                tournamentId: tournament._id,
+                payload: { date: moment(e.target.value).format() }
+              }
+            })
+          }
+        />
       </Box>
 
       <Box mt={2}>

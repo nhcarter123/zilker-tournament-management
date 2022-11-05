@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useSubscription } from '@apollo/client';
 import { GET_ROUND } from 'graphql/definitions/queries';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Spinner from 'components/Spinner';
 import {
   MatchResult,
@@ -14,13 +14,10 @@ import {
   Tournament
 } from 'types/types';
 
-import LaunchIcon from '@mui/icons-material/Launch';
-import { useHistory } from 'react-router-dom';
-import { Page } from 'types/page';
-import WinnerText from 'components/WinnerText';
 import Bold from 'components/Bold';
 import { MATCH_UPDATED } from 'graphql/definitions/subscriptions';
 import { useQueryWithReconnect } from 'hooks/useQueryWithReconnect';
+import MatchListItem from 'components/RoundListItem/MatchListItem';
 
 interface GetRoundArgs {
   tournamentId: string;
@@ -39,8 +36,6 @@ const RoundStatusDetail = ({
   tournament,
   roundPreview
 }: RoundProps): JSX.Element => {
-  const history = useHistory();
-
   const { data, loading } = useQueryWithReconnect<
     {
       getRound: Nullable<Round>;
@@ -56,72 +51,16 @@ const RoundStatusDetail = ({
   });
 
   useSubscription<MatchUpdatedData, MatchUpdatedVariables>(MATCH_UPDATED, {
-    variables: { matchIds: roundPreview.matches }
+    ...(roundPreview.matches.length
+      ? { variables: { matchIds: roundPreview.matches } }
+      : { skip: true })
   });
-
-  const renderMatches = (
-    match: MatchWithUserInfo,
-    index: number
-  ): JSX.Element => {
-    const isByeRound = !match.black || !match.white;
-
-    return (
-      <Box key={index} display={'flex'} justifyContent={'space-between'} pt={1}>
-        <Box display={'flex'} alignItems={'center'}>
-          <WinnerText
-            variant={'body2'}
-            won={match.result === MatchResult.WhiteWon}
-            name={`${match.white?.firstName} ${(
-              match.white?.lastName || ''
-            ).substring(0, 1)}`}
-          />
-
-          {match.result === MatchResult.Draw ? (
-            <Typography ml={1} mr={1} variant={'subtitle1'}>
-              🤝
-            </Typography>
-          ) : (
-            <Typography ml={1} mr={1} variant={'subtitle1'} component={'span'}>
-              <Bold>VS</Bold>
-            </Typography>
-          )}
-
-          <WinnerText
-            variant={'body2'}
-            won={match.result === MatchResult.BlackWon}
-            name={
-              match.black
-                ? `${match.black?.firstName} ${(
-                    match.black?.lastName || ''
-                  ).substring(0, 1)}`
-                : 'Bye'
-            }
-          />
-        </Box>
-
-        {!isByeRound && (
-          <IconButton
-            aria-label="view"
-            color={'info'}
-            onClick={() =>
-              history.push(
-                Page.ViewMatch.replace(':tournamentId', tournament._id).replace(
-                  ':matchId',
-                  match._id
-                ) + history.location.search
-              )
-            }
-          >
-            <LaunchIcon />
-          </IconButton>
-        )}
-      </Box>
-    );
-  };
 
   const matches = [...(data?.getRound?.matches || [])];
 
-  const sortedMatches = matches.sort((a, b) => a.boardNumber - b.boardNumber);
+  const sortedMatches = matches.sort(
+    (a, b) => (a.boardNumber || 0) - (b.boardNumber || 0)
+  );
 
   return loading && !sortedMatches.length ? (
     <Box sx={{ width: '200px' }} mb={3}>
@@ -135,7 +74,13 @@ const RoundStatusDetail = ({
         } completed`}</Bold>
       </Typography>
 
-      {sortedMatches.map((match, index) => renderMatches(match, index))}
+      {sortedMatches.map((match, index) => (
+        <MatchListItem
+          tournamentId={tournament._id}
+          match={match}
+          key={index}
+        />
+      ))}
     </Box>
   );
 };

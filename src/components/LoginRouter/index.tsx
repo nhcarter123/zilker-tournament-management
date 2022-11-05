@@ -13,26 +13,29 @@ import { User } from 'types/types';
 import { UPDATE_USER_DETAILS } from 'graphql/definitions/mutations';
 import { onError } from 'graphql/errorHandler';
 
-import { useStyles } from 'components/LoginRouter/styles';
 import { UserContext } from 'context/userContext';
+import { LoginContext } from 'context/loginContext';
 import { Redirect } from 'react-router';
+import { Box } from '@mui/material';
 
 const LoginRouter = (): JSX.Element => {
   const history = useHistory();
-  const classes = useStyles();
+
+  const queryParams = new URLSearchParams(window.location.search);
 
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   const {
     data,
     loading: meLoading,
-    networkStatus
+    networkStatus,
+    refetch: refetchGetMe
   } = useQuery<{ me: Nullable<User> }>(GET_ME, {
-    fetchPolicy: 'no-cache', // todo test
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
     context: {
       headers: {
-        authorization: token ? `Bearer ${token}` : ''
+        authorization: (token?.length || 0) > 0 ? `Bearer ${token}` : ''
       }
     },
     onCompleted: () => {
@@ -42,7 +45,17 @@ const LoginRouter = (): JSX.Element => {
           history.location.pathname === Page.MoreInfo) &&
         data?.me?.firstName
       ) {
-        return history.push(Page.Tournaments + history.location.search);
+        const page = queryParams.get('page');
+
+        if (page) {
+          queryParams.delete('page');
+          history.replace({
+            search: queryParams.toString()
+          });
+          return history.push(page + history.location.search);
+        }
+
+        return history.push(Page.Home + history.location.search);
       }
 
       if (data?.me && !data?.me.firstName) {
@@ -60,48 +73,50 @@ const LoginRouter = (): JSX.Element => {
   const me = data?.me || null;
 
   return (
-    <div className={classes.root}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 'var(--app-height)'
+      }}
+    >
       {meLoading &&
       (!me?.firstName || networkStatus !== NetworkStatus.refetch) ? (
         <Spinner />
       ) : (
         <UserContext.Provider value={me}>
-          <Route exact path="/">
-            <Redirect to={Page.Tournaments} />
-          </Route>
-          {/*Legacy Support*/}
-          <Route path="/app">
-            <Redirect to={Page.Tournaments} />
-          </Route>
-          <Route
-            path={Page.Login}
-            render={(): JSX.Element => <LoginPage setToken={setToken} />}
-          />
-          <Route
-            path={Page.MoreInfo}
-            render={(): JSX.Element => (
-              <MoreInfoPage
-                updateUserDetails={updateUserDetails}
-                updateUserDetailsLoading={updateUserDetailsLoading}
-              />
-            )}
-          />
-          <Route
-            path={[
-              Page.Profile,
-              Page.Community,
-              Page.Rules,
-              Page.Donate,
-              Page.Stats,
-              Page.About,
-              '/tournament',
-              Page.Tournaments
-            ]}
-            component={AppPage}
-          />
+          <LoginContext.Provider value={{ setToken, refetchGetMe }}>
+            <Route exact path="/">
+              <Redirect to={Page.Tournaments} />
+            </Route>
+            <Route
+              path={Page.Login}
+              render={(): JSX.Element => <LoginPage setToken={setToken} />}
+            />
+            <Route
+              path={Page.MoreInfo}
+              render={(): JSX.Element => (
+                <MoreInfoPage
+                  updateUserDetails={updateUserDetails}
+                  updateUserDetailsLoading={updateUserDetailsLoading}
+                />
+              )}
+            />
+            <Route
+              path={[
+                Page.Home,
+                Page.Tournaments,
+                Page.Tournament,
+                Page.Challenge,
+                Page.Profile
+              ]}
+              component={AppPage}
+            />
+          </LoginContext.Provider>
         </UserContext.Provider>
       )}
-    </div>
+    </Box>
   );
 };
 

@@ -1,15 +1,21 @@
 export type User = {
   _id: string;
-  firstName?: string;
-  lastName?: string;
-  photo?: string;
+  firstName: Nullable<string>;
+  lastName: Nullable<string>;
+  photo: Nullable<string>;
   phone: string;
   rating: number;
   matchesPlayed: number;
   role: Role;
-  token?: string;
-  organizationId?: string;
+  token: Nullable<string>;
+  organizationId: Nullable<string>;
+  challenge: Nullable<IChallenge>;
 };
+
+export interface IChallenge {
+  expiresAt: Date;
+  gameCode: string;
+}
 
 export interface IUserWithResult extends User {
   isWinner: boolean;
@@ -41,21 +47,27 @@ export enum PairingAlgorithm {
 
 export type MatchWithUserInfo = {
   _id: string;
-  tournamentId: string;
-  white: User | null;
-  black: User | null;
-  whiteRating: number;
-  blackRating: number;
+  tournamentId: Nullable<string>;
+  hostId: Nullable<string>;
+  white: Nullable<User>;
+  black: Nullable<User>;
+  whiteRating?: number;
+  blackRating?: number;
   newWhiteRating?: number;
   newBlackRating?: number;
   whiteScore: number;
   blackScore: number;
   whiteMatchesPlayed: number;
   blackMatchesPlayed: number;
-  boardNumber: number;
+  boardNumber?: number;
   result: MatchResult;
   completed: boolean;
 };
+
+export interface IHistoryResult {
+  tournaments: Tournament[];
+  matches: MatchWithUserInfo[];
+}
 
 export type Standing = {
   _id: string;
@@ -130,4 +142,15 @@ export type TournamentUpdatedData = {
 
 export type TournamentUpdatedVariables = {
   tournamentIds: string[];
+};
+
+export type ChallengeUpdatedData = {
+  challengeUpdated?: {
+    hostId: string;
+    completed: boolean;
+  };
+};
+
+export type ChallengeUpdatedVariables = {
+  hostIds: string[];
 };

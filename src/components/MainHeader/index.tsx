@@ -1,60 +1,78 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Route } from 'react-router-dom';
 
-import { IconButton, Box } from '@mui/material';
+import { Box } from '@mui/material';
+
+import SimpleHeader from 'components/MainHeader/SimpleHeader';
+import TournamentHeader from 'components/MainHeader/TournamentHeader';
 
 import { Page } from 'types/page';
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import SimpleHeader from 'components/MainHeader/SimpleHeader';
+import { MyTournamentContext } from 'context/myTournamentContext';
+import { getPageName } from 'helpers/helpers';
 
-interface MainHeaderProps {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const MainHeader = ({ setOpen }: MainHeaderProps): JSX.Element => {
-  const history = useHistory();
-  const hasBackButton = false;
+const MainHeader = (): JSX.Element => {
+  const { currentTournament } = useContext(MyTournamentContext);
 
   return (
-    <Box display={'flex'} alignItems={'center'} pl={1}>
-      <Box>
-        <IconButton
-          aria-label={'menu'}
-          size={'large'}
-          onClick={() => (hasBackButton ? history.goBack() : setOpen(true))}
-        >
-          {hasBackButton ? <ArrowBackIcon /> : <MenuIcon />}
-        </IconButton>
+    <Box display={'flex'} alignItems={'center'}>
+      <Box width={'100%'}>
+        <Route
+          path={Page.Home}
+          render={() => <SimpleHeader title={getPageName(Page.Home)} />}
+          exact
+        />
+        <Route
+          path={Page.Challenge}
+          render={() => <SimpleHeader title={getPageName(Page.Challenge)} />}
+          exact
+        />
+        <Route
+          path={Page.Tournaments}
+          render={() => <SimpleHeader title={getPageName(Page.Tournaments)} />}
+          exact
+        />
+        <Route
+          path={Page.Profile}
+          render={() => <SimpleHeader title={getPageName(Page.Profile)} />}
+        />
+        <Route
+          path={Page.Stats}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.Stats)} back={Page.Home} />
+          )}
+        />
+        <Route
+          path={Page.About}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.About)} back={Page.Home} />
+          )}
+        />
+        <Route
+          path={Page.Donate}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.Donate)} back={Page.Home} />
+          )}
+        />
+        <Route
+          path={Page.History}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.History)} back={Page.Home} />
+          )}
+        />
+        <Route
+          path={Page.Community}
+          render={() => (
+            <SimpleHeader
+              title={getPageName(Page.Community)}
+              back={Page.Home}
+            />
+          )}
+        />
+        <Route
+          path={Page.Tournament}
+          render={() => <TournamentHeader tournament={currentTournament} />}
+        />
       </Box>
-      <Route
-        path={Page.Tournaments}
-        render={() => <SimpleHeader title={'Tournaments'} />}
-      />
-      <Route
-        path={Page.Profile}
-        render={() => <SimpleHeader title={'Profile'} />}
-      />
-      <Route
-        path={Page.Community}
-        render={() => <SimpleHeader title={'Community'} />}
-      />
-      <Route
-        path={Page.Rules}
-        render={() => <SimpleHeader title={'Rules'} />}
-      />
-      <Route
-        path={Page.Donate}
-        render={() => <SimpleHeader title={'Donate'} />}
-      />
-      <Route
-        path={Page.About}
-        render={() => <SimpleHeader title={'About'} />}
-      />
-      <Route
-        path={Page.Stats}
-        render={() => <SimpleHeader title={'Stats'} />}
-      />
     </Box>
   );
 };

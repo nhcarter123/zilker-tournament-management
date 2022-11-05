@@ -94,6 +94,9 @@ const LoginRouter = (): JSX.Element => {
             <Route path="/tournament">
               <Redirect to={Page.Tournaments} />
             </Route>
+            <Route path="/app">
+              <Redirect to={Page.Tournaments} />
+            </Route>
             <Route path="/community">
               <Redirect to={Page.Community} />
             </Route>

@@ -53,7 +53,7 @@ const LoginRouter = (): JSX.Element => {
           return history.push(page + history.location.search);
         }
 
-        return history.push(Page.Home + history.location.search);
+        return history.push(Page.Tournaments + history.location.search);
       }
 
       if (data?.me && !data?.me.firstName) {

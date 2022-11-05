@@ -1,4 +1,10 @@
-import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import React, {
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 
@@ -23,50 +29,16 @@ import {
 } from 'types/types';
 import { Page } from 'types/page';
 import { THEME_PRIMARY } from 'constants/constants';
+import { UserContext } from 'context/userContext';
 
 const TournamentsPage = (): JSX.Element => {
+  const me = useContext(UserContext);
   const history = useHistory();
 
   const queryParams = useMemo(
     () => new URLSearchParams(history.location.search),
     [history.location.search]
   );
-
-  const [joinTournament, { loading: joinLoading }] = useMutation<{
-    joinTournament?: { tournamentId: string };
-  }>(JOIN_TOURNAMENT, {
-    onError,
-    onCompleted: (data) => {
-      const tournamentId = data.joinTournament?.tournamentId;
-
-      if (tournamentId) {
-        history.push(
-          Page.Tournament.replace(':tournamentId', tournamentId) +
-            history.location.search
-        );
-      }
-    }
-  });
-
-  useEffect(() => {
-    const organizationId = queryParams.get('join');
-    const tournamentId = queryParams.get('tournamentId');
-
-    if (organizationId) {
-      queryParams.delete('join');
-      queryParams.delete('tournamentId');
-      history.replace({
-        search: queryParams.toString()
-      });
-
-      void joinTournament({
-        variables: {
-          organizationId,
-          tournamentId
-        }
-      });
-    }
-  }, [queryParams, joinLoading, history, joinTournament]);
 
   const { data, loading } = useQueryWithReconnect<{
     getTournaments: TournamentWithOrganization[];
@@ -103,6 +75,63 @@ const TournamentsPage = (): JSX.Element => {
   const completedTournaments = tournaments.filter(
     (tournament) => tournament.status === TournamentStatus.Completed
   );
+
+  const [joinTournament, { loading: joinLoading }] = useMutation<{
+    joinTournament?: { tournamentId: string };
+  }>(JOIN_TOURNAMENT, {
+    onError,
+    onCompleted: (data) => {
+      const tournamentId = data.joinTournament?.tournamentId;
+
+      if (tournamentId) {
+        history.push(
+          Page.Tournament.replace(':tournamentId', tournamentId) +
+            history.location.search
+        );
+      }
+    }
+  });
+
+  useEffect(() => {
+    const organizationId = queryParams.get('join');
+    const tournamentId = queryParams.get('tournamentId');
+
+    if (organizationId && activeTournaments.length > 0) {
+      queryParams.delete('join');
+      queryParams.delete('tournamentId');
+
+      if (
+        activeTournaments.some((tournament) =>
+          tournament.players.includes(me?._id || '')
+        )
+      ) {
+        history.push(
+          Page.Tournament.replace(
+            ':tournamentId',
+            tournamentId + queryParams.toString()
+          )
+        );
+      } else {
+        history.replace({
+          search: queryParams.toString()
+        });
+
+        void joinTournament({
+          variables: {
+            organizationId,
+            tournamentId
+          }
+        });
+      }
+    }
+  }, [
+    queryParams,
+    joinLoading,
+    history,
+    joinTournament,
+    activeTournaments,
+    me
+  ]);
 
   const [currentTab, setCurrentTab] = useState<number>(
     activeTournaments.length > 0 ? 0 : 1

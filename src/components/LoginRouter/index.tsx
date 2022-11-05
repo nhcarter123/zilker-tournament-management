@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
-import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import LoginPage from 'components/pages/LoginPage';
 import MoreInfoPage from 'components/pages/MoreInfoPage';
@@ -28,10 +28,8 @@ const LoginRouter = (): JSX.Element => {
   const {
     data,
     loading: meLoading,
-    networkStatus,
     refetch: refetchGetMe
   } = useQuery<{ me: Nullable<User> }>(GET_ME, {
-    notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
     context: {
       headers: {
@@ -81,8 +79,7 @@ const LoginRouter = (): JSX.Element => {
         height: 'var(--app-height)'
       }}
     >
-      {meLoading &&
-      (!me?.firstName || networkStatus !== NetworkStatus.refetch) ? (
+      {meLoading && !me?.firstName ? (
         <Spinner />
       ) : (
         <UserContext.Provider value={me}>

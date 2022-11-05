@@ -17,7 +17,6 @@ import { loader } from 'graphql.macro';
 import { setContext } from '@apollo/client/link/context';
 import WebsocketContextProvider from 'context/websocketContext';
 import { RoundPreview } from 'types/types';
-import moment from 'moment';
 
 const typeDefs = loader('./graphql/schema.graphql');
 
@@ -52,20 +51,13 @@ const checkVersionLink = new ApolloLink((operation, forward) => {
     const context = operation.getContext();
     const clientVersion = context.response.headers.get('client-version');
 
-    let attempts = parseInt(localStorage.getItem('attempts') || '') || 0;
+    const cachedVersion = localStorage.getItem('cachedVersion');
 
-    if (process.env.REACT_APP_WS_URI !== clientVersion && attempts < 5) {
+    if (cachedVersion && cachedVersion !== clientVersion) {
       location.reload();
-      attempts = attempts + 1;
-      localStorage.setItem('attempts', attempts.toString());
-      localStorage.setItem('attemptedAt', moment().format());
-    } else {
-      const lastAttempted = moment(localStorage.getItem('attemptedAt'));
-
-      if (moment(lastAttempted).add(20, 'seconds').isBefore(moment())) {
-        localStorage.setItem('attempts', '0');
-      }
     }
+
+    localStorage.setItem('cachedVersion', clientVersion);
 
     return response;
   });

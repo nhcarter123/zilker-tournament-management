@@ -51,13 +51,9 @@ const checkVersionLink = new ApolloLink((operation, forward) => {
     const context = operation.getContext();
     const clientVersion = context.response.headers.get('client-version');
 
-    const cachedVersion = localStorage.getItem('cachedVersion');
-
-    if (cachedVersion && cachedVersion !== clientVersion) {
+    if (process.env.REACT_APP_WS_URI !== clientVersion) {
       location.reload();
     }
-
-    localStorage.setItem('cachedVersion', clientVersion);
 
     return response;
   });

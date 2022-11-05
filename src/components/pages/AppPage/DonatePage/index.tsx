@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material/';
 import { Button } from 'antd';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const DonatePage = (): JSX.Element => {
   return (
@@ -14,6 +15,10 @@ const DonatePage = (): JSX.Element => {
 
       <Box mt={3} display={'flex'} justifyContent={'center'}>
         <Button
+          style={{
+            background: THEME_PRIMARY,
+            borderColor: THEME_PRIMARY
+          }}
           size={'large'}
           type="primary"
           onClick={(): void => {

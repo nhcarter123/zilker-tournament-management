@@ -14,6 +14,7 @@ import { TournamentStatus, TournamentWithOrganization } from 'types/types';
 import { UserContext } from 'context/userContext';
 import { Page } from 'types/page';
 import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
+import { THEME_SECONDARY } from 'constants/constants';
 
 interface JoinTournamentListProps {
   status: TournamentStatus;
@@ -38,7 +39,6 @@ const JoinTournamentList = ({
       <Box
         sx={{
           overflow: 'auto',
-          borderColor: '#e5e5e5',
           position: 'absolute',
           top: 0,
           bottom: 0,
@@ -115,7 +115,7 @@ const JoinTournamentList = ({
                     px={0.5}
                     py={1}
                     sx={{
-                      background: '#d4fbcd',
+                      background: THEME_SECONDARY,
                       padding: '4px 8px'
                     }}
                   >

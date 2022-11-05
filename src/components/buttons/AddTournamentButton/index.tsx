@@ -8,6 +8,7 @@ import { onError } from 'graphql/errorHandler';
 import { Tournament } from 'types/types';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const AddTournamentButton = (): JSX.Element => {
   const history = useHistory();
@@ -32,6 +33,7 @@ const AddTournamentButton = (): JSX.Element => {
   return (
     <Box width={'100%'} mb={1.5}>
       <Button
+        style={{ background: THEME_PRIMARY, borderColor: THEME_PRIMARY }}
         type={'primary'}
         onClick={(): void =>
           void createTournament({ variables: { name: 'New Tournament' } })

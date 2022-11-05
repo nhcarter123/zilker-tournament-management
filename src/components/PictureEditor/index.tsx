@@ -9,6 +9,7 @@ import { DELETE_PHOTO, UPLOAD_PHOTO } from 'graphql/definitions/mutations';
 import { GET_ME } from 'graphql/definitions/queries';
 import { onError } from 'graphql/errorHandler';
 import Spinner from 'components/Spinner';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const PictureEditor = (): JSX.Element => {
   const [localFile, setLocalFile] = useState<Nullable<File>>(null);
@@ -82,6 +83,10 @@ const PictureEditor = (): JSX.Element => {
           <Box display={'flex'} justifyContent={'center'}>
             {localFile ? (
               <Button
+                style={{
+                  background: THEME_PRIMARY,
+                  borderColor: THEME_PRIMARY
+                }}
                 size={'middle'}
                 type="primary"
                 onClick={(): void => {
@@ -99,6 +104,10 @@ const PictureEditor = (): JSX.Element => {
               </Button>
             ) : (
               <Button
+                style={{
+                  background: THEME_PRIMARY,
+                  borderColor: THEME_PRIMARY
+                }}
                 size={'middle'}
                 type="primary"
                 onClick={(): void => {
@@ -111,6 +120,10 @@ const PictureEditor = (): JSX.Element => {
             {localFile && (
               <Box ml={2}>
                 <Button
+                  style={{
+                    background: THEME_PRIMARY,
+                    borderColor: THEME_PRIMARY
+                  }}
                   size={'middle'}
                   type="primary"
                   onClick={(): void => {
@@ -127,6 +140,10 @@ const PictureEditor = (): JSX.Element => {
             {!localFile && photo && (
               <Box ml={2}>
                 <Button
+                  style={{
+                    background: THEME_PRIMARY,
+                    borderColor: THEME_PRIMARY
+                  }}
                   size={'middle'}
                   type="primary"
                   onClick={(): void => void deletePhoto()}

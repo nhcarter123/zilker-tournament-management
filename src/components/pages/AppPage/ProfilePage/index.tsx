@@ -12,6 +12,7 @@ import { LoginContext } from 'context/loginContext';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
 import { GET_ME } from 'graphql/definitions/queries';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const ProfilePage = (): JSX.Element => {
   const me = useContext(UserContext);
@@ -71,6 +72,10 @@ const ProfilePage = (): JSX.Element => {
 
         <Box mt={2}>
           <Button
+            style={{
+              background: THEME_PRIMARY,
+              borderColor: THEME_PRIMARY
+            }}
             size={'middle'}
             type="primary"
             loading={loading}

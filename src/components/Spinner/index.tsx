@@ -2,6 +2,7 @@ import React from 'react';
 import { LinearProgress, Box } from '@mui/material';
 import { Spin } from 'antd';
 import { useStyles } from 'components/Spinner/styles';
+import { THEME_PRIMARY } from 'constants/constants';
 
 interface SpinnerProps {
   linear?: boolean;
@@ -17,7 +18,15 @@ const Spinner = ({ linear }: SpinnerProps): JSX.Element => {
   ) : (
     <div className={classes.spinner}>
       <div />
-      <Box display={'flex'} alignItems={'center'}>
+      <Box
+        display={'flex'}
+        alignItems={'center'}
+        sx={{
+          '& .ant-spin-dot-item': {
+            backgroundColor: THEME_PRIMARY
+          }
+        }}
+      >
         <Spin size="large" />
       </Box>
       <div />

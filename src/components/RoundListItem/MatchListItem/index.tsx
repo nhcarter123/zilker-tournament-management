@@ -24,8 +24,9 @@ const MatchListItem = ({
 
   return (
     <Box display={'flex'} justifyContent={'space-between'} pt={1}>
-      <Box display={'flex'} alignItems={'center'}>
+      <Box display={'flex'} alignItems={'baseline'}>
         <WinnerText
+          rating={match.whiteRating}
           variant={'body2'}
           won={match.result === MatchResult.WhiteWon}
           name={`${match.white?.firstName} ${(
@@ -44,6 +45,7 @@ const MatchListItem = ({
         )}
 
         <WinnerText
+          rating={match.blackRating}
           variant={'body2'}
           won={match.result === MatchResult.BlackWon}
           name={

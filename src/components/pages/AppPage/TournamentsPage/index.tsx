@@ -22,6 +22,7 @@ import {
   TournamentWithOrganization
 } from 'types/types';
 import { Page } from 'types/page';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const TournamentsPage = (): JSX.Element => {
   const history = useHistory();
@@ -130,7 +131,16 @@ const TournamentsPage = (): JSX.Element => {
             'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 2px 6px 2px;'
           }
         >
-          <Box>
+          <Box
+            sx={{
+              '& .MuiTabs-indicator': {
+                background: THEME_PRIMARY
+              },
+              '& .Mui-selected': {
+                color: `${THEME_PRIMARY} !important`
+              }
+            }}
+          >
             <Tabs
               value={currentTab}
               onChange={(event: SyntheticEvent, newValue: number) =>

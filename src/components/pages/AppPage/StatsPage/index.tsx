@@ -3,6 +3,7 @@ import { Box, Tab, Tabs } from '@mui/material/';
 import SwipeableViews from 'react-swipeable-views';
 import GlobalStats from 'components/pages/AppPage/StatsPage/GlobalStats';
 import PersonalStats from 'components/pages/AppPage/StatsPage/PersonalStats';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const StatsPage = (): JSX.Element => {
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -17,6 +18,14 @@ const StatsPage = (): JSX.Element => {
         boxShadow={
           'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 2px 6px 2px;'
         }
+        sx={{
+          '& .MuiTabs-indicator': {
+            background: THEME_PRIMARY
+          },
+          '& .Mui-selected': {
+            color: `${THEME_PRIMARY} !important`
+          }
+        }}
       >
         <Tabs
           value={currentTab}
@@ -24,8 +33,8 @@ const StatsPage = (): JSX.Element => {
             setCurrentTab(newValue)
           }
         >
-          <Tab label={'Personal'} />
           <Tab label={'Global'} />
+          <Tab label={'Personal'} />
         </Tabs>
       </Box>
 
@@ -50,8 +59,8 @@ const StatsPage = (): JSX.Element => {
             }}
             onChangeIndex={handleChangeIndex}
           >
-            <PersonalStats />
             <GlobalStats />
+            <PersonalStats />
           </SwipeableViews>
         </Box>
       </Box>

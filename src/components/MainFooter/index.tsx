@@ -10,6 +10,7 @@ import { UserContext } from 'context/userContext';
 import { compact } from 'lodash';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Page } from 'types/page';
+import { THEME_PRIMARY } from 'constants/constants';
 
 export enum MenuItem {
   Home = 'Home',
@@ -96,6 +97,12 @@ const MainFooter = (): JSX.Element => {
         <Box display={'flex'} justifyContent={'center'}>
           <Tabs
             sx={{
+              '& .MuiTabs-indicator': {
+                background: THEME_PRIMARY
+              },
+              '& .Mui-selected': {
+                color: `${THEME_PRIMARY} !important`
+              },
               '& .MuiTab-textColorPrimary': {
                 minWidth: 0,
                 padding: '12px min(5.5vw, 16px)',

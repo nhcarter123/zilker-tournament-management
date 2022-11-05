@@ -179,7 +179,7 @@ const HistoryPage = (): JSX.Element => {
                     ) : (
                       <Box mx={2} width={'100%'}>
                         <Divider />
-                        <Box mb={1}>
+                        <Box mb={2} mt={1}>
                           <MatchListItem match={matchOrTournament} />
                         </Box>
                       </Box>

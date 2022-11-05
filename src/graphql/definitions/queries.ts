@@ -115,12 +115,14 @@ export const GET_MATCH = gql`
         firstName
         lastName
         photo
+        rating
       }
       black {
         _id
         firstName
         lastName
         photo
+        rating
       }
       whiteRating
       blackRating
@@ -145,12 +147,14 @@ export const GET_MY_MATCH = gql`
         firstName
         lastName
         photo
+        rating
       }
       black {
         _id
         firstName
         lastName
         photo
+        rating
       }
       whiteRating
       blackRating
@@ -176,12 +180,14 @@ export const GET_MY_CHALLENGE_MATCH = gql`
         firstName
         lastName
         photo
+        rating
       }
       black {
         _id
         firstName
         lastName
         photo
+        rating
       }
       whiteRating
       blackRating

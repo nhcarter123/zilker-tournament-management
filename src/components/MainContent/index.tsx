@@ -163,7 +163,6 @@ const MainContent = (): JSX.Element => {
         ? { variables: { hostIds: [myChallengeSubscriptionId] } }
         : { skip: true }),
       onSubscriptionData: (data) => {
-        console.log(data);
         if (data.subscriptionData.data?.challengeUpdated?.completed) {
           void refetchGetMe();
         }

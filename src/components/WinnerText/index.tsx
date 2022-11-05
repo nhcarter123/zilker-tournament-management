@@ -10,20 +10,36 @@ interface MatchResultSelectProps {
   won: boolean;
   name: string;
   variant: Variant;
+  rating?: number;
 }
 
 const WinnerText = ({
   won,
   name,
-  variant
+  variant,
+  rating
 }: MatchResultSelectProps): JSX.Element => {
   const classes = useStyles();
   return (
-    <Box className={won ? classes.root : ''}>
-      <div className={classes.crownContainer}>
-        <CrownIcon className={won ? classes.crown : classes.crownHidden} />
-        <Typography variant={variant}>{name}</Typography>
-      </div>
+    <Box>
+      <Box className={won ? classes.root : ''}>
+        <div className={classes.crownContainer}>
+          <CrownIcon className={won ? classes.crown : classes.crownHidden} />
+          <Typography variant={variant}>{name}</Typography>
+        </div>
+      </Box>
+      {rating && rating > 0 ? (
+        <Typography
+          fontFamily={'Monospace'}
+          variant={'body1'}
+          fontSize={'12px'}
+          color={'gray'}
+        >
+          {rating}
+        </Typography>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 };

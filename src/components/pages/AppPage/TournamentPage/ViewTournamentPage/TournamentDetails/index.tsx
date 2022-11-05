@@ -167,8 +167,6 @@ const TournamentDetails = ({
       }
     });
 
-  console.log(moment(tournament.date).format('yyyy-MM-DDThh:mm'));
-
   return (
     <>
       <Typography variant={'h5'} align={'center'} mt={2}>

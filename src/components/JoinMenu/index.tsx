@@ -14,6 +14,7 @@ import { GET_MY_CHALLENGE_MATCH } from 'graphql/definitions/queries';
 import { UserContext } from 'context/userContext';
 import { onError } from 'graphql/errorHandler';
 import moment from 'moment';
+import { THEME_PRIMARY } from 'constants/constants';
 
 const calcPercent = (expiresAt?: Date) => {
   const start = moment(expiresAt).subtract(5, 'minutes');
@@ -28,7 +29,6 @@ const JoinMenu = (): JSX.Element => {
   const myGameCode = me?.challenge?.gameCode;
   const expiresAt = me?.challenge?.expiresAt;
   const history = useHistory();
-  const [mounted, setMounted] = useState(false);
   const [percent, setPercent] = useState(calcPercent(expiresAt));
 
   const queryParams = useMemo(
@@ -48,7 +48,7 @@ const JoinMenu = (): JSX.Element => {
     onError
   });
 
-  const [refreshChallenge, { loading: refreshChallengeLoading }] = useMutation<{
+  const [refreshChallenge] = useMutation<{
     refreshChallenge: Nullable<User>;
   }>(REFRESH_CHALLENGE);
 
@@ -67,7 +67,6 @@ const JoinMenu = (): JSX.Element => {
 
   useEffect(() => {
     void refreshChallenge();
-    setMounted(true);
   }, [refreshChallenge]);
 
   useEffect(() => {
@@ -99,7 +98,7 @@ const JoinMenu = (): JSX.Element => {
           p={1.5}
           pt={0.5}
         >
-          {refreshChallengeLoading || joinChallengeLoading || !mounted ? (
+          {joinChallengeLoading ? (
             <Spinner />
           ) : (
             <Box
@@ -122,7 +121,15 @@ const JoinMenu = (): JSX.Element => {
               </Box>
 
               <Box width={'100%'} pb={1} pt={0.2}>
-                <LinearProgress variant="determinate" value={percent} />
+                <LinearProgress
+                  variant="determinate"
+                  value={percent}
+                  sx={{
+                    '& .MuiLinearProgress-bar1Determinate': {
+                      bgcolor: THEME_PRIMARY
+                    }
+                  }}
+                />
               </Box>
 
               <Box display={'flex'} justifyContent={'center'}>

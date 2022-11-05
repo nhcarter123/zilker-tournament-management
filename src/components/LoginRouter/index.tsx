@@ -87,6 +87,27 @@ const LoginRouter = (): JSX.Element => {
       ) : (
         <UserContext.Provider value={me}>
           <LoginContext.Provider value={{ setToken, refetchGetMe }}>
+            {/*Legacy Support*/}
+            <Route path="/tournament">
+              <Redirect to={Page.Tournaments} />
+            </Route>
+            <Route path="/community">
+              <Redirect to={Page.Community} />
+            </Route>
+            <Route path="/rules">
+              <Redirect to={Page.Home} />
+            </Route>
+            <Route path="/stats">
+              <Redirect to={Page.Stats} />
+            </Route>
+            <Route path="/donate">
+              <Redirect to={Page.Donate} />
+            </Route>
+            <Route path="/about">
+              <Redirect to={Page.About} />
+            </Route>
+            {/*Legacy Support*/}
+
             <Route exact path="/">
               <Redirect to={Page.Tournaments} />
             </Route>

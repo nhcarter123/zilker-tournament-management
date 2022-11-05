@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSubscription } from '@apollo/client';
+import { useMutation, useSubscription } from '@apollo/client';
 import { useMediaQuery } from 'react-responsive';
 
 import Player from 'components/Player';
@@ -12,15 +12,19 @@ import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/Matc
 
 import { Box, Typography } from '@mui/material';
 import {
+  MatchResult,
   MatchUpdatedData,
   MatchUpdatedVariables,
   MatchWithUserInfo
 } from 'types/types';
 import clsx from 'clsx';
+import { END_CHALLENGE } from 'graphql/definitions/mutations';
+import { GET_MY_CHALLENGE_MATCH } from 'graphql/definitions/queries';
+import { Button, Popconfirm } from 'antd';
 
 interface MatchPageProps {
   match: MatchWithUserInfo;
-  organizationId: string;
+  organizationId?: string;
   isChallenge?: boolean;
 }
 
@@ -34,6 +38,16 @@ const MatchPage = ({
 
   useSubscription<MatchUpdatedData, MatchUpdatedVariables>(MATCH_UPDATED, {
     variables: { matchIds: [match._id] }
+  });
+
+  const matchId = match?._id;
+
+  const [endChallenge, { loading }] = useMutation<{
+    endChallenge: Nullable<MatchWithUserInfo>;
+  }>(END_CHALLENGE, {
+    ...(matchId ? { variables: { matchId } } : { skip: true }),
+    refetchQueries: [GET_MY_CHALLENGE_MATCH],
+    awaitRefetchQueries: true
   });
 
   const whitePlayer = match.white;
@@ -121,10 +135,40 @@ const MatchPage = ({
             />
 
             {allPlayersJoined && (
-              <MatchResultSelect
-                match={match}
-                organizationId={organizationId}
-              />
+              <Box>
+                <MatchResultSelect
+                  match={match}
+                  organizationId={organizationId}
+                />
+                {isChallenge && (
+                  <Box display={'flex'} justifyContent={'center'} py={1}>
+                    <Popconfirm
+                      title="Are you sure?"
+                      onConfirm={() => endChallenge()}
+                    >
+                      <Button
+                        style={{
+                          color:
+                            match.result !== MatchResult.DidNotStart
+                              ? 'white'
+                              : 'red'
+                        }}
+                        size={'small'}
+                        type={
+                          match.result !== MatchResult.DidNotStart
+                            ? 'primary'
+                            : 'default'
+                        }
+                        loading={loading}
+                      >
+                        {match.result !== MatchResult.DidNotStart
+                          ? 'Complete challenge'
+                          : 'Leave challenge'}
+                      </Button>
+                    </Popconfirm>
+                  </Box>
+                )}
+              </Box>
             )}
           </Box>
         )}

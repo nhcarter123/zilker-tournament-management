@@ -1,5 +1,14 @@
 import { gql } from '@apollo/client';
 
+export const CHALLENGE_UPDATED = gql`
+  subscription ChallengeUpdated($hostIds: [ID!]!) {
+    challengeUpdated(hostIds: $hostIds) {
+      hostId
+      completed
+    }
+  }
+`;
+
 export const MATCH_UPDATED = gql`
   subscription MatchUpdated($matchIds: [ID!]!) {
     matchUpdated(matchIds: $matchIds) {

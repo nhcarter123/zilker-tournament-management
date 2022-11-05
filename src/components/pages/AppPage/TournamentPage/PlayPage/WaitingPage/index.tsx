@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@mui/material/';
+import { Box, Typography } from '@mui/material/';
 import { useStyles } from 'components/pages/AppPage/TournamentPage/PlayPage/WaitingPage/styles';
 
 interface WaitingPageProps {
@@ -10,7 +10,7 @@ const WaitingPage = ({ tournamentStarted }: WaitingPageProps): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root} px={2}>
       <div>
         {tournamentStarted ? (
           <>
@@ -44,7 +44,7 @@ const WaitingPage = ({ tournamentStarted }: WaitingPageProps): JSX.Element => {
           </>
         )}
       </div>
-    </div>
+    </Box>
   );
 };
 

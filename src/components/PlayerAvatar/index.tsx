@@ -12,7 +12,7 @@ const PlayerAvatar = ({ player, size }: PlayPageProps): JSX.Element => {
   return (
     <Box display={'flex'} justifyContent={'center'} mb={0.5}>
       <Avatar
-        src={player?.photo}
+        src={player?.photo || ''}
         sx={{
           bgcolor: getColorFromName(
             player ? `${player.firstName}${player.lastName}` : '?'

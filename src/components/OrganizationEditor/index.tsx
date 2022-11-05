@@ -64,7 +64,6 @@ const OrganizationEditor = (): JSX.Element => {
             type="primary"
             loading={createOrganizationLoading}
             onClick={() => createOrganization()}
-            block
           >
             Create
           </Button>

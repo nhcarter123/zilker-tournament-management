@@ -20,7 +20,7 @@ const SimpleHeader = ({ title, back }: SimpleHeaderProps): JSX.Element => {
     <Box pt={1} pb={0.5} bgcolor={THEME_PRIMARY}>
       <Box
         display={'grid'}
-        gridTemplateColumns={'1fr 1fr 1fr'}
+        gridTemplateColumns={'1fr auto 1fr'}
         alignItems={'center'}
       >
         <Box ml={1}>
@@ -62,9 +62,9 @@ const SimpleHeader = ({ title, back }: SimpleHeaderProps): JSX.Element => {
                 variant={'body2'}
                 color={'#fff'}
                 mr={0.5}
-                textAlign={'right'}
+                width={'min-content'}
               >
-                Return to tournament
+                My tournament
               </Typography>
               <ArrowBackIosNewIcon
                 fontSize={'small'}

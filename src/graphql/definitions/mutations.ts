@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 export const VERIFY_CODE = gql`
   mutation VerifyCode($code: String!) {
     verifyCode(code: $code) {
+      _id
       token
     }
   }
@@ -35,7 +36,26 @@ export const VERIFY_EMAIL = gql`
 export const LOGIN_EMAIL = gql`
   mutation LoginEmail($email: String!, $password: String!, $token: String!) {
     loginEmail(email: $email, password: $password, token: $token) {
+      _id
       token
+    }
+  }
+`;
+
+export const LOGOUT = gql`
+  mutation Logout {
+    logout
+  }
+`;
+
+export const REFRESH_CHALLENGE = gql`
+  mutation RefreshChallenge {
+    refreshChallenge {
+      _id
+      challenge {
+        expiresAt
+        gameCode
+      }
     }
   }
 `;
@@ -48,7 +68,9 @@ export const UPDATE_USER_DETAILS = gql`
 
 export const CREATE_TOURNAMENT = gql`
   mutation CreateTournament($name: String!) {
-    createTournament(name: $name)
+    createTournament(name: $name) {
+      _id
+    }
   }
 `;
 
@@ -101,6 +123,18 @@ export const DELETE_ROUND = gql`
 export const UPDATE_MATCH = gql`
   mutation UpdateMatch($matchId: ID!, $payload: UpdateMatchPayload!) {
     updateMatch(matchId: $matchId, payload: $payload)
+  }
+`;
+
+export const JOIN_CHALLENGE = gql`
+  mutation JoinChallenge($gameCode: ID!) {
+    joinChallenge(gameCode: $gameCode)
+  }
+`;
+
+export const END_CHALLENGE = gql`
+  mutation EndChallenge($matchId: ID!) {
+    endChallenge(matchId: $matchId)
   }
 `;
 

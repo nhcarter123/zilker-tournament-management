@@ -5,7 +5,6 @@ import { Box } from '@mui/material';
 import Spinner from 'components/Spinner';
 import ViewTournamentPage from 'components/pages/AppPage/TournamentPage/ViewTournamentPage';
 import PlayPage from 'components/pages/AppPage/TournamentPage/PlayPage';
-import TournamentHeader from 'components/MainHeader/TournamentHeader';
 import ViewMatchPage from 'components/pages/AppPage/TournamentPage/ViewMatchPage';
 
 import { MatchWithUserInfo, Tournament } from 'types/types';

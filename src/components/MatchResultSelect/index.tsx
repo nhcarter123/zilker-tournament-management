@@ -22,7 +22,7 @@ import { UserContext } from 'context/userContext';
 
 interface MatchResultSelectProps {
   match: MatchWithUserInfo;
-  organizationId: string;
+  organizationId?: string;
 }
 
 const MatchResultSelect = ({
@@ -44,10 +44,10 @@ const MatchResultSelect = ({
   };
 
   const canEdit =
-    me?.organizationId === organizationId ||
+    (organizationId && me?.organizationId === organizationId) ||
     me?.role === Role.Admin ||
-    me?._id === match.white?._id ||
-    me?._id === match.black?._id;
+    ((me?._id === match.white?._id || me?._id === match.black?._id) &&
+      !match.completed);
 
   const disabled = !isOnline || !canEdit;
 

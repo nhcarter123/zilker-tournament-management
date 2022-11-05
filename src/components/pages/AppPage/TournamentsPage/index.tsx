@@ -1,19 +1,10 @@
-import React, {
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 
 import { Box, Tab, Tabs } from '@mui/material';
 import JoinTournamentList from 'components/pages/AppPage/TournamentsPage/JoinTournamentList';
 import Spinner from 'components/Spinner';
-import AddTournamentButton from 'components/buttons/AddTournamentButton';
-import CreateGameButton from 'components/buttons/CreateGameButton';
-
 import SwipeableViews from 'react-swipeable-views';
 
 import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
@@ -25,29 +16,19 @@ import { useMutation, useSubscription } from '@apollo/client';
 import { onError } from 'graphql/errorHandler';
 
 import {
-  MatchResult,
-  Role,
   TournamentStatus,
   TournamentUpdatedData,
   TournamentUpdatedVariables,
-  TournamentWithOrganization,
-  User
+  TournamentWithOrganization
 } from 'types/types';
 import { Page } from 'types/page';
-import { UserContext } from 'context/userContext';
-import MatchPage from 'components/pages/AppPage/TournamentPage/PlayPage/MatchPage';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { THEME_PRIMARY } from 'constants/constants';
-import { Button } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
 
 const TournamentsPage = (): JSX.Element => {
   const history = useHistory();
-  const me = useContext(UserContext);
 
   const queryParams = useMemo(
-    () => new URLSearchParams(window.location.search),
-    []
+    () => new URLSearchParams(history.location.search),
+    [history.location.search]
   );
 
   const [joinTournament, { loading: joinLoading }] = useMutation<{
@@ -142,12 +123,6 @@ const TournamentsPage = (): JSX.Element => {
         width={'100%'}
         maxWidth={'600px'}
       >
-        {/*<Box mx={2} display={'flex'} justifyContent={'center'}>*/}
-        {/*{me?.organizationId && <AddTournamentButton />}*/}
-        {/*<CreateGameButton />*/}
-        {/*<AddTournamentButton />*/}
-        {/*</Box>*/}
-
         <Box
           display={'flex'}
           justifyContent={'center'}
@@ -167,23 +142,6 @@ const TournamentsPage = (): JSX.Element => {
               <Tab label={'Past'} />
             </Tabs>
           </Box>
-          {/*<Box*/}
-          {/*  position={'absolute'}*/}
-          {/*  left={15}*/}
-          {/*  top={65}*/}
-          {/*  // color={THEME_PRIMARY}*/}
-          {/*  zIndex={2}*/}
-          {/*>*/}
-          {/*  <Button*/}
-          {/*    type={'primary'}*/}
-          {/*    size={'large'}*/}
-          {/*    shape="circle"*/}
-          {/*    onClick={() => {*/}
-          {/*      console.log('');*/}
-          {/*    }}*/}
-          {/*    icon={<PlusCircleOutlined />}*/}
-          {/*  />*/}
-          {/*</Box>*/}
         </Box>
 
         <Box>

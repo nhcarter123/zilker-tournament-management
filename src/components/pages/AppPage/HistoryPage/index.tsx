@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Divider, Link, Typography } from '@mui/material/';
-import { IHistoryResult, MatchWithUserInfo } from 'types/types';
+import { IHistoryResult, MatchResult, MatchWithUserInfo } from 'types/types';
 import { useQuery } from '@apollo/client';
 import { GET_MY_MATCH_HISTORY } from 'graphql/definitions/queries';
 import Spinner from 'components/Spinner';
@@ -9,20 +9,49 @@ import { find, groupBy } from 'lodash';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
+import { UserContext } from 'context/userContext';
 
 interface ITournamentHistoryItem {
   _id: string;
   name: string;
   date: string;
+  score: string;
   matches: MatchWithUserInfo[];
 }
 
-const HistoryPage = (): JSX.Element => {
-  const { data, loading } = useQuery<
-    { getMyMatchHistory: IHistoryResult },
-    { tournamentId: string }
-  >(GET_MY_MATCH_HISTORY);
+const getScore = (matches: MatchWithUserInfo[], userId: string): number => {
+  let score = 0;
 
+  matches.forEach((match) => {
+    if (match.white?._id === userId) {
+      if (match.result === MatchResult.WhiteWon) {
+        score = score + 1;
+      }
+    }
+
+    if (match.black?._id === userId) {
+      if (match.result === MatchResult.BlackWon) {
+        score = score + 1;
+      }
+    }
+
+    if (match.result === MatchResult.Draw) {
+      score = score + 0.5;
+    }
+
+    if (!match.white || !match.black) {
+      score = score + 1;
+    }
+  });
+
+  return score;
+};
+
+const HistoryPage = (): JSX.Element => {
+  const { data, loading } =
+    useQuery<{ getMyMatchHistory: IHistoryResult }>(GET_MY_MATCH_HISTORY);
+
+  const me = useContext(UserContext);
   const history = useHistory();
 
   const addedTournaments = new Set();
@@ -44,6 +73,9 @@ const HistoryPage = (): JSX.Element => {
         if (value && tournament) {
           matchesWithTournaments.push({
             _id: tournament._id,
+            score: `(${getScore(value, me?._id || '')}/${
+              tournament.rounds.length
+            })`,
             name: tournament.name,
             date: moment(tournament.date).format('ll'),
             matches: value
@@ -79,55 +111,82 @@ const HistoryPage = (): JSX.Element => {
           {loading ? (
             <Spinner />
           ) : (
-            <Box width={'100%'} maxWidth={'600px'}>
-              {matchesWithTournaments.map((matchOrTournament, index) => (
-                <Box key={index} display={'flex'}>
-                  {'name' in matchOrTournament ? (
-                    <Box mt={3} width={'100%'} px={1}>
-                      <Box
-                        display={'flex'}
-                        alignItems={'baseline'}
-                        justifyContent={'space-between'}
-                      >
-                        <Link
-                          onClick={() =>
-                            history.push(
-                              Page.ViewTournament.replace(
-                                ':tournamentId',
-                                matchOrTournament._id
-                              ) + history.location.search
-                            )
-                          }
-                          underline={'hover'}
-                          variant="h5"
-                        >
-                          {matchOrTournament.name}
-                        </Link>
-
-                        <Typography ml={2} variant={'body1'}>
-                          {matchOrTournament.date}
-                        </Typography>
-                      </Box>
-
-                      <Divider />
-
-                      <Box mx={1}>
-                        {matchOrTournament.matches.map((match, index) => (
-                          <MatchListItem
-                            key={index}
-                            match={match}
-                            tournamentId={matchOrTournament._id}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
-                  ) : (
-                    <MatchListItem match={matchOrTournament} />
-                  )}
-                  {/*<Box>{match.white?.firstName}</Box>*/}
-                  {/*<Box>{match.white?.firstName}</Box>*/}
+            <Box width={'100%'} maxWidth={'600px'} pt={2} px={1}>
+              {matchesWithTournaments.length === 0 ? (
+                <Box
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  fontStyle={'italic'}
+                  height={'100%'}
+                >
+                  <Box>
+                    <Typography variant="body1">
+                      You have no match history
+                    </Typography>
+                    <Typography variant="subtitle2">
+                      Play some games to get started
+                    </Typography>
+                  </Box>
                 </Box>
-              ))}
+              ) : (
+                matchesWithTournaments.map((matchOrTournament, index) => (
+                  <Box key={index} display={'flex'}>
+                    {'name' in matchOrTournament ? (
+                      <Box mb={3} width={'100%'}>
+                        <Box
+                          display={'flex'}
+                          alignItems={'baseline'}
+                          justifyContent={'space-between'}
+                        >
+                          <Box display={'flex'} alignItems={'baseline'}>
+                            <Link
+                              onClick={() =>
+                                history.push(
+                                  Page.ViewTournament.replace(
+                                    ':tournamentId',
+                                    matchOrTournament._id
+                                  ) + history.location.search
+                                )
+                              }
+                              underline={'hover'}
+                              variant="h5"
+                            >
+                              {matchOrTournament.name}
+                            </Link>
+                            <Typography ml={1} variant={'body1'}>
+                              {matchOrTournament.score}
+                            </Typography>
+                          </Box>
+
+                          <Typography ml={2} variant={'body1'}>
+                            {matchOrTournament.date}
+                          </Typography>
+                        </Box>
+
+                        <Divider />
+
+                        <Box mx={1}>
+                          {matchOrTournament.matches.map((match, index) => (
+                            <MatchListItem
+                              key={index}
+                              match={match}
+                              tournamentId={matchOrTournament._id}
+                            />
+                          ))}
+                        </Box>
+                      </Box>
+                    ) : (
+                      <Box mx={2} width={'100%'}>
+                        <Divider />
+                        <Box mb={1}>
+                          <MatchListItem match={matchOrTournament} />
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                ))
+              )}
             </Box>
           )}
         </Box>

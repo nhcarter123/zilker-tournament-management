@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { findIndex } from 'lodash';
-import { matchPath, useLocation } from 'react-router-dom';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 
 import LeaveTournamentButton from 'components/pages/AppPage/TournamentPage/LeaveTournamentButton';
-import SwapViewButton from 'components/pages/AppPage/TournamentPage/SwapViewButton';
-import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
 import { Box, Typography, Divider } from '@mui/material';
 
 import { useStyles } from 'components/MainHeader/TournamentHeader/styles';
@@ -13,6 +11,8 @@ import { Page } from 'types/page';
 import { Tournament, TournamentStatus } from 'types/types';
 import { getUserAllUserIdsFromTournament } from 'helpers/helpers';
 import { THEME_PRIMARY } from 'constants/constants';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { MyTournamentContext } from 'context/myTournamentContext';
 
 interface TournamentHeaderProps {
   tournament: Nullable<Tournament>;
@@ -24,6 +24,9 @@ const TournamentHeader = ({
   const me = useContext(UserContext);
   const page = useLocation().pathname;
   const classes = useStyles();
+  const history = useHistory();
+  const { myTournamentId } = useContext(MyTournamentContext);
+
   const pathMatch = matchPath<{ matchId?: string }>(page, {
     path: Page.ViewTournamentMatch,
     exact: false,
@@ -49,6 +52,7 @@ const TournamentHeader = ({
   const playerCount = getUserAllUserIdsFromTournament(tournament).length;
 
   const isTournamentPage = page.includes('view') && !page.includes('match');
+  const isMyTournamentPage = page.includes(myTournamentId || 'does not match');
 
   return (
     <Box
@@ -65,7 +69,11 @@ const TournamentHeader = ({
           {tournament.name}
         </Typography>
 
-        <Box display={'flex'} alignItems={'center'} className={classes.noWrap}>
+        <Box
+          display={'flex'}
+          alignItems={'baseline'}
+          className={classes.noWrap}
+        >
           {currentRound > 0 && (
             <Box mr={1}>
               <Typography
@@ -89,42 +97,83 @@ const TournamentHeader = ({
         </Box>
       </Box>
 
-      {amParticipant && (
-        <Box>
-          <Divider sx={{ background: '#fff' }} />
+      <Box>
+        <Divider sx={{ background: '#fff' }} />
 
-          <Box
-            my={0.5}
-            display={'grid'}
-            alignItems={'center'}
-            gridTemplateColumns={'1fr 1fr 1fr'}
-          >
-            <TournamentStatusChip
-              label={`${
-                tournament.status === TournamentStatus.Active
-                  ? 'Playing'
-                  : 'Played'
-              }`}
-            />
+        <Box
+          my={0.5}
+          display={'grid'}
+          alignItems={'center'}
+          gridTemplateColumns={'1fr auto 1fr'}
+        >
+          <Box ml={1}>
+            <Box
+              color={'#fff'}
+              display={'flex'}
+              alignItems={'center'}
+              onClick={() => {
+                const target = isTournamentPage
+                  ? Page.Tournaments
+                  : Page.ViewTournament.replace(
+                      ':tournamentId',
+                      tournament._id
+                    );
 
-            {!isTournamentPage ||
-            tournament.status === TournamentStatus.Active ? (
-              <SwapViewButton
-                tournamentId={tournament._id}
-                isTournamentPage={isTournamentPage}
-              />
-            ) : (
-              <Box />
-            )}
-
-            {tournament.status === TournamentStatus.Active ? (
-              <LeaveTournamentButton tournamentId={tournament._id} />
-            ) : (
-              <Box />
-            )}
+                history.push(target + history.location.search);
+              }}
+            >
+              <ArrowBackIosNewIcon fontSize={'small'} />
+              <Typography variant={'body2'} color={'#fff'}>
+                {isTournamentPage ? 'Tournaments' : 'Tournament'}
+              </Typography>
+            </Box>
           </Box>
+
+          {amParticipant && tournament.status === TournamentStatus.Active ? (
+            <Box display={'flex'} justifyContent={'center'}>
+              <LeaveTournamentButton tournamentId={tournament._id} />
+            </Box>
+          ) : (
+            <Box />
+          )}
+
+          {!isMyTournamentPage || (isMyTournamentPage && isTournamentPage) ? (
+            <Box mr={1}>
+              {myTournamentId && (
+                <Box
+                  color={'#fff'}
+                  display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'end'}
+                  onClick={() =>
+                    history.push(
+                      Page.Tournament.replace(':tournamentId', myTournamentId) +
+                        history.location.search
+                    )
+                  }
+                >
+                  <Typography
+                    lineHeight={'14px'}
+                    variant={'body2'}
+                    color={'#fff'}
+                    mr={0.5}
+                    whiteSpace={'nowrap'}
+                    width={'min-content'}
+                  >
+                    {isTournamentPage ? 'My match' : 'My tournament'}
+                  </Typography>
+                  <ArrowBackIosNewIcon
+                    fontSize={'small'}
+                    style={{ transform: 'rotate(180deg)' }}
+                  />
+                </Box>
+              )}
+            </Box>
+          ) : (
+            <Box />
+          )}
         </Box>
-      )}
+      </Box>
     </Box>
   );
 };

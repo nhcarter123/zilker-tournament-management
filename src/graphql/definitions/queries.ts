@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
 
+// TODO optimize with fragments
+
 export const GET_ME = gql`
   query GetMe {
     me {
@@ -13,6 +15,10 @@ export const GET_ME = gql`
       matchesPlayed
       role
       organizationId
+      challenge {
+        expiresAt
+        gameCode
+      }
     }
   }
 `;
@@ -123,6 +129,7 @@ export const GET_MATCH = gql`
       newWhiteRating
       newBlackRating
       boardNumber
+      completed
       result
     }
   }
@@ -152,6 +159,38 @@ export const GET_MY_MATCH = gql`
       newWhiteRating
       newBlackRating
       boardNumber
+      completed
+      result
+    }
+  }
+`;
+
+export const GET_MY_CHALLENGE_MATCH = gql`
+  query GetMyMatch {
+    getMyChallengeMatch {
+      _id
+      tournamentId
+      hostId
+      white {
+        _id
+        firstName
+        lastName
+        photo
+      }
+      black {
+        _id
+        firstName
+        lastName
+        photo
+      }
+      whiteRating
+      blackRating
+      whiteScore
+      blackScore
+      newWhiteRating
+      newBlackRating
+      boardNumber
+      completed
       result
     }
   }
@@ -164,6 +203,9 @@ export const GET_MY_MATCH_HISTORY = gql`
         _id
         name
         date
+        rounds {
+          _id
+        }
       }
       matches {
         _id

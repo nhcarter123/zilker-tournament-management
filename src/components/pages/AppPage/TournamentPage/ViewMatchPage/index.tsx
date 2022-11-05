@@ -10,7 +10,7 @@ import { MatchWithUserInfo } from 'types/types';
 import { Page } from 'types/page';
 
 interface IViewMatchPageProps {
-  organizationId: string;
+  organizationId?: string;
 }
 
 const ViewMatchPage = ({
@@ -19,12 +19,13 @@ const ViewMatchPage = ({
   // todo maybe grab match from props?
   const page = useLocation().pathname;
   const pathMatch = matchPath<{ matchId?: string }>(page, {
-    path: Page.ViewTournamentMatch,
-    exact: false,
-    strict: false
+    path: Page.ViewTournamentMatch
+  });
+  const pathMatch2 = matchPath<{ matchId?: string }>(page, {
+    path: Page.ViewSoloMatch
   });
 
-  const idFromRoute = pathMatch?.params.matchId;
+  const idFromRoute = pathMatch?.params.matchId || pathMatch2?.params.matchId;
 
   const { data, loading } = useQueryWithReconnect<
     {

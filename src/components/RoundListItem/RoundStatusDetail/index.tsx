@@ -51,7 +51,9 @@ const RoundStatusDetail = ({
   });
 
   useSubscription<MatchUpdatedData, MatchUpdatedVariables>(MATCH_UPDATED, {
-    variables: { matchIds: roundPreview.matches }
+    ...(roundPreview.matches.length
+      ? { variables: { matchIds: roundPreview.matches } }
+      : { skip: true })
   });
 
   const matches = [...(data?.getRound?.matches || [])];

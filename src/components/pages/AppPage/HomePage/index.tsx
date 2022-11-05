@@ -1,13 +1,9 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material/';
-import AboutPage from 'components/pages/AppPage/AboutPage';
 import { Page } from 'types/page';
 import { useHistory } from 'react-router-dom';
-import EventImage from 'image/event.jpg';
-import BattleImage from 'image/battle.png';
-import ChallengeImage from 'image/challenge.png';
-import CalendarImage from 'image/calendar.png';
-import PlannerImage from 'image/planner.png';
+import HistoryImage from 'image/history.png';
+import StatsImage from 'image/stats.png';
 import CommunityImage from 'image/community.png';
 import BookImage from 'image/book.png';
 import DonateImage from 'image/donate.png';
@@ -85,8 +81,8 @@ const HomePage = (): JSX.Element => {
                 gridGap: '8px'
               }}
             >
-              <HomePageCard image={PlannerImage} redirect={Page.Tournaments} />
-              <HomePageCard image={BattleImage} redirect={Page.Challenge} />
+              <HomePageCard image={HistoryImage} redirect={Page.History} />
+              <HomePageCard image={StatsImage} redirect={Page.Stats} />
               <HomePageCard image={CommunityImage} redirect={Page.Community} />
               <HomePageCard image={BookImage} redirect={Page.About} />
               <HomePageCard image={DonateImage} redirect={Page.Donate} />

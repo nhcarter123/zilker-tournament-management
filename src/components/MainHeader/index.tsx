@@ -23,22 +23,12 @@ const MainHeader = (): JSX.Element => {
         />
         <Route
           path={Page.Challenge}
-          render={() => (
-            <SimpleHeader
-              title={getPageName(Page.Challenge)}
-              back={Page.Home}
-            />
-          )}
+          render={() => <SimpleHeader title={getPageName(Page.Challenge)} />}
           exact
         />
         <Route
           path={Page.Tournaments}
-          render={() => (
-            <SimpleHeader
-              title={getPageName(Page.Tournaments)}
-              back={Page.Home}
-            />
-          )}
+          render={() => <SimpleHeader title={getPageName(Page.Tournaments)} />}
           exact
         />
         <Route
@@ -47,7 +37,9 @@ const MainHeader = (): JSX.Element => {
         />
         <Route
           path={Page.Stats}
-          render={() => <SimpleHeader title={getPageName(Page.Stats)} />}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.Stats)} back={Page.Home} />
+          )}
         />
         <Route
           path={Page.About}
@@ -63,7 +55,9 @@ const MainHeader = (): JSX.Element => {
         />
         <Route
           path={Page.History}
-          render={() => <SimpleHeader title={getPageName(Page.History)} />}
+          render={() => (
+            <SimpleHeader title={getPageName(Page.History)} back={Page.Home} />
+          )}
         />
         <Route
           path={Page.Community}

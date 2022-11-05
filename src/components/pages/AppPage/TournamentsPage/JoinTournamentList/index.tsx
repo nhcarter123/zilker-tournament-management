@@ -5,10 +5,10 @@ import { Box, Card, IconButton, Typography } from '@mui/material/';
 import Bold from 'components/Bold';
 import JoinTournamentButton from 'components/buttons/JoinTournamentButton';
 import TournamentStatusChip from 'components/pages/AppPage/TournamentPage/TournamentStatusChip';
+import AddTournamentButton from 'components/buttons/AddTournamentButton';
 import ImageWithBackup from 'components/ImageWithBackup';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-
 import { useHistory } from 'react-router-dom';
 import { TournamentStatus, TournamentWithOrganization } from 'types/types';
 import { UserContext } from 'context/userContext';
@@ -32,8 +32,6 @@ const JoinTournamentList = ({
       tournament.players.includes(me?._id || '') &&
       tournament.status === TournamentStatus.Active
   );
-
-  const now = moment();
 
   return (
     <Box position={'relative'} height={'100%'} mx={1}>
@@ -68,7 +66,12 @@ const JoinTournamentList = ({
             </Typography>
           </Box>
         ) : (
-          <Box mt={2}>
+          <Box>
+            <Box mt={2} display={'flex'} justifyContent={'center'}>
+              {me?.organizationId && status === TournamentStatus.Created && (
+                <AddTournamentButton />
+              )}
+            </Box>
             {tournaments.map((tournament, index) => {
               const amParticipant = tournament.players.includes(me?._id || '');
 

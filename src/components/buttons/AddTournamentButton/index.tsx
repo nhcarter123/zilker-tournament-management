@@ -5,19 +5,34 @@ import { useMutation } from '@apollo/client';
 import { CREATE_TOURNAMENT } from 'graphql/definitions/mutations';
 import { GET_TOURNAMENTS } from 'graphql/definitions/queries';
 import { onError } from 'graphql/errorHandler';
+import { Tournament } from 'types/types';
+import { Page } from 'types/page';
+import { useHistory } from 'react-router-dom';
 
 const AddTournamentButton = (): JSX.Element => {
-  const [createTournament, { loading }] = useMutation(CREATE_TOURNAMENT, {
+  const history = useHistory();
+
+  const [createTournament, { loading }] = useMutation<{
+    createTournament: Nullable<Tournament>;
+  }>(CREATE_TOURNAMENT, {
+    onCompleted: (data) => {
+      const newTournamentId = data.createTournament?._id;
+      if (newTournamentId) {
+        history.push(
+          Page.ViewTournament.replace(':tournamentId', newTournamentId) +
+            history.location.search
+        );
+      }
+    },
     onError,
     refetchQueries: [GET_TOURNAMENTS],
     awaitRefetchQueries: true
   });
 
   return (
-    <Box mt={1} mb={1}>
+    <Box width={'100%'} mb={1.5}>
       <Button
         type={'primary'}
-        size={'large'}
         onClick={(): void =>
           void createTournament({ variables: { name: 'New Tournament' } })
         }

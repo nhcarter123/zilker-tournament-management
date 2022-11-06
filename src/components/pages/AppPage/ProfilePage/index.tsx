@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import { Page } from 'types/page';
 import { GET_ME } from 'graphql/definitions/queries';
 import { THEME_PRIMARY } from 'constants/constants';
+import { Redirect } from 'react-router';
 
 const ProfilePage = (): JSX.Element => {
   const me = useContext(UserContext);
@@ -87,7 +88,7 @@ const ProfilePage = (): JSX.Element => {
       </Box>
     </Box>
   ) : (
-    <></>
+    <Redirect to={Page.Home} />
   );
 };
 

@@ -33,8 +33,8 @@ const StatsPage = (): JSX.Element => {
             setCurrentTab(newValue)
           }
         >
-          <Tab label={'Global'} />
           <Tab label={'Personal'} />
+          <Tab label={'Global'} />
         </Tabs>
       </Box>
 
@@ -59,8 +59,8 @@ const StatsPage = (): JSX.Element => {
             }}
             onChangeIndex={handleChangeIndex}
           >
-            <GlobalStats />
             <PersonalStats />
+            <GlobalStats />
           </SwipeableViews>
         </Box>
       </Box>

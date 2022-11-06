@@ -22,6 +22,16 @@ export interface IUserWithResult extends User {
   groupIndex: number;
 }
 
+export interface IDataPoint {
+  label: string;
+  value: number;
+}
+
+export interface IStatsResult {
+  ratingOverTime: IDataPoint[];
+  totalGames: number;
+}
+
 export enum Role {
   Admin = 'admin',
   Player = 'player'

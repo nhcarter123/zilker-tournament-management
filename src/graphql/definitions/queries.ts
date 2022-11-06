@@ -23,6 +23,18 @@ export const GET_ME = gql`
   }
 `;
 
+export const GET_MY_STATS = gql`
+  query GetMyStats {
+    getMyStats {
+      totalGames
+      ratingOverTime {
+        label
+        value
+      }
+    }
+  }
+`;
+
 export const GET_USERS = gql`
   query GetUsers($userIds: [ID!]!, $filterTerm: String) {
     getUsers(userIds: $userIds, filterTerm: $filterTerm) {

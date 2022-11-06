@@ -71,6 +71,16 @@ type Challenge {
   gameCode: String!
 }
 
+type IDataPoint {
+  label: String!
+  value: Int!
+}
+
+type IStatsResult {
+  ratingOverTime: [IDataPoint!]!
+  totalGames: Int!
+}
+
 enum Role {
   admin
   player
@@ -187,6 +197,7 @@ type Organization {
 
 type Query {
   me: User
+  getMyStats: IStatsResult!
   getUsers(userIds: [ID!]!, filterTerm: String): [User!]!
 
   getMyTournament: Tournament

@@ -195,6 +195,10 @@ type Organization {
   name: String!
 }
 
+type CodeResponse {
+  code: String!
+}
+
 type Query {
   me: User
   getMyStats: IStatsResult!
@@ -232,7 +236,7 @@ type Mutation {
   uploadPhoto(photo: Upload!): Boolean!
   deletePhoto: Boolean!
   verifyCode(code: String!): User
-  verifyPhone(phone: String!, token: String!): Boolean!
+  verifyPhone(phone: String!, token: String!): CodeResponse!
   verifyEmail(email: String!, password: String!, token: String!): Boolean!
   loginEmail(email: String!, password: String!, token: String!): User
   updateUserDetails(payload: UpdateUserDetailsPayload!): Boolean!

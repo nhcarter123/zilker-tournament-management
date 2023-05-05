@@ -23,7 +23,9 @@ export const DELETE_PHOTO = gql`
 
 export const VERIFY_PHONE = gql`
   mutation VerifyPhone($phone: String!, $token: String!) {
-    verifyPhone(phone: $phone, token: $token)
+    verifyPhone(phone: $phone, token: $token) {
+        code
+    }
   }
 `;
 

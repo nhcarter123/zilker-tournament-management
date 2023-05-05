@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useFormik } from 'formik';
-import { Button, Input } from 'antd';
+import { Button, Input } from "antd";
 import * as EmailValidator from 'email-validator';
 
 import 'react-phone-number-input/style.css';
@@ -90,7 +90,7 @@ const SendCodeForm = ({
               phone: values.phoneNumber,
               token
             }
-          });
+          })
         } else if (isNewUser) {
           verifyEmail({
             variables: {

@@ -1,4 +1,4 @@
-# Zilker Tournament Client
+# Pease Park Tournament Client
 This is the client for our tournament management solution. Players join, get parings, and enter their match results on their phones.\
 Visit https://zilkerchess.com to find out more!
 
